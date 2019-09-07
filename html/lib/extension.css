@@ -1,0 +1,37 @@
+a .card:hover{
+    border-color: steelblue;
+    box-shadow: 0px 0px 4px steelblue;
+}
+
+.this .card a:hover{
+    border:2.5px solid steelblue;
+    box-shadow: 0px 0px steelblue;
+}
+
+.textInfoPos{
+    position:relative;
+    
+}
+
+.textInfo{
+    visibility: hidden;
+    width: 145px;
+    background-color: #FFF;
+    text-align: center;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 5px;
+    position: absolute;
+    white-space: nowrap;
+    z-index: 3;
+    opacity:0;
+    bottom: 100%;
+    overflow: visible;
+    transition: opacity 0.3s;
+}
+
+
+.textInfoPos:hover .textInfo{
+    visibility: visible;
+    opacity: 1;
+}
