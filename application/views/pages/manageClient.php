@@ -290,7 +290,7 @@ var app = new Vue({
         this.jobsCopy = this.jobs;
         this.pageNums = [];
         for(var i=0; i<this.activeJobNum; i=i+10){
-            this.pageNums.push({id: i, isActive: false});
+            this.pageNums.push({id: i/10, isActive: false});
         }
         this.pageNums[0].isActive = true;
     }

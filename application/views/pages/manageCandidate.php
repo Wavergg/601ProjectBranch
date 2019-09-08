@@ -336,6 +336,7 @@ var app = new Vue({
             for(var i=0; i<this.pageNums.length; i++){
                 if(this.pageNums[i].isActive){
                     result = this.pageNums[i].id;
+                  
                 }
             }
             return result;
@@ -349,7 +350,7 @@ var app = new Vue({
         // inite pageNums
         this.pageNums = [];
         for(var i=0; i<this.candidateNum; i=i+10){
-            this.pageNums.push({id: i, isActive: false});
+            this.pageNums.push({id: i/10, isActive: false});
         }
         this.pageNums[0].isActive = true;
         

@@ -108,7 +108,6 @@ class CandidateMission extends CI_Controller{
             $firstName = $_POST['firstName'];
             $lastName = $_POST['lastName'];
             
-            
             $data['candidates'] = $this->candidate_model->getCandidatesWithName(10, $offset,$page,$city,$jobType="",$jobInterest,$firstName,$lastName,$suburb="",$phoneNumber="",$email="");
             echo json_encode($data['candidates']);
         } else {
