@@ -172,7 +172,6 @@ class Jobs extends CI_Controller {
 			//DEFAULT VALUE END
 			
 			if(isset($_FILES['jobImage'])){
-				$file =  $_FILES['jobImage'];
 				$fileName = $_FILES['jobImage']['name'];
 				$fileTmpName = $_FILES['jobImage']['tmp_name'];
 				$fileSize = $_FILES['jobImage']['size'];

@@ -38,12 +38,11 @@
             <div class="mt-4 col-md-4 ">
                     <div class="row justify-content-md-start justify-content-center">
    
-                        <?php $setImgPreviewID = "imgPreview" ;?>
-                        <img id="imgPreview" src="<?php echo base_url()?>lib/images/facebook.jpg" class="mx-md-2" style="width:275px;height:165px;">
+                        <img id="imgPreview" src="<?php echo base_url()?>lib/images/user-512.png" class="mx-md-2" style="width:200px;height:200px;">
                     
                     </div>
-                    <div class="row justify-content-center ">
-                    <input type="file" onchange="document.getElementById('<?php echo $setImgPreviewID ; ?>').src = window.URL.createObjectURL(this.files[0])" name="jobImage" class="offset-1 offset-md-0" required>
+                    <div class="row justify-content-center mt-2">
+                    <input type="file" id="UserPicture" onchange="document.getElementById('imgPreview').src = window.URL.createObjectURL(this.files[0])" name="userProfilePicture" class="offset-1 offset-md-0">
                     </div>
             </div>
         </div>
@@ -453,6 +452,7 @@ var app = new Vue ({
             formData.append('lastName', this.lastName);
             formData.append('userAddress', this.userAddress);
             formData.append('city', this.city);
+            formData.append('DOB', this.DOB);
             formData.append('zipCode', this.zipCode);
             formData.append('suburb', this.suburb);
             formData.append('phoneNumber', this.phoneNumber);
@@ -510,9 +510,16 @@ var app = new Vue ({
             formData.append('Smoke', this.smoke);
             formData.append('Conviction', this.conviction);
             formData.append('ConvictionDetails', this.convictionDetails);
+            
+            if(document.getElementById("UserPicture").value.length>0){
+                var userPic = document.getElementById("UserPicture");
+                
+                formData.append('UserPicture',userPic.files[0]);
+            }
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/applyJob/'
             this.$http.post(urllink, formData).then(res => {
-                var result = res.body;
+                this.message= res.body;
+                $('#myModal').modal('show');
             }, res => {
                 // error callback
                 this.message=this.message + " Submission is failed, please try again.";
@@ -520,13 +527,13 @@ var app = new Vue ({
             }
             );
             
-            // upload CV
+            // // upload CV
             var candidateCV = document.getElementById("JobCVID");
             if(candidateCV.files.length > 0){
                 var candidateCV = document.getElementById("JobCVID");
                 
                 var formData = new FormData()
-                // firstName and lastName for getting the user ID
+               // // firstName and lastName for getting the user ID
                 formData.append('firstName', this.firstName);
                 formData.append('lastName', this.lastName);
                 formData.append('JobCV', candidateCV.files[0]);
@@ -561,6 +568,11 @@ var app = new Vue ({
                     this.isButton = true;
                     this.jobCVError = "Invalid File Format"
                 }
+            }
+        },
+        checkCity: function(){
+            if(this.city.length>0){
+                this.cityError = "";
             }
         },
         checkEmail: function(){

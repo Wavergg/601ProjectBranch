@@ -236,6 +236,14 @@ class Candidate_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function updateProfilePictureLink($candidateID,$profilePictureLink){
+        $data = array(
+            'UserPicture' => $profilePictureLink,
+        );
+        $this->db->where('CandidateID',$candidateID);
+        $this->db->update('candidate',$data);
+    }
+
     // called from: Controller->CandidateMission->manageCandidate() 
     // return the numbers of candidates // extra parameter is just for criteria to match with the other methods in this page
     public function countAll($page="",$city="",$jobType="",$jobInterest="",$firstName="",$lastName="",$suburb="",$email="",$phoneNumber=""){
@@ -251,6 +259,7 @@ class Candidate_model extends CI_Model {
                 $this->db->or_where('JobID',"");
                 $this->db->or_where('JobID',0);
             $this->db->group_end();
+            
         }
         if(!empty($city)){
             $this->db->where('City',$city);
@@ -330,6 +339,7 @@ class Candidate_model extends CI_Model {
                 $this->db->or_where('Candidate.JobID',"");
                 $this->db->or_where('Candidate.JobID',0);
             $this->db->group_end();
+            $this->db->where('CandidateStatus !=','removed');
         } elseif($page == "archive"){
             $this->db->where('Candidate.CandidateStatus','removed');
         } else {

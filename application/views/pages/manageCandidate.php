@@ -8,7 +8,7 @@
 <?php endif;?>
     <div style="height: 50px;"></div>
 
-    <h2 class="text-center"><?php echo $title; ?></h2>
+    <h2 class="text-center">Manage Applicants</h2>
     <hr />
     
     
@@ -63,7 +63,7 @@
            
                 <thead>
                     <tr>
-                        <th scope="col" v-bind:class="{ 'd-none': ! showAssignCandidate }"><a href="#" class="text-dark">Assign Candidate</a></th>
+                        <th scope="col" v-bind:class="{ 'd-none': ! showAssignCandidate }"><a href="#" class="text-dark">Assign_Candidate</a></th>
                         <th scope="col" v-bind:class="{ 'd-none': ! showRemoveStatus }"><a href="#" class="text-dark">Remove</a></th>
                         <th scope="col"><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
                         <th scope="col" >CV</th>
@@ -97,7 +97,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="candidate in candidatesCopy" :key="candidate.CandidateID" :id="'row'+candidate.CandidateID">
-                        <th class="textInfoPos" v-bind:class="{ 'd-none': ! showAssignCandidate }"><span class="textInfo text-center" style="left: 0px;overflow:initial;">Assign job <br>to this Candidate</span><a v-on:click="AssignIDURL(candidate.CandidateID)" role="button" class="text-info"><i style="font-size:30px;" class="ml-1 icon ion-md-contacts mx-3"></i></a></th>
+                        <th class="textInfoPos text-center" v-bind:class="{ 'd-none': ! showAssignCandidate }"><span class="textInfo text-center" style="left: 0px;overflow:initial;">Assign job <br>to this Candidate</span><a v-on:click="AssignIDURL(candidate.CandidateID)" role="button" class="text-info"><i style="font-size:30px;" class="ml-1 icon ion-md-contacts mx-3"></i></a></th>
                         <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeCandidateApp(candidate.CandidateID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
                         <th class="textInfoPos"><span class="textInfo text-center" style="left: -35px;width:190px;">See Candidate's Details</span><a v-on:click="getUrl(candidate.CandidateID)" role="button" class="text-primary"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></th>
                         <th class="textInfoPos" ><span class="textInfo text-center" style="left: -45px;width:160px;">Download <br>Candidate's CV</span><a class="btn btn-outline-dark px-2" :href="'<?php echo base_Url(); ?>index.php/candidateMission/downloadCV/' + candidate.JobCV">CV</a></th>
@@ -352,6 +352,7 @@ var app = new Vue({
             this.pageNums.push({id: i, isActive: false});
         }
         this.pageNums[0].isActive = true;
+        
         
         this.filterJobInterest = "<?php echo $job['JobTitle'];?>";
         

@@ -61,6 +61,7 @@ class CandidateMission extends CI_Controller{
             $data['jobID'] = $jobID;
             //count the total number of candidate, so a page number could be made // extra parameters are for, when the staff or admin would like to assign a candidate into the job
             $data['candidateNum'] = $this->candidate_model->countAll($page,$data['job']['City'],$data['job']['JobType'],$data['job']['JobTitle']);
+            
             // $data['candidateNum'] = 30;
             //when loaded limit the records to be first 10 records // extra parameters are for, when the staff or admin would like to assign a candidate into the job
             //matches the cityLocation,JobInterest/JobTitle, and jobType
@@ -153,7 +154,7 @@ class CandidateMission extends CI_Controller{
     //inserting the data into database table of candidate: candidate_model->applyJob($data);
     public function applyJob(){
         
-            $candidateNotes = "";
+           
         
             // Staff and Mark Lee won't apply a job for themselves
             // So this means it comes from the staff only page
@@ -161,7 +162,8 @@ class CandidateMission extends CI_Controller{
            
             $firstName = $this->security->xss_clean(stripslashes(trim($this->input->post('firstName'))));
             $lastName = $this->security->xss_clean(stripslashes(trim($this->input->post('lastName'))));
-            
+
+            $candidateNotes = "";
             if(isset($_POST['candidateNotes'])){
                 $candidateNotes = $_POST['candidateNotes'];
             }
@@ -211,10 +213,39 @@ class CandidateMission extends CI_Controller{
         'CandidateNotes' => $candidateNotes,
         'ApplyDate' => $applyDate,
         );
-
         
         $this->candidate_model->applyJob($data);
+        $data = array();
+        $candidate = $this->candidate_model->getMaxIDByUserID($userID);
         
+        if(isset($_FILES['UserPicture'])){
+            $fileName = $_FILES['UserPicture']['name'];
+            $fileTmpName = $_FILES['UserPicture']['tmp_name'];
+            $fileSize = $_FILES['UserPicture']['size'];
+            $fileError = $_FILES['UserPicture']['error'];
+
+            $fileExt = explode(".",$fileName);
+            $fileRealExt = strtolower(end($fileExt));
+            $allowed = array('jpg','jpeg','png','gif');
+
+            if(in_array($fileRealExt,$allowed)){
+                if($fileError === 0){
+                    if($fileSize < 1000000){
+                        $fileNameNew = $candidate['MaxID'] . $fileName;
+                        $fileDestination = "C:\\xamppNew2\\htdocs\\candidateProfile\\" . $fileNameNew;
+                        move_uploaded_file($fileTmpName,$fileDestination);
+                        $this->candidate_model->updateProfilePictureLink($candidate['MaxID'],$fileNameNew);
+                        echo 'Successful in uploading user image';
+                    } else {
+                       echo 'The file is too big';
+                    }
+                } else {
+                   echo 'There was an error uploading the file';
+                }
+            } else {
+               echo 'You cannot upload the file of this type';
+            }
+        }
     }
 
     //function that manage an upload cv from candidate
@@ -340,6 +371,34 @@ class CandidateMission extends CI_Controller{
                 'CandidateNotes' => $this->security->xss_clean(stripslashes(trim($this->input->post('CandidateNotes')))),
                 'ApplyDate' => date('Y-m-d'),
                 );
+
+                if(isset($_FILES['UserPicture'])){
+                    $fileName = $_FILES['UserPicture']['name'];
+                    $fileTmpName = $_FILES['UserPicture']['tmp_name'];
+                    $fileSize = $_FILES['UserPicture']['size'];
+                    $fileError = $_FILES['UserPicture']['error'];
+
+                    $fileExt = explode(".",$fileName);
+                    $fileRealExt = strtolower(end($fileExt));
+                    $allowed = array('jpg','jpeg','png','gif');
+
+                    if(in_array($fileRealExt,$allowed)){
+                        if($fileError === 0){
+                            if($fileSize < 1000000){
+                                $fileNameNew = $candidateID . $fileName;
+                                $fileDestination = "C:\\xamppNew2\\htdocs\\candidateProfile\\" . $fileNameNew;
+                                move_uploaded_file($fileTmpName,$fileDestination);
+                                $data['UserPicture'] = $fileNameNew;
+                            } else {
+                               echo 'The file is too big';
+                            }
+                        } else {
+                           echo 'There was an error uploading the file';
+                        }
+                    } else {
+                       echo 'You cannot upload the file of this type';
+                    }
+                }
                 $this->candidate_model->updateCandidateDetails($candidateID,$data);
         } else {
             redirect('/');
@@ -372,6 +431,7 @@ class CandidateMission extends CI_Controller{
         $firstName = xss_clean(stripslashes(trim($this->input->post('firstName'))));
         $lastName = xss_clean(stripslashes(trim($this->input->post('lastName'))));
         $userAddress = xss_clean(stripslashes(trim($this->input->post('userAddress'))));
+        $DOB = xss_clean(stripslashes(trim($this->input->post('DOB'))));
         $city = xss_clean(stripslashes(trim($this->input->post('city'))));
         $zipCode = xss_clean(stripslashes(trim($this->input->post('zipCode'))));
         $suburb = xss_clean(stripslashes(trim($this->input->post('suburb'))));
@@ -387,7 +447,7 @@ class CandidateMission extends CI_Controller{
         $newUserPasswd = substr_replace($userPasswd, $alphabet, $pos, 1);
         $userType = 'candidate';
         $newUserPasswd = do_hash($newUserPasswd, 'sha256');
-        $this->register_model->addUser($firstName, $lastName, $userEmail, $newUserPasswd, $userAddress, $city, $zipCode, $suburb, $userType, $phoneNumber, "0000-00-00", $gender);
+        $this->register_model->addUser($firstName, $lastName, $userEmail, $newUserPasswd, $userAddress, $city, $zipCode, $suburb, $userType, $phoneNumber, $DOB, $gender);
 
     }
 

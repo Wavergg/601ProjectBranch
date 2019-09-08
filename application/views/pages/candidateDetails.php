@@ -57,7 +57,7 @@
         <h3 class="text-warning mt-3"> Personal Details </h3>
         <hr>
         <div class="row">
-        <div class="col-8">
+        <div class="col-md-8">
         <div class="row">
             <div class="col-md-6">
                 <label for="firstNameID" class="font-weight-bold mt-2">Applicant First Name:</label>
@@ -67,10 +67,7 @@
                 <label for="lastNameID" class="font-weight-bold mt-2">Applicant Last Name:</label>
                 <input type="text" v-model="lastName" class="form-control" readonly v-bind:class="{ 'border-0': !toggleEdit}" id="lastNameID" >
             </div>
-            <!-- <div class="col-md-4">
-                <div class="row ml-1"><label for="candidateCVID" class="font-weight-bold mt-2">Candidate's CV:</label></div>
-                <div class="row ml-1"><a href="<?php echo base_url()?>index.php/CandidateMission/downloadCV/<?php echo $candidate['JobCV'];?>" id="candidateCVID" class="btn btn-primary">CandidateCV</a> </div>   
-            </div> -->
+           
         </div>
 
         <div class="row mt-3">
@@ -95,8 +92,32 @@
             </div>
         </div>
         </div>
-        <div class="row">
+        <div class="row col-md-4">
+             <div class="col-md-12">
+                <div class="row ml-3"><label for="candidateCVID" class="font-weight-bold mt-2">Candidate's CV:</label></div>
+                <div class="row ml-3"><a href="<?php echo base_url()?>index.php/CandidateMission/downloadCV/<?php echo $candidate['JobCV'];?>" id="candidateCVID" class="btn btn-primary">CandidateCV</a> </div>   
+               
+                <div class="row mt-5 mb-0 ml-4">
+                
+                <div class="row">
+                <?php $setImgPreviewID = "" ;?>
+                      <?php if(empty($candidate['UserPicture'])):?>
+                        <?php $setImgPreviewID = "imgPreview" ;?>
+                        <img id="imgPreview" src="<?php echo base_url()?>lib/images/user-512.png" style="width:150px;height:150px;">
+                    <?php else :?>
+                        <?php $setImgPreviewID = "imgPreview1" ;?>
+                        <img id="imgPreview1" src="<?php echo base_url() . 'candidateProfile/' . $candidate['UserPicture']?>" style="width:150px;height:150px;">
+                    <?php endif;?>
+                </div>
+                <div class="row justify-content-center">
+                    <input type="file" id="fileProfileBtn" hidden style="width:240px;" onchange="document.getElementById('<?php echo $setImgPreviewID ; ?>').src = window.URL.createObjectURL(this.files[0])" name="candidateImage" class="offset-md-0">
+                </div>
+               
+                </div>
+            </div>
+            
         </div>
+        
         </div>
         <div class="row mt-2">
             <div class="col-md-2">
@@ -274,7 +295,7 @@
         </div>
   </div><!--applicant profile end-->
   <div class="tab-pane fade" id="attachment" role="tabpanel" aria-labelledby="attachment-tab">
-      Attachment
+     
   </div><!--attachment end-->
 </div>
         
@@ -349,6 +370,7 @@
                     for (i = 0; i < y; i++) {
                         document.getElementsByTagName("textarea")[i].removeAttribute("readonly");
                     }
+                    document.getElementById("fileProfileBtn").removeAttribute("hidden");
                 } else {
                     for (i = 0; i < x; i++) {
                         document.getElementsByTagName("input")[i].setAttribute("readonly", "readonly"); 
@@ -356,6 +378,7 @@
                     for (i = 0; i < y; i++) {
                         document.getElementsByTagName("textarea")[i].setAttribute("readonly", "readonly");
                     }
+                    document.getElementById("fileProfileBtn").setAttribute("hidden","true");
                 }
             },
             submitButton: function(candidateID,userID){
@@ -406,6 +429,10 @@
             formData.append('Smoke',this.smoke);
             formData.append('Conviction',this.conviction);
             formData.append('ConvictionDetails',this.convictionDetails);
+            if(document.getElementById("fileProfileBtn").value.length>0){
+                var userPic = document.getElementById("fileProfileBtn");
+                formData.append('UserPicture',userPic.files[0]);
+            }
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateCandidateDetails/'+candidateID
             this.$http.post(urllink, formData).then(res => {
                 
