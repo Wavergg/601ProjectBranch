@@ -144,7 +144,7 @@ class Candidate_model extends CI_Model {
             $this->db->group_end();
             $this->db->where('CandidateStatus !=','removed');
         } else if($page == "archive"){
-            $this->db->where('Candidate.CandidateStatus','removed');
+            $this->db->where('CandidateStatus','removed');
         } else {
             $this->db->where('CandidateStatus !=','removed');
         }
@@ -210,19 +210,6 @@ class Candidate_model extends CI_Model {
         return $query->result_array();
     }
 
-    // get all Archived Candidate
-    // called from : Controller->Applicant->index
-    public function getArchivedCandidate(){
-        //$mySql = "SELECT User.FirstName, User.LastName, Candidate.* FROM Candidate INNER JOIN User ON Candidate.UserID=User.UserID";
-        //$query = $this->db->query($mySql);
-        $this->db->select('User.FirstName, User.LastName,User.DOB,User.City,User.Address,User.Suburb,User.PhoneNumber,User.Email,User.Gender,Candidate.*');
-        $this->db->from('Candidate');
-        $this->db->join('User', 'Candidate.UserID = User.UserID');
-        $this->db->where('CandidateStatus', 'removed');
-        $query = $this->db->get();
-        return $query->result_array();
-    }
-
     // get all citizenships
     // called from: Controller->CandidateMission->index() , Controller->CandidateMission->addingNewCandidateStaffOnly()
     public function get_citizenships(){
@@ -236,13 +223,21 @@ class Candidate_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function updateProfilePictureLink($candidateID,$profilePictureLink){
+        $data = array(
+            'UserPicture' => $profilePictureLink,
+        );
+        $this->db->where('CandidateID',$candidateID);
+        $this->db->update('candidate',$data);
+    }
+
     // called from: Controller->CandidateMission->manageCandidate() 
     // return the numbers of candidates // extra parameter is just for criteria to match with the other methods in this page
     public function countAll($page="",$city="",$jobType="",$jobInterest="",$firstName="",$lastName="",$suburb="",$email="",$phoneNumber=""){
         $this->db->select('User.City,User.FirstName,User.LastName,User.Suburb,User.Email,User.PhoneNumber,Candidate.*');
         $this->db->from('Candidate');
         $this->db->join('User', 'Candidate.UserID = User.UserID');
-        $this->db->where('CandidateStatus !=','removed');
+       
         if($page == "jobDetails"){
             //if this function is called because of the staff is looking for someone to take the job
             //filter it by the candidate that still hasnt get any job yet
@@ -251,6 +246,11 @@ class Candidate_model extends CI_Model {
                 $this->db->or_where('JobID',"");
                 $this->db->or_where('JobID',0);
             $this->db->group_end();
+            $this->db->where('CandidateStatus !=','removed');
+        } else if($page == "archive"){
+            $this->db->where('CandidateStatus','removed');
+        } else {
+            $this->db->where('CandidateStatus !=','removed');
         }
         if(!empty($city)){
             $this->db->where('City',$city);
@@ -330,6 +330,7 @@ class Candidate_model extends CI_Model {
                 $this->db->or_where('Candidate.JobID',"");
                 $this->db->or_where('Candidate.JobID',0);
             $this->db->group_end();
+            $this->db->where('CandidateStatus !=','removed');
         } elseif($page == "archive"){
             $this->db->where('Candidate.CandidateStatus','removed');
         } else {

@@ -372,6 +372,11 @@ var app = new Vue({
                     this.isButton = true
                 }
             },
+            checkCity: function(){
+                if(this.city.length>0){
+                    this.cityError = "";
+                }
+            },
             checkPhoneNumber: function(){
               var re = /^[\+]?\(?[\+]?[0-9]{1,4}\)?[\- \.]?\(?[0-9]{2,4}[\-\. ]?[0-9]{2,4}[\-\. ]?[0-9]{0,6}?\)?$/
                 if(re.test(this.phoneNumber)){

@@ -58,7 +58,7 @@
             </div>
             <div class="col-lg-3 col-md-4 col-9 p-0 mt-2 mt-lg-0 mt-md-2 pr-2">
                 <label for="CityID" class="font-weight-bold"><span class="text-danger">* </span>City:</label>
-                <select class="form-control" type="text" name="City" id="CityID" v-model="city" >
+                <select class="form-control" type="text" @change="checkCity" name="City" id="CityID" v-model="city" >
                     <option selected></option>
                     <?php foreach($cities as $city): ?>
                     <option value="<?php echo $city['CityName']; ?>"><?php echo $city['CityName']; ?></option>

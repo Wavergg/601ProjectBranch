@@ -39,10 +39,13 @@ class Archive extends CI_Controller{
                 // $data['jobs'][$i]['bookmarkUrl'] = $bookmarkUrl;
             }
             //return the number of job so it could be used as paging
-            $data['candidates'] = $this->candidate_model->getArchivedCandidate();
+            $limitNum = 10;
+            $offsetNum = 0;
+            $page = 'archive';
+            $data['candidates'] = $this->candidate_model->getCandidatesWithName($limitNum, $offsetNum,$page);
             $data['fromPage'] = "archive";
             $data['archiveJobNum'] = $this->job_model->countAllArchive();
-            $data['candidateNum'] = sizeof($data['candidates']);
+            $data['candidateNum'] = $this->candidate_model->countAll($page);
             
             $this->load->view('templates/header',$userdata);
             $this->load->view('pages/archive',$data);

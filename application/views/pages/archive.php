@@ -1,3 +1,4 @@
+
 <div id="app">
     <div style="height: 50px;"></div>
 
@@ -201,9 +202,9 @@
     <nav aria-label="Candidate Page">
         <ul class="pagination justify-content-center">
             
-            <li class="page-item" v-for="pageNum in candidatePageNums" :key="pageNum.id" :class="{ active: pageNum.isActive }">
-                <div v-if="pageNum.id >= candidateCurrentPageID-2 && pageNum.id <= candidateCurrentPageID + 2">
-                    <a class="page-link"  href="#" @click.stop.prevent="getCandidates(pageNum.id)">{{ pageNum.id + 1 }}</a>
+            <li class="page-item" v-for="candidatePageNum in candidatePageNums" :key="candidatePageNum.id" :class="{ active: candidatePageNum.isActive }">
+                <div v-if="candidatePageNum.id >= candidateCurrentPageID-2 && candidatePageNum.id <= candidateCurrentPageID + 2">
+                    <a class="page-link"  href="#" @click.stop.prevent="getCandidates(candidatePageNum.id)">{{ candidatePageNum.id + 1 }}</a>
                 </div>
             </li>
             
@@ -396,15 +397,14 @@ var app = new Vue({
             }
             var formData = new FormData()
             formData.append('offset',offset)
-            formData.append('jobInterest',this.filterJobInterest);
-            formData.append('city', this.filterCity);
-            formData.append('firstName',this.filterFirstName);
-            formData.append('lastName',this.filterLastName);
+            formData.append('jobInterest',this.filterCandidateJobInterest);
+            formData.append('city', this.filterCandidateCity);
+            formData.append('firstName',this.filterCandidateFirstName);
+            formData.append('lastName',this.filterCandidateLastName);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/getCandidates/<?php echo $fromPage;?>'
             this.$http.post(urllink, formData).then(res => {
                 var result = res.body
                 this.candidatesCopy = result
-                
             }, res => {
             })
         },
@@ -475,7 +475,7 @@ var app = new Vue({
     mounted: function(){
         this.jobPageNums = [];
         for(var i=0; i<this.archiveJobNum; i=i+10){
-            this.jobPageNums.push({id: i, isActive: false});
+            this.jobPageNums.push({id: i/10, isActive: false});
         }
         this.jobPageNums[0].isActive = true;
         this.candidatesCopy = this.candidates;
@@ -483,7 +483,7 @@ var app = new Vue({
         // inite pageNums
         this.candidatePageNums = [];
         for(var i=0; i<this.candidateNum; i=i+10){
-            this.candidatePageNums.push({id: i, isActive: false});
+            this.candidatePageNums.push({id: i/10, isActive: false});
         }
         this.candidatePageNums[0].isActive = true;
 
