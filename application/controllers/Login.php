@@ -40,6 +40,7 @@ class Login extends CI_Controller {
             if($data['user']['UserPasswd'] == $userPasswd && strlen($_POST['Password']) > 5){
                 //array that are assigned to session KVP
                 $newdata = array(
+                    'candidateID' => '',
                     'userEmail' => $userEmail,
                     'userID' => $data['user']['UserID'],
                     'userType' => $data['user']['UserType'],
