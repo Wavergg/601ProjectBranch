@@ -142,6 +142,13 @@ class EmployerMission extends CI_Controller{
         if(!$errorIsTrue){
             $this->job_model->addJob($clientTitle,$clientName,$clientCompany,$clientEmail,$clientContact,$clientCity,$clientAddress,$clientJobTitle,$clientJobType,$description,$clientSuburb,$dateJobSubmitted);
             $data['title'] = 'Job was added successfully.';
+
+            // create a folder for the job, named as JobID
+            // so when upload any files for this job, they should be here
+            $jobMaxID = $this->job_model->get_maxJobID();
+            $filePath = constant('JOB_IMAGE_PATH').$jobMaxID['JobID'];
+            mkdir($filePath);
+
         } else {
             $data['message'] = $errMessage;
         }

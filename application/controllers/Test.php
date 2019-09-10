@@ -6,6 +6,7 @@ class Test extends CI_Controller {
 		parent::__construct();
         // Models
         $this->load->model('candidate_model');
+        $this->load->model('job_model');
 
 		// Load url helper
         $this->load->helper('url');
@@ -50,5 +51,10 @@ class Test extends CI_Controller {
         $str = 'php';
         $str['name'] = array('apple');
         echo var_dump($str['name']);
+    }
+
+    public function testMaxJobID(){
+        $jobMaxID = $this->job_model->get_maxJobID();
+        echo $jobMaxID['JobID'];
     }
 }
