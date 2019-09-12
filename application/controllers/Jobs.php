@@ -8,6 +8,8 @@ class Jobs extends CI_Controller {
 		// Load url helper
 		$this->load->helper('url');
 		$this->load->helper('security');
+		$this->load->helper('download');
+		$this->load->helper('directory');
 
 		$this->load->library('session');
 		// Load Models
@@ -115,6 +117,11 @@ class Jobs extends CI_Controller {
 			$data['title'] = "Job Order Details";
 			//get all info
 			$data['job'] = $this->job_model->get_specificJob($paramJobID);
+			
+			// Find all the files under the job's folder
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
+			$data['userFiles'] = directory_map($path);
+
 			//if a candidate is assigned load it as well
 			$data['candidatesData'] = $this->candidate_model->getCandidatesJobDetails($paramJobID);
 			$data['message'] = "";
@@ -511,5 +518,47 @@ class Jobs extends CI_Controller {
         $jobID = $_POST['jobID'];
         
         $this->job_model->updateJobStatusToComplete($jobID);
+	}
+	
+	// upload other files by Admin or Staff
+    public function uploadFiles(){
+        if($_SESSION['userType']!='admin' && $_SESSION['userType'] !='staff'){
+            echo "Please login";
+        }
+        $jobID = $this->input->post('jobID');
+		
+		
+        $config['upload_path'] = constant('JOB_IMAGE_PATH').$jobID.'/';
+
+        $config['allowed_types'] = 'pdf|png|doc|docx';
+        $config['max_size'] = 10000;
+        $config['max_width'] = 0;
+        $config['max_height'] = 0;
+
+        if ($this->security->xss_clean($_FILES, TRUE) === FALSE)
+        {
+            echo 'upload failed';
+        } else {
+            $this->load->library('upload', $config);
+            if (!$this->upload->do_upload('userFile')) {
+                echo "Apply Failed.";
+            } else {
+                echo "Apply Successfully";
+            }
+		}
+		
+        
+	}
+	
+	// download file
+	public function downloadFile($jobID, $fileName){
+        if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+
+            $path = constant('JOB_IMAGE_PATH').$jobID.'/'.$fileName;
+            
+            force_download($path, NULL);
+        } else {
+            redirect('/');
+        }
     }
 }

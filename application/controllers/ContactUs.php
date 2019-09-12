@@ -50,9 +50,9 @@ class ContactUS extends CI_Controller{
         */
 
         // sendgrid
-        $config['smtp_host'] = 'smtp.sendgrid.net';
+        $config['smtp_host'] = '';
         $config['smtp_user'] = 'apikey';
-        $config['smtp_pass'] = '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';
+        $config['smtp_pass'] = '';
         
         $config['smtp_port'] = '587';
         $config['smtp_crypto'] = 'tls';

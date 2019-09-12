@@ -191,7 +191,7 @@
                 <!-- List of the files -->
                 <div v-if="userFiles.length > 0">
                     <div v-for="userFile in userFiles">
-                        <a class="btn btn-primary btn-block my-1" :href="'<?php echo base_Url(); ?>index.php/candidateMission/downloadFile/' + candidateID + '/' + userFile">{{ userFile }}</a>
+                        <a class="btn btn-primary btn-block my-1" :href="'<?php echo base_Url(); ?>index.php/Jobs/downloadFile/' + jobID + '/' + userFile">{{ userFile }}</a>
                         
                     </div>
                 </div>
@@ -226,6 +226,53 @@
 <!-- Modal END -->
 </div> <!-- app -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+<!-- Vue -->
+<!-- development version, includes helpful console warnings -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+
+<script>
+var app = new Vue({
+    el: '#app',
+    data: {
+        message: "",
+        userFiles: [
+            <?php foreach($userFiles as $userFile) : ?>
+                "<?php echo $userFile; ?>",
+            <?php endforeach; ?>
+        ],
+        jobID: "<?php echo $job['JobID'];?>"
+    },
+    methods: {
+        uploadFiles: function() {
+            console.log(this.jobID);
+            this.message = "";
+            var userFiles = document.getElementById("userFiles");
+            var len = userFiles.files.length;
+            for (var i = 0; i < len; i++) {
+                console.log(userFiles.files[i].name)
+                var formData = new FormData();
+                formData.append('jobID', this.jobID);
+                formData.append('userFile', userFiles.files[i]);
+                var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/uploadFiles/'
+                this.$http.post(urllink, formData).then(res => {
+                    var result = res.body
+                    this.message = this.message + result;
+
+                }, res => {
+                 //error callback
+                    var result = res.body
+                    this.message = this.message + result;
+
+                })
+            }
+
+            $('#myModal').modal('show')
+        }
+    }
+});
+</script>
 
 <script>
     CKEDITOR.replace( 'editor1' );
@@ -305,48 +352,4 @@ function resetCandidateData($candidateID){
     };
 }
 
-</script>
-
-<!-- Vue -->
-<!-- development version, includes helpful console warnings -->
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
-
-<script>
-var app = new Vue({
-    el: '#app',
-    data: {
-        userFiles: [
-            <?php foreach($userFiles as $userFile) : ?>
-                "<?php echo $userFile; ?>",
-            <?php endforeach; ?>
-        ],
-    },
-    methods: {
-        uploadFiles: function() {
-            console.log(this.candidateID);
-            this.message = "";
-            var userFiles = document.getElementById("userFiles");
-            var len = userFiles.files.length;
-            for (var i = 0; i < len; i++) {
-                //console.log(userFiles.files[i].name)
-                var formData = new FormData();
-                formData.append('condidateID', this.candidateID);
-                formData.append('userFile', userFiles.files[i]);
-                var urllink = "<?php echo base_Url(); ?>" + 'index.php/candidateMission/uploadFiles/'
-                this.$http.post(urllink, formData).then(res => {
-                    var result = res.body
-                    this.message = this.message + result;
-
-                }, res => {
-                    // error callback
-                    var result = res.body
-                    this.message = this.message + result;
-
-                })
-            }
-
-            $('#myModal').modal('show')
-        }
-});
 </script>
