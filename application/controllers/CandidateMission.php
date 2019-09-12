@@ -264,9 +264,9 @@ class CandidateMission extends CI_Controller{
     public function uploadCV(){
         
 
-            $firstName = $this->input->post('firstName');
-            $lastName = $this->input->post('lastName');
-            //get the last ID for database with firstname and lastname criteria
+        $firstName = $this->input->post('firstName');
+        $lastName = $this->input->post('lastName');
+        //get the last ID for database with firstname and lastname criteria
         $userData = $this->candidate_model->getUserByData($firstName,$lastName);
         $userID = $userData['UserID'];
         

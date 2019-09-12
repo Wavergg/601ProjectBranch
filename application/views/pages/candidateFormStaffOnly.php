@@ -22,7 +22,7 @@
             </div>
             <div class="col-md-4">
                 <label class="font-weight-bold">Drop your CV here:</label>
-                <input type="file" id="JobCVID" @change="checkJobCV" v-model="jobCV" name="jobCV">
+                <input type="file" id="JobCVID" @change="checkJobCV" name="jobCV">
                 <div class="mt-3" v-if="jobCVError.length">
                     <p class="text-danger" v-text="jobCVError"></p>
                 </div>
@@ -425,7 +425,7 @@ var app = new Vue ({
         
     },
     methods: {
-        newCandidate: function(){
+        newCandidate: async function(){
             if(this.firstName == "" || this.lastName == "" || this.userAddress == "" || this.city == "" || this.userEmail == "")
             {
                 if(this.firstName.length === 0){
@@ -459,7 +459,7 @@ var app = new Vue ({
             formData.append('userEmail', this.userEmail);
             formData.append('gender', this.gender);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/addUserByStaff/'
-            this.$http.post(urllink, formData).then(res => {
+            await this.$http.post(urllink, formData).then(res => {
                 var result = res.body
                 
             }, res => {
@@ -517,7 +517,7 @@ var app = new Vue ({
                 formData.append('UserPicture',userPic.files[0]);
             }
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/applyJob/'
-            this.$http.post(urllink, formData).then(res => {
+            await this.$http.post(urllink, formData).then(res => {
                 this.message= res.body;
                 $('#myModal').modal('show');
             }, res => {
@@ -555,9 +555,11 @@ var app = new Vue ({
         } 
 
         },checkJobCV: function(){
-            if(this.jobCV.length>0){
-                if(this.jobCV.indexOf(".")>-1){
-                    var res = this.jobCV.split(".");
+            var candidateCV = document.getElementById("JobCVID");
+            if(candidateCV.files.length > 0){
+                var jobCV = candidateCV.files[0].name;
+                if(jobCV.indexOf(".")>-1){
+                    var res = jobCV.split(".");
                     //pdf|png|doc|docx
                     if(res[res.length-1].toLowerCase()=="pdf" || res[res.length-1].toLowerCase()=="png" ||
                     res[res.length-1].toLowerCase()=="doc" || res[res.length-1].toLowerCase()=="docx" ){
