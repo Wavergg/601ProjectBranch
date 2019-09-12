@@ -192,7 +192,7 @@ class Jobs extends CI_Controller {
 					if($fileError === 0){
 						if($fileSize < 1000000){
 							$fileNameNew = $paramJobID . $fileName;
-							$fileDestination = constant('JOB_IMAGE_PATH') . $fileNameNew;
+							$fileDestination = constant('JOB_IMAGE_PATH') . $paramJobID. '/'. $fileNameNew;
 							move_uploaded_file($fileTmpName,$fileDestination);
 						} else {
 							array_push($errMessage,'The file is too big');
@@ -526,8 +526,6 @@ class Jobs extends CI_Controller {
             echo "Please login";
         }
         $jobID = $this->input->post('jobID');
-		
-		
         $config['upload_path'] = constant('JOB_IMAGE_PATH').$jobID.'/';
 
         $config['allowed_types'] = 'pdf|png|doc|docx';
@@ -546,8 +544,6 @@ class Jobs extends CI_Controller {
                 echo "Apply Successfully";
             }
 		}
-		
-        
 	}
 	
 	// download file

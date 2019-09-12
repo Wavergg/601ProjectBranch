@@ -107,7 +107,7 @@
                                         <img id="imgPreview" src="<?php echo base_url()?>lib/images/facebook.jpg" class="mx-md-2" style="width:275px;height:165px;">
                                     <?php else :?>
                                         <?php $setImgPreviewID = "imgPreview1" ;?>
-                                        <img id="imgPreview1" src="<?php echo base_url() . 'lib/jobImages/' . $job['JobImage']?>"  class="mx-md-2" style="width:275px;height:165px;">
+                                        <img id="imgPreview1" src="<?php echo base_url() . 'lib/jobImages/' . $job['JobID'] . '/'. $job['JobImage']?>"  class="mx-md-2" style="width:275px;height:165px;">
                                     <?php endif;?>
                                     </div>
                                     <div class="row justify-content-center">
@@ -192,7 +192,6 @@
                 <div v-if="userFiles.length > 0">
                     <div v-for="userFile in userFiles">
                         <a class="btn btn-primary btn-block my-1" :href="'<?php echo base_Url(); ?>index.php/Jobs/downloadFile/' + jobID + '/' + userFile">{{ userFile }}</a>
-                        
                     </div>
                 </div>
                 <!-- List of the files end -->
