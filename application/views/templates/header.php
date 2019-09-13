@@ -37,10 +37,10 @@
                 $numUncheckedJob = $ci->Job_model->countNumberUncheckedJob();
                 $numUncheckedCandidate = $ci->Candidate_model->countNumberUncheckedCandidate();?>
                 <!-- icon for notification and the number -->
-                <a href="" class="notification">
+                <span class="notification">
                     <span><i style="font-size:30px;" class="icon ion-md-notifications-outline"></i></span>
                     <span class="text-primary"><?php echo $numUncheckedCandidate+$numUncheckedJob?></span>
-                </a>
+                </span>
                 <?php endif;?>
             <?php endif;?>
             </div>

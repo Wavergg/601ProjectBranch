@@ -518,12 +518,10 @@ var app = new Vue ({
             }
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/applyJob/'
             this.$http.post(urllink, formData).then(res => {
-                this.message = res.body;
-                $('#myModal').modal('show');
+                
             }, res => {
                 // error callback
-                this.message=this.message + " Submission is failed, please try again.";
-                $('#myModal').modal('show');
+                
             }
             );
             
