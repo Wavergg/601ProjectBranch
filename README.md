@@ -8,3 +8,16 @@ Ivy: UX Designer
 David: Front End Programmer
 Carl: Back End Programmer
 
+# configuration
+
+## application/config/config.php
+$config['base_url'] = 'http://localhost';
+
+## application/config/constants.php
+All files for an candidates:
+define('CV_PATH', '/var/www/candidatesCV/');
+The folder should be created.
+
+All files for a job:
+define('JOB_IMAGE_PATH', '/var/www/html/lib/jobImages/');
+The folder should be created.

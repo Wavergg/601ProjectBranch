@@ -124,7 +124,7 @@
                 <label for="JobCVID" class="font-weight-bold mx-3">Drop your CV here:</label>
                 </div>
                 <div class="row">
-                <input type="file" class="col-10" id="JobCVID" @change="checkJobCV" v-model="jobCV" name="jobCV">
+                <input type="file" class="col-10" id="JobCVID" @change="checkJobCV" name="jobCV">
                 <div class="mt-3" v-if="jobCVError.length">
                     <p class="text-danger" v-text="jobCVError"></p>
                 </div>

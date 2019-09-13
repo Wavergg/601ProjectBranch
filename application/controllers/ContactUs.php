@@ -38,7 +38,8 @@ class ContactUS extends CI_Controller{
         /**
          * Email config
          */
-            
+        
+        /* Sugarhosting
         $to      = 'leekunhui@gmail.com';
         $subject = 'Message from Website';
         $message = 'Name: '.$userName.'; Email: '.$userEmail.'; Contact: '.$userContact.';\n Message:'.$userMessage;
@@ -46,6 +47,31 @@ class ContactUS extends CI_Controller{
             'Return-Path: carl@markleetesting12300.name' . "\r\n" .
             'Reply-To: carl@markleetesting12300.name' . "\r\n";
         mail($to, $subject, $message, $headers);
+        */
 
+        // sendgrid
+        $config['smtp_host'] = '';
+        $config['smtp_user'] = 'apikey';
+        $config['smtp_pass'] = '';
+        
+        $config['smtp_port'] = '587';
+        $config['smtp_crypto'] = 'tls';
+        // $config['mailtype'] = 'html';
+
+        $this->email->initialize($config);
+
+        $this->email->from('apikey@sendgrid.net');
+        $this->email->to('leekunhui@gmail.com');
+        $this->email->subject('Message from the Website');
+        $message = 'Name: '.$userName.' Email: '.$userEmail.' Contact: '.$userContact.' Message:'.$userMessage;
+        $this->email->message($message);
+        
+        if($this->email->send()){
+            $message = 'Successfully';
+        } else {
+            $message = 'Failed';
+        }
+
+        echo $message;
      }
 }

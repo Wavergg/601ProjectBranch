@@ -8,6 +8,7 @@ class CandidateMission extends CI_Controller{
 		$this->load->helper('url');
         $this->load->helper('security');
         $this->load->helper('download');
+        $this->load->helper('directory');
 
         $this->load->library('session');
         // Load Modesl
@@ -91,6 +92,16 @@ class CandidateMission extends CI_Controller{
         }
     }
     
+    public function downloadFile($candidateID, $fileName){
+        if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+
+            $path = constant('CV_PATH').$candidateID.'/'.$fileName;
+            
+            force_download($path, NULL);
+        } else {
+            redirect('/');
+        }
+    }
     
     /**
      * AJAX Methods
@@ -245,10 +256,10 @@ class CandidateMission extends CI_Controller{
     public function uploadCV(){
       
        
+
         $firstName = $this->input->post('firstName');
         $lastName = $this->input->post('lastName');
         //get the last ID for database with firstname and lastname criteria
-
         $userData = $this->candidate_model->getUserByData($firstName,$lastName);
         $userID = $userData['UserID'];
         
@@ -288,6 +299,35 @@ class CandidateMission extends CI_Controller{
         
     }
 
+    
+    // upload other files by Admin or Staff
+    public function uploadFiles(){
+        if($_SESSION['userType']!='admin' && $_SESSION['userType'] !='staff'){
+            echo "Please login";
+        }
+        $candidateID = $this->input->post('condidateID');
+        
+        $config['upload_path'] = constant('CV_PATH').$candidateID.'/';
+
+        $config['allowed_types'] = 'pdf|png|doc|docx';
+        $config['max_size'] = 10000;
+        $config['max_width'] = 0;
+        $config['max_height'] = 0;
+
+        if ($this->security->xss_clean($_FILES, TRUE) === FALSE)
+        {
+            echo 'upload failed';
+        } else {
+            $this->load->library('upload', $config);
+            if (!$this->upload->do_upload('userFile')) {
+                echo "Apply Failed.";
+            } else {
+                echo "Apply Successfully".$candidateID;
+            }
+        }
+        
+    }
+
     //accessible from View->pages->manageCandidate
     //a detailed information of candidate based on what data they inserted in the form, when submitting their application
     public function candidateDetails($candidateID,$jobID=""){
@@ -299,6 +339,11 @@ class CandidateMission extends CI_Controller{
                 //if it's under assign candidate function pass in the job ID as well so staff can easily click on a button to assign this candidate
                 $data['job'] = $this->job_model->get_specificJob($jobID);
             }
+
+            // Find all the files under the candidate's folder
+            $path = constant('CV_PATH').$candidateID.'/';
+            $data['userFiles'] = directory_map($path);
+
             $this->load->view('templates/header',$userdata);
             $this->load->view('pages/candidateDetails',$data);
             $this->load->view('templates/footer');

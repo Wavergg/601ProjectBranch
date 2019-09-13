@@ -213,7 +213,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="candidate in candidatesCopy" :key="candidate.CandidateID">
-                                <td v-bind:class="{ 'd-none': ! showCandidateCheck }"> <input type="checkbox" v-on:click="checkCandidate(candidate.CandidateID)" :checked="candidate.Checked"></td>
+                                <td v-bind:class="{ 'd-none': ! showCandidateCheck }"> <input type="checkbox" v-on:click="checkCandidate(candidate.CandidateID)" :checked="candidate.Checked"></td> <!-- Change to update date -->
                                 <td><a v-on:click="getUrl(candidate.CandidateID)" role="button" class="text-primary"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></td>
                                 <td v-text="candidate.FirstName" v-bind:class="{ 'd-none': ! showFirstName }"></td>
                                 <td v-text="candidate.LastName" v-bind:class="{ 'd-none': ! showLastName }"></td>

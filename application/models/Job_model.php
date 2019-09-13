@@ -83,6 +83,14 @@ class Job_model extends CI_Model {
         return $query->row_array();
     }
 
+    // called from: Controller->EmployerMission->addjob(),
+    // get the job with the max JobID
+    public function get_maxJobID(){
+        $this->db->select_max('JobID');
+        $query = $this->db->get('Job');
+        return $query->row_array();
+    }
+
     /**
      * Update functions
      */
