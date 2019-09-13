@@ -266,15 +266,17 @@ class CandidateMission extends CI_Controller{
         // get max candidate ID
         $candidate = $this->candidate_model->getMaxIDByUserID($userID);
         $maxID=$candidate['MaxID'];
-
         
-        $config['upload_path'] = constant('CV_PATH');
+        $config['upload_path'] = constant('CV_PATH').$maxID.'/';
+
+        // create the folder
+        mkdir($config['upload_path']);
 
         $config['allowed_types'] = 'pdf|png|doc|docx';
         $config['max_size'] = 10000;
         $config['max_width'] = 0;
         $config['max_height'] = 0;
-        $config['file_name'] = $maxID; // the uploaded file's extension will be applied
+        $config['file_name'] = "CV"; // the uploaded file's extension will be applied
 
         if ($this->security->xss_clean($_FILES, TRUE) === FALSE)
         {
