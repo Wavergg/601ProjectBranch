@@ -517,8 +517,8 @@ var app = new Vue ({
                 formData.append('UserPicture',userPic.files[0]);
             }
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/applyJob/'
-            await this.$http.post(urllink, formData).then(res => {
-                this.message= res.body;
+            this.$http.post(urllink, formData).then(res => {
+                this.message = res.body;
                 $('#myModal').modal('show');
             }, res => {
                 // error callback

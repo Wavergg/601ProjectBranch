@@ -209,6 +209,7 @@ var app = new Vue({
             formData.append('lastName', this.lastName);
             formData.append('userAddress', this.userAddress);
             formData.append('city', this.city);
+            formData.append('DOB',this.DOB);
             formData.append('zipCode', this.zipCode);
             formData.append('suburb', this.suburb);
             formData.append('phoneNumber', this.phoneNumber);
@@ -217,12 +218,16 @@ var app = new Vue({
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/addUserByStaff/'
             await this.$http.post(urllink, formData).then(res => {
                 var result = res.body
+                this.messages = res.body
+                $('#myModal').modal('show');
             }, res => {
                 // error callback
-                this.message="Cannot add a user, please try it later.";
+                this.messages=res.body;
                 $('#myModal').modal('show');
             });
 
+            var candidateCV = document.getElementById("JobCVID");
+            
             var formData = new FormData()
             formData.append('firstName', this.firstName);
             formData.append('lastName', this.lastName);
@@ -260,35 +265,32 @@ var app = new Vue({
             formData.append('Smoke', this.smoke);
             formData.append('Conviction', this.conviction);
             formData.append('ConvictionDetails', this.convictionDetails);
+          
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/applyJob/'
             await this.$http.post(urllink, formData).then(res => {
                 var result = res.body
-                
-                
             }, res => {
                 // error callback
-                this.messages="Submition was failed, please try it later.";
+                this.messages="Submission was failed, please try it again.";
                 $('#myModal').modal('show');
             })
 
             // upload the cv
-            var candidateCV = document.getElementById("JobCVID");
-            
-            var formData = new FormData()
-            formData.append('firstName', this.firstName);
-            formData.append('lastName', this.lastName);
-            formData.append('JobCV', candidateCV.files[0]);
-            var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/uploadCV/'
-            this.$http.post(urllink, formData).then(res => {
-                var result = res.body
-                this.messages="Job was applied successfully.";
-                $('#myModal').modal('show');
+                var candidateCV = document.getElementById("JobCVID");
                 
-            }, res => {
-                // error callback
-                this.messages="CV upload was failed, please try it later.";
-                $('#myModal').modal('show');
-            })
+                var formData = new FormData()
+                formData.append('firstName', this.firstName);
+                formData.append('lastName', this.lastName);
+                formData.append('JobCV', candidateCV.files[0]);
+                var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/uploadCV/'
+                this.$http.post(urllink, formData).then(res => {
+                    var result = 'Application submitted'
+                    $('#myModal').modal('show');
+                }, res => {
+                    // error callback
+                    this.messages="CV upload was failed, please try it again.";
+                    $('#myModal').modal('show');
+                })
             }
         },
         checkJobCV: function(){
