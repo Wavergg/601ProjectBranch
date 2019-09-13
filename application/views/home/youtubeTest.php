@@ -1,45 +1,54 @@
+<div id="app">
+    <div style="height: 50px;"></div>
+        <div class="container">
+        <label for="youtubeLinksID" class="display-4 font-weight-bold">Enter URL:</label>
+        <input type="text" id="youtubeLinksID"  v-model="urlLink" @change="loadVideo" class="form-control" >
+        </div>
+        <div class="container my-4 ">
+          <!-- <div class="row justify-content-center"> -->
+            <div id="video  justify-content-center row">
+                <div class="wrapper">
+                    <iframe id="video-preview" style="display:none" src=""></iframe>
+                </div>
+            </div>
+        </div>
+   <!--  </div> -->
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
 
-<div id="player"></div>
-
-    <script>
-      // 2. This code loads the IFrame Player API code asynchronously.
-      var tag = document.createElement('script');
-
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-      // 3. This function creates an <iframe> (and YouTube player)
-      //    after the API code downloads.
-      var player;
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-          height: '390',
-          width: '640',
-          videoId: 'M7lc1UVf-VE',
-          events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-          }
-        });
-      }
-
-      // 4. The API will call this function when the video player is ready.
-      function onPlayerReady(event) {
-        event.target.playVideo();
-      }
-
-      // 5. The API calls this function when the player's state changes.
-      //    The function indicates that when playing a video (state=1),
-      //    the player should play for six seconds and then stop.
-      var done = false;
-      function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
-          setTimeout(stopVideo, 6000);
-          done = true;
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+        urlLink: "",
+        },
+        methods: {
+            
+            loadVideo: function(){
+                var videoUrl = document.getElementById('youtubeLinksID').value
+                if(videoUrl.length < 1){
+                    document.getElementById('video').style.display = "none";
+                    document.getElementById('video-preview').style.display = "none";
+                } else {
+                    var urlID = this.urlLink.split("=")
+                    document.getElementById("video-preview").src = 'https://youtube.com/embed/'+urlID[1];
+                    document.getElementById('video-preview').style.display = "block";
+                    document.getElementById('video').style.display = "block";
+                }
+            }
+        },
+        mounted: function() {
+           this.urlLink = 'https://www.youtube.com/watch?v=c1xVsgekJr0';
+           if(this.urlLink.length>0){
+                var urlID = this.urlLink.split("=")
+                document.getElementById("video-preview").src = 'https://youtube.com/embed/'+urlID[1];
+                document.getElementById('video-preview').style.display = "block";
+                document.getElementById('video').style.display = "block";
+           }
         }
-      }
-      function stopVideo() {
-        player.stopVideo();
-      }
-    </script>
+        
+    })
+</script>
+
+
