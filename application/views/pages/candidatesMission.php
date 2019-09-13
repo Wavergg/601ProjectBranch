@@ -134,7 +134,9 @@ var app = new Vue({
         DOB: "",
         cityError: "",
         zipCode: "",
+        zipCodeError: "",
         suburb: "",
+        suburbError: "",
         phoneNumber: "",
         phoneNumberError: "",
         userEmail: "",
@@ -187,19 +189,21 @@ var app = new Vue({
             {
                 if(this.firstName.length === 0){
                     this.firstNameError = "Plase fill the First Name"
+                } else { 
+                    this.firstNameError = "" 
                 }
                 if(this.lastName.length === 0){
                     this.lastNameError = "Plase fill the Last Name"
-                }
+                } else { this.lastNameError = "" }
                 if(this.userAddress.length === 0){
                     this.addressError = "Plase fill the Address"
-                }
+                } else { this.addressError = "" }
                 if(this.city.length === 0){
                     this.cityError = "Plase fill the City"
-                }
+                } else { this.cityError = "" }
                 if(this.userEmail.length === 0){
                     this.emailError = "Plase fill the Email"
-                }
+                } else { this.emailError = "" }
                 this.emptyRequiredError = "Please Fill the required field"
             } else {
             // insert data to database
@@ -284,7 +288,8 @@ var app = new Vue({
                 formData.append('JobCV', candidateCV.files[0]);
                 var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/uploadCV/'
                 this.$http.post(urllink, formData).then(res => {
-                    var result = 'Application submitted'
+                    var result = res.body
+                    this.messages = 'Application submitted'
                     $('#myModal').modal('show');
                 }, res => {
                     // error callback
@@ -302,8 +307,8 @@ var app = new Vue({
                     //pdf|png|doc|docx
                     if(res[res.length-1].toLowerCase()=="pdf" || res[res.length-1].toLowerCase()=="png" ||
                     res[res.length-1].toLowerCase()=="doc" || res[res.length-1].toLowerCase()=="docx" ){
-                        this.isButton=false;
                         this.jobCVError="";
+                        this.buttonDisabledCheck()
                     } else {this.isButton = true; this.jobCVError="Invalid file format, only accepts pdf,doc,png or docx"}
                 } else {
                     this.isButton = true;
@@ -319,12 +324,12 @@ var app = new Vue({
         },
         checkEmail: function(){
                 
-                    if(!this.validEmail(this.userEmail)){
+                    if(!this.validEmail(this.userEmail) && this.userEmail.length>0){
                         this.emailError = "Invalid Email Address"
                         this.isButton = true
                     } else {
                     this.emailError = ""
-                    this.isButton = false
+                    this.buttonDisabledCheck()
                     }
                 
             },
@@ -337,7 +342,7 @@ var app = new Vue({
                     var re = /^[a-zA-Z\.\'\-\"\, ]{2,}$/;
                     if(re.test(this.firstName)){
                         this.firstNameError = ""
-                        this.isButton = false
+                        this.buttonDisabledCheck()
                     } else {
                         this.firstNameError = "Invalid Name"
                         this.isButton = true
@@ -352,7 +357,7 @@ var app = new Vue({
                     var re = /^[a-zA-Z\.\'\-\"\, ]{2,}$/;
                     if(re.test(this.lastName)){
                         this.lastNameError = ""
-                        this.isButton = false
+                        this.buttonDisabledCheck()
                     } else {
                         this.lastNameError = "Invalid Name"
                         this.isButton = true
@@ -367,9 +372,9 @@ var app = new Vue({
                     var re = /^([a-zA-Z\.\,\'"&:/\- ]+[ ]?[#]?[0-9][a-zA-Z0-9 ]*|[#]?[ ]?[0-9]+[ ]?[a-zA-Z][ a-zA-Z0-9\.\,\'"&:/\-]*)$/;
                     if(re.test(this.userAddress)){
                         this.addressError = ""
-                        this.isButton = false
+                        this.buttonDisabledCheck()
                     } else {
-                        this.addressError = "Invalid address, contains unallowed special characters or it\'s incomplete"
+                        this.addressError = "Invalid address, incomple or contains bad characters"
                         this.isButton = true
                     }
                 } else { 
@@ -380,16 +385,52 @@ var app = new Vue({
             checkCity: function(){
                 if(this.city.length>0){
                     this.cityError = "";
+                    this.buttonDisabledCheck()
                 }
             },
             checkPhoneNumber: function(){
               var re = /^[\+]?\(?[\+]?[0-9]{1,4}\)?[\- \.]?\(?[0-9]{2,4}[\-\. ]?[0-9]{2,4}[\-\. ]?[0-9]{0,6}?\)?$/
-                if(re.test(this.phoneNumber)){
+                if(re.test(this.phoneNumber) || this.phoneNumber.length<1){
                     this.phoneNumberError = ""
                 } else {
                     this.phoneNumberError = "Invalid Phone Number"
                 }
+            },
+            checkGeneral: function(general){
+                var generalID = general+'IDError'
+                var generalValue = document.getElementById(general+'ID').value
+                var re = /^[a-zA-Z0-9/\.\'\-\"\, \n]+$/
+                if(re.test(generalValue) || generalValue.length<1){
+                    document.getElementById(generalID).innerHTML = "";
+                } else {
+                    document.getElementById(generalID).innerHTML = "Input contains bad characters";
+                }
+            },
+            checkZip: function(){
+                var re = /^\d{4}$/
+                if(re.test(this.zipCode) || this.zipCode.length<1){
+                    this.zipCodeError = ""
+                } else {
+                    this.zipCodeError = "Invalid"
+                }
+            },
+            checkSuburb: function(){
+                var re = /^[a-zA-Z\s/\.\'\(\)&\,\"\-]+$/
+                if(re.test(this.suburb) || this.suburb.length<1){
+                    this.suburbError = ""
+                } else {
+                    this.suburbError = "Invalid Suburb"
+                }
+            },
+            buttonDisabledCheck: function(){
+                if(this.firstNameError.length>0||this.lastNameError.length>0|| this.emailError.length>0 
+                ||this.addressError.length>0 || this.cityError.length>0 || this.jobCVError.length>0){
+                    this.isButton = true
+                } else {
+                    this.isButton = false
+                }
             }
+            
         
         
         

@@ -206,7 +206,7 @@ class CandidateMission extends CI_Controller{
             'Smoke' => $this->checkBoxFilter($this->input->post('Smoke')),
             'Conviction' => $this->checkBoxFilter($this->input->post('Conviction')),
 
-            'ConvictionDetails' => $this->security->xss_clean(stripslashes(trim($this->input->post('ConvictionDetails')))),
+            'ConvictionDetails' => $this->filterGeneral($this->input->post('ConvictionDetails')),
             'UserID' => $userID,
             'CandidateNotes' => $candidateNotes,
             'ApplyDate' => $applyDate,
@@ -478,26 +478,26 @@ class CandidateMission extends CI_Controller{
         if($this->filterName($this->input->post('firstName'))){
         $firstName = xss_clean(stripslashes(trim($this->input->post('firstName'))));
         } else {
-            $isError = true; echo 'firstName';
+            $isError = true; echo 'Failure to enter the application into database, Cause: invalid First Name ';
         }
 
         if($this->filterName($this->input->post('lastName'))){
         $lastName = xss_clean(stripslashes(trim($this->input->post('lastName'))));
         } else {
-            $isError = true; echo 'lastName';
+            $isError = true; echo 'Failure to enter the application into database, Cause: Invalid Last Name ';
         }
         
         if($this->filterAddress(($this->input->post('userAddress')))){
         $userAddress = xss_clean(stripslashes(trim($this->input->post('userAddress'))));
         } else {
-            $isError = true; echo 'address';
+            $isError = true; echo 'Failure to enter the application into database, Cause: Invalid Address ';
         }
        
         if(!empty($_POST['DOB'])){
             if($this->filterDOB($this->input->post('DOB'))){
             $DOB = xss_clean(stripslashes(trim($this->input->post('DOB'))));
             } else {
-                $isError = true; echo 'DOB';
+                $isError = true; echo 'Failure to enter the application into database, Cause: Invalid DOB ';
             }
         } else {
             $DOB = '0000-00-00';
@@ -506,7 +506,7 @@ class CandidateMission extends CI_Controller{
         if($this->filterCity($this->input->post('city'))){
             $city = xss_clean(stripslashes(trim($this->input->post('city'))));
         } else {
-            $isError = true; echo 'city';
+            $isError = true; echo 'Failure to enter the application into database, Cause: Invalid City ';
         }
 
         $zipCode = $this->filterZIP(($this->input->post('zipCode')));
@@ -515,14 +515,14 @@ class CandidateMission extends CI_Controller{
             if($this->filterSuburb($this->input->post('suburb'))){
                 $suburb = xss_clean(stripslashes(trim($this->input->post('suburb'))));
             } else {
-                $isError = true; echo 'suburb';
+                $isError = true; echo 'Failure to enter the application into database, Cause: Invalid Suburb ';
             }
         } else { $suburb = "";}
 
         if($this->filterPhone($this->input->post('phoneNumber'))){
         $phoneNumber = xss_clean(stripslashes(trim($this->input->post('phoneNumber'))));
         } else {
-            $isError = true; echo 'zip';
+            $isError = true; echo 'Failure to enter the application into database, Cause: Invalid Phone number ';
         }
 
         if($this->filterGender($this->input->post('gender'))){
@@ -533,7 +533,7 @@ class CandidateMission extends CI_Controller{
 
         if($this->filterEmail($this->input->post('userEmail'))){
             $userEmail = xss_clean(stripslashes(trim($this->input->post('userEmail'))));
-        } else { $isError = true; echo 'email';}
+        } else { $isError = true; echo 'Failure to enter the application into database, Cause: Invalid Email ';}
 
         //generate an email and password that are almost impossible for the user to login so there is no conflict when a staff added a new candidate
         //because it requires a user as well

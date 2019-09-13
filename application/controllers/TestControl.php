@@ -44,6 +44,12 @@ class TestControl extends CI_Controller
           foreach($jobsResult[0] as $key=>$val){
             echo $key . ':' . $val . '<br/>';
           };
+      }
 
-  }
+      public function embedYoutube(){
+        $userdata['userType'] = 'anyone';
+        $this->load->view('templates/header',$userdata);
+        $this->load->view('home/youtubeTest');
+        $this->load->view('templates/footer');
+      }
 }
