@@ -6,7 +6,7 @@
         </div>
         <div class="container my-4 ">
           <!-- <div class="row justify-content-center"> -->
-            <div id="video  justify-content-center row">
+            <div id="video justify-content-center row">
                 <div class="wrapper">
                     <iframe id="video-preview" style="display:none" src=""></iframe>
                 </div>
@@ -28,13 +28,12 @@
             loadVideo: function(){
                 var videoUrl = document.getElementById('youtubeLinksID').value
                 if(videoUrl.length < 1){
-                    document.getElementById('video').style.display = "none";
+          
                     document.getElementById('video-preview').style.display = "none";
                 } else {
                     var urlID = this.urlLink.split("=")
                     document.getElementById("video-preview").src = 'https://youtube.com/embed/'+urlID[1];
                     document.getElementById('video-preview').style.display = "block";
-                    document.getElementById('video').style.display = "block";
                 }
             }
         },

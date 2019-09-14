@@ -141,6 +141,11 @@ class Jobs extends CI_Controller {
 			$data['title'] = "Job Order Details";
 
 			$this->job_model->updateJobStatusToComplete($paramJobID);
+
+			// Find all the files under the job's folder
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
+			$data['userFiles'] = directory_map($path);
+
 			//get the new refreshed data
 			$data['job'] = $this->job_model->get_specificJob($paramJobID);
 			$data['candidatesData'] = $this->candidate_model->getCandidatesJobDetails($paramJobID);
@@ -210,6 +215,9 @@ class Jobs extends CI_Controller {
 			$this->job_model->publishJob($paramJobID,$textEditor,$thumbnailText,$publishTitle,$publishDate,$fileNameNew);
 			//select the job 
 			//refresh the value
+			// Find all the files under the job's folder
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
+			$data['userFiles'] = directory_map($path);
 			$data['job'] = $this->job_model->get_specificJob($paramJobID);
 			$data['candidatesData'] = $this->candidate_model->getCandidatesJobDetails($paramJobID);
 			$data['message'] = $errMessage;
@@ -237,6 +245,9 @@ class Jobs extends CI_Controller {
 			}
 			$this->job_model->unpublishJob($paramJobID,$status);
 			//select the job 
+			// Find all the files under the job's folder
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
+			$data['userFiles'] = directory_map($path);
 			$data['job'] = $this->job_model->get_specificJob($paramJobID);
 			
 			$this->load->view('templates/header',$userdata);
@@ -331,6 +342,10 @@ class Jobs extends CI_Controller {
 			$data['job'] = $this->job_model->get_specificJob($jobID);
 			$data['candidatesData'] = $this->candidate_model->getCandidatesJobDetails($jobID);
 			
+			// Find all the files under the job's folder
+            $path = constant('JOB_IMAGE_PATH').$jobID.'/';
+			$data['userFiles'] = directory_map($path);
+
 			$this->load->view('templates/header',$userdata);
 			$this->load->view('pages/jobDetails',$data);
 			$this->load->view('templates/footer');
@@ -523,28 +538,33 @@ class Jobs extends CI_Controller {
 	// upload other files by Admin or Staff
     public function uploadFiles(){
         if($_SESSION['userType']!='admin' && $_SESSION['userType'] !='staff'){
-            echo "Please login";
+          
         }
-        $jobID = $this->input->post('jobID');
-        $config['upload_path'] = constant('JOB_IMAGE_PATH').$jobID.'/';
+		$jobID = $this->input->post('jobID');
+		$path = constant('JOB_IMAGE_PATH').$jobID.'/';
+        $config['upload_path'] = $path;
 
-        $config['allowed_types'] = 'pdf|png|doc|docx';
-        $config['max_size'] = 10000;
+        $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx|zip|7z';
+        $config['max_size'] = 30000;
         $config['max_width'] = 0;
-        $config['max_height'] = 0;
+		$config['max_height'] = 0;
+		$config['file_ext_tolower'] = TRUE;
+		$config['remove_spaces'] = TRUE;
 
         if ($this->security->xss_clean($_FILES, TRUE) === FALSE)
         {
-            echo 'upload failed';
         } else {
             $this->load->library('upload', $config);
             if (!$this->upload->do_upload('userFile')) {
-                echo "Apply Failed.";
+
             } else {
-                echo "Apply Successfully";
+				$data['userFiles'] = directory_map($path);
+				
+				echo json_encode($data['userFiles']);
             }
 		}
 	}
+	
 	
 	// download file
 	public function downloadFile($jobID, $fileName){
@@ -556,5 +576,21 @@ class Jobs extends CI_Controller {
         } else {
             redirect('/');
         }
-    }
+	}
+	
+	//remove File
+	public function removeFile(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			$jobID = $_POST['jobID'];
+			$fileName = $_POST['userFile'];
+			$path = constant('JOB_IMAGE_PATH').$jobID.'/';
+			//let's not use this. it's dangerous as heck
+			//unlink($path.$fileName);
+			rename($path.$fileName,constant('JOB_IMAGE_PATH').'del/'.$jobID.$fileName);
+			$data['userFiles'] = directory_map($path);
+			echo json_encode($data['userFiles']);
+        } else {
+            redirect('/');
+        }
+	}
 }

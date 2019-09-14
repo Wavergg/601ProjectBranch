@@ -83,7 +83,10 @@ class CandidateMission extends CI_Controller{
     // accessible from view->pages->candidateDetails || view->pages->manageCandidate
     public function downloadCV($fileName){
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-
+            if(empty($fileName) || $fileName == 'null'){
+                echo 'Candidate CV doesn\'t exists';
+            }
+           // $candidateID = explode('.',$fileName);
             $path = constant('CV_PATH').$fileName;
             
             force_download($path, NULL);
@@ -216,6 +219,11 @@ class CandidateMission extends CI_Controller{
             
             $data = array();
             $candidate = $this->candidate_model->getMaxIDByUserID($userID);
+            
+            $path = constant('CV_PATH').$candidate['MaxID'].'/';
+
+            // create the folder
+            mkdir($path);
 
             if(!empty($_FILES['UserPicture'])){
                 $fileName = $_FILES['UserPicture']['name'];
@@ -231,7 +239,7 @@ class CandidateMission extends CI_Controller{
                     if($fileError === 0){
                         if($fileSize < 1000000){
                             $fileNameNew = $candidate['MaxID'] . $fileName;
-                            $fileDestination = "C:\\xamppNew2\\htdocs\\candidateProfile\\" . $fileNameNew;
+                            $fileDestination = constant('CANDIDATE_PICTURE_PATH') . $fileNameNew;
                             move_uploaded_file($fileTmpName,$fileDestination);
                             $this->candidate_model->updateProfilePictureLink($candidate['MaxID'],$fileNameNew);
                             echo 'Successful in uploading user image';
@@ -266,18 +274,16 @@ class CandidateMission extends CI_Controller{
         // get max candidate ID
         $candidate = $this->candidate_model->getMaxIDByUserID($userID);
         $maxID=$candidate['MaxID'];
-        
-        $config['upload_path'] = constant('CV_PATH').$maxID.'/';
 
-        // create the folder
-        mkdir($config['upload_path']);
-
+        $config['upload_path'] = constant('CV_PATH');
         $config['allowed_types'] = 'pdf|png|doc|docx';
         $config['max_size'] = 10000;
         $config['max_width'] = 0;
         $config['max_height'] = 0;
-        $config['file_name'] = "CV"; // the uploaded file's extension will be applied
-
+        $config['file_name'] = $maxID."CV"; // the uploaded file's extension will be applied
+        $config['file_ext_tolower'] = TRUE;
+        $config['remove_spaces'] = TRUE;
+        
         if ($this->security->xss_clean($_FILES, TRUE) === FALSE)
         {
             echo 'upload failed';
@@ -307,28 +313,47 @@ class CandidateMission extends CI_Controller{
         if($_SESSION['userType']!='admin' && $_SESSION['userType'] !='staff'){
             echo "Please login";
         }
-        $candidateID = $this->input->post('condidateID');
+        $candidateID = $this->input->post('candidateID');
         
-        $config['upload_path'] = constant('CV_PATH').$candidateID.'/';
+        $path = constant('CV_PATH').$candidateID.'\\';
+        $config['upload_path'] = $path;
 
-        $config['allowed_types'] = 'pdf|png|doc|docx';
-        $config['max_size'] = 10000;
+        $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx|zip|7z';
+        $config['max_size'] = 30000;
         $config['max_width'] = 0;
         $config['max_height'] = 0;
+        $config['file_ext_tolower'] = TRUE;
+		$config['remove_spaces'] = TRUE;
 
         if ($this->security->xss_clean($_FILES, TRUE) === FALSE)
         {
-            echo 'upload failed';
         } else {
             $this->load->library('upload', $config);
             if (!$this->upload->do_upload('userFile')) {
-                echo "Apply Failed.";
+
             } else {
-                echo "Apply Successfully".$candidateID;
+				$data['userFiles'] = directory_map($path);
+				
+				echo json_encode($data['userFiles']);
             }
-        }
-        
+		}
     }
+
+    //removing file from candidateDetails
+    public function removeFile(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			$candidateID = $_POST['candidateID'];
+			$fileName = $_POST['userFile'];
+			$path = constant('CV_PATH').$candidateID.'/';
+			//let's not use this. it's dangerous as heck
+			//unlink($path.$fileName);
+			rename($path.$fileName,constant('CV_PATH').'del/'.$candidateID.$fileName);
+			$data['userFiles'] = directory_map($path);
+			echo json_encode($data['userFiles']);
+        } else {
+            redirect('/');
+        }
+	}
 
     //accessible from View->pages->manageCandidate
     //a detailed information of candidate based on what data they inserted in the form, when submitting their application
@@ -346,6 +371,7 @@ class CandidateMission extends CI_Controller{
             $path = constant('CV_PATH').$candidateID.'/';
             $data['userFiles'] = directory_map($path);
 
+            
             $this->load->view('templates/header',$userdata);
             $this->load->view('pages/candidateDetails',$data);
             $this->load->view('templates/footer');
@@ -426,7 +452,7 @@ class CandidateMission extends CI_Controller{
                         if($fileError === 0){
                             if($fileSize < 1000000){
                                 $fileNameNew = $candidateID . $fileName;
-                                $fileDestination = "C:\\xamppNew2\\htdocs\\candidateProfile\\" . $fileNameNew;
+                                $fileDestination = constant('CANDIDATE_PICTURE_PATH') . $fileNameNew;
                                 move_uploaded_file($fileTmpName,$fileDestination);
                                 $data['UserPicture'] = $fileNameNew;
                             } else {
@@ -445,6 +471,17 @@ class CandidateMission extends CI_Controller{
         }
     }
 
+    //update youtube url link in candidateDetails
+    public function updateYoutubeURL(){
+        if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+            $data['CandidateID'] = $_POST['candidateID'];
+            $data['YoutubeURL'] = $_POST['youtubeURL'];
+            $this->candidate_model->updateYoutubeLink($data['CandidateID'],$data);
+        }
+        else {
+            redirect('/');
+        }
+    }
 
     //accessible from view->pages->manageCandidate
     //page to allow the staff and admin to add a new candidate themself

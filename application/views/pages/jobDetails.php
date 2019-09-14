@@ -16,7 +16,7 @@
             </li>
         </ul>
         <!-- Tab content -->
-        <div class="tab-content" id="myTabContent">
+        <div class="tab-content mt-4" id="myTabContent">
             <!-- Order Brief Tab -->
             <div class="tab-pane fade  show active" id="orderBrief" role="tabpanel" aria-labelledby="orderBrief-tab">
         
@@ -183,15 +183,30 @@
             </div>
             <!-- Order Brief Tab End -->
             <!-- Attachment Tab -->
-            <div class="tab-pane fade" id="attachment" role="tabpanel" aria-labelledby="attachment-tab">
-                <div class="my-2">
-                    <input type="file" id="userFiles" multiple="multiple">
-                    <button class="btn btn-primary" @click="uploadFiles">Upload Files</button>
+            <div class="tab-pane fade pb-5" id="attachment" role="tabpanel" aria-labelledby="attachment-tab">
+            
+            <div class="custom-file mt-5">
+                <div class="text-center mb-3 font-weight-bold">Upload Attachment Here:</div>
+                <div class="row justify-content-center container pr-1">
+                <div class="col-md-7">
+                <input type="file" class="custom-file-input" @change="uploadFileName" v-model="chosenFile" multiple="multiple" id="userFiles">
+                <label class="custom-file-label" for="userFiles" v-text="labelFile"></label>
                 </div>
+                </div>
+                <div class="row justify-content-center ">
+                    <div class="col-md-2 col-6">
+                    <button class="btn btn-light font-weight-bold border border-dark form-control mt-3" @click="uploadFiles">Upload Files</button>
+                    </div>
+                </div>
+            </div>
+                
                 <!-- List of the files -->
-                <div v-if="userFiles.length > 0">
-                    <div v-for="userFile in userFiles">
-                        <a class="btn btn-primary btn-block my-1" :href="'<?php echo base_Url(); ?>index.php/Jobs/downloadFile/' + jobID + '/' + userFile">{{ userFile }}</a>
+                <div class="mt-4"><h2 class="text-dark">Files Attached:</h2></div>
+
+                <div v-if="userFiles.length > 0" class="mt-3">
+                    <div v-for="userFile in userFiles" class="">
+                        
+                        <div class="btn btn-danger border-danger" v-on:click="removingFile(userFile)" style="border-radius: 5px 0px 0px 5px">X</div><a class="btn btn-outline-dark px-5 my-1" style="border-radius:0px 5px 5px 0px;" :href="'<?php echo base_Url(); ?>index.php/Jobs/downloadFile/' + jobID + '/' + userFile">{{ userFile }}</a>
                     </div>
                 </div>
                 <!-- List of the files end -->
@@ -236,12 +251,10 @@ var app = new Vue({
     el: '#app',
     data: {
         message: "",
-        userFiles: [
-            <?php foreach($userFiles as $userFile) : ?>
-                "<?php echo $userFile; ?>",
-            <?php endforeach; ?>
-        ],
-        jobID: "<?php echo $job['JobID'];?>"
+        userFiles: <?php echo json_encode($userFiles)?>,
+        jobID: "<?php echo $job['JobID'];?>",
+        chosenFile: "",
+        labelFile: "",
     },
     methods: {
         uploadFiles: function() {
@@ -257,17 +270,47 @@ var app = new Vue({
                 var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/uploadFiles/'
                 this.$http.post(urllink, formData).then(res => {
                     var result = res.body
-                    this.message = this.message + result;
-
+                    if(result.length>this.userFiles.length){
+                    this.message = "Successful in uploading files"
+                    this.userFiles = result
+                    } else {
+                        this.message = "Failure in uploading files"
+                    }
                 }, res => {
-                 //error callback
-                    var result = res.body
-                    this.message = this.message + result;
-
+                    this.message = "Failure in uploading files"
                 })
             }
-
+              $('#myModal').modal('show')
+        },
+        uploadFileName: function(){
+            if(this.chosenFile.length>0){
+            var chosenFileSplit = this.chosenFile.split('\\')
+            this.labelFile = chosenFileSplit[chosenFileSplit.length-1];
+            }
+        },
+        removingFile: function(userFileX){
+            console.log(this.jobID);
+            this.message = "";
+            
+             
+                var formData = new FormData();
+                formData.append('jobID', this.jobID);
+                formData.append('userFile', userFileX);
+                var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/removeFile/'
+                this.$http.post(urllink, formData).then(res => {
+                    var result = res.body
+                    if(result.length<this.userFiles.length){
+                        this.message = "Successful in removing files"
+                        this.userFiles = res.body
+                    } else {
+                        this.message = "Failure in removing files"
+                    }
+                }, res => {
+                    this.message = "Failure in removing files, Server Error"
+                })
+            
             $('#myModal').modal('show')
+    
         }
     }
 });

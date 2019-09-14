@@ -1,3 +1,4 @@
+
 <div id="app">
     <?php if(!empty($job)):?>
     <div class="form-control bg-success text-center text-white font-weight-bold rounded-0"
@@ -13,17 +14,17 @@
     </a>
     <?php endif;?>
 
-
-    <button type="button" @click="editButton()" style="position:fixed;right: 20px; bottom:180px;z-index:1"
-        class=" btn-lg btn-info">
+    <?php if(empty($job)):?>
+    <button type="button" @click="editButton()" style="position:fixed;right: 20px; bottom:154px;z-index:1"
+        class=" btn-sm btn-info">
         <i style="font-size:30px;" class="icon ion-md-create m-1"></i>
     </button>
     <button type="button"
         @click="submitButton(<?php echo $candidate['CandidateID'];?>,<?php echo $candidate['UserID'];?>)"
-        style="position:fixed;right: 20px; bottom:100px;z-index:1" class=" btn-lg btn-success">
+        style="position:fixed;right: 20px; bottom:90px;z-index:1" class=" btn-sm btn-success">
         <i style="font-size:30px;" class="icon ion-md-save m-1"></i>
     </button>
-
+    <?php endif;?>
     <div class="container mt-5">
         <h1 class="text-dark mt-3 text-center"> Applicant's Personal Information </h1>
         <hr />
@@ -36,6 +37,10 @@
             <li class="nav-item">
                 <a class="nav-link" id="attachment-tab" data-toggle="tab" href="#attachment" role="tab"
                     aria-controls="attachment" aria-selected="false">Attachment</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="Youtube-tab" data-toggle="tab" href="#Youtube" role="tab"
+                    aria-controls="Youtube" aria-selected="false">Youtube URL</a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
@@ -103,7 +108,7 @@
                     <div class="row col-md-4">
                         <div class="col-md-12">
                             <div class="row ml-3"><label for="candidateCVID" class="font-weight-bold mt-2">Candidate's CV:</label></div>
-                            <div class="row ml-3"><a href="<?php echo base_url()?>index.php/CandidateMission/downloadCV/<?php echo $candidate['JobCV'];?>" id="candidateCVID" class="btn btn-primary">CandidateCV</a></div>   
+                            <div class="row ml-3"><a href="<?php echo base_url()?>index.php/CandidateMission/downloadCV/<?php if(!empty($candidate['JobCV'])){echo $candidate['JobCV'];} else { echo '0';}?>" id="candidateCVID" class="btn btn-primary">CandidateCV</a></div>   
                 
                             <div class="row mt-5 mb-0 ml-4">
                     
@@ -120,7 +125,6 @@
                                 <div class="row justify-content-center">
                                     <input type="file" id="fileProfileBtn" hidden style="width:240px;" onchange="document.getElementById('<?php echo $setImgPreviewID ; ?>').src = window.URL.createObjectURL(this.files[0])" name="candidateImage" class="offset-md-0">
                                 </div>
-               
                             </div>
                         </div>
                     </div>
@@ -324,21 +328,51 @@
             </div>
             <!--applicant profile end-->
             <!-- attachement tab -->
-            <div class="tab-pane fade" id="attachment" role="tabpanel" aria-labelledby="attachment-tab">
-                <div class="my-2">
-                    <input type="file" id="userFiles" multiple="multiple">
-                    <button class="btn btn-primary" @click="uploadFiles">Upload Files</button>
+            <div class="tab-pane fade my-5" id="attachment" role="tabpanel" aria-labelledby="attachment-tab">
+                
+                <div class="custom-file mt-5">
+                <div class="text-center mb-3 font-weight-bold">Upload Attachment Here:</div>
+                <div class="row justify-content-center container pr-1">
+                <div class="col-md-7" style="z-index:0">
+                <input type="file" class="custom-file-input" @change="uploadFileName" v-model="chosenFile" multiple="multiple" id="userFiles">
+                <label class="custom-file-label" for="userFiles" v-text="labelFile"></label>
                 </div>
+                </div>
+                <div class="row justify-content-center ">
+                    <div class="col-md-2 col-6">
+                    <button class="btn btn-light font-weight-bold border border-dark form-control mt-3" @click="uploadFiles">Upload Files</button>
+                    </div>
+                </div>
+            </div>
+                
                 <!-- List of the files -->
-                <div v-if="userFiles.length > 0">
+                <div class="mt-5"><h2 class="text-dark">Files Attached:</h2></div>
+
+                <div v-if="userFiles.length > 0" class="mt-3 mb-5">
                     <div v-for="userFile in userFiles">
-                        <a class="btn btn-primary btn-block my-1" :href="'<?php echo base_Url(); ?>index.php/candidateMission/downloadFile/' + candidateID + '/' + userFile">{{ userFile }}</a>
-                        
+                        <div class="btn btn-danger border-danger" v-on:click="removingFile(userFile)" style="border-radius: 5px 0px 0px 5px">X</div><a class="btn btn-outline-dark px-5 my-1" style="border-radius:0px 5px 5px 0px;" :href="'<?php echo base_Url(); ?>index.php/CandidateMission/downloadFile/' + candidateID + '/' + userFile">{{ userFile }}</a>
                     </div>
                 </div>
                 <!-- List of the files end -->
+                
             </div>
             <!-- attachement tab end -->
+            <!-- Youtube Start -->
+            <div class="tab-pane fade mb-5" id="Youtube" role="tabpanel" aria-labelledby="Youtube-tab">
+                
+                <label for="youtubeLinksID" class="display-4 font-weight-bold mt-4">Youtube URL:</label>
+                <input type="text" id="youtubeLinksID"  v-model="youtubeLink" @change="loadVideo" class="form-control" >
+                
+                <div class="container my-4 ">
+                <!-- <div class="row justify-content-center"> -->
+                    <div id="video justify-content-center row">
+                        <div class="wrapper">
+                            <iframe id="video-preview" style="display:none" src=""></iframe>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <!-- Youtube End -->
         </div>
         <!-- tab content end -->
             
@@ -377,13 +411,11 @@
 var app = new Vue({
     el: '#app',
     data: {
-        userFiles: [
-            <?php foreach($userFiles as $userFile) : ?>
-            "<?php echo $userFile; ?>",
-            <?php endforeach; ?>
-        ],
         message: "",
         toggleEdit: false,
+        userFiles: <?php echo json_encode($userFiles)?>,
+        chosenFile: "",
+        labelFile: "",
         candidateID: <?php echo $candidate['CandidateID']; ?> ,
         firstName : "<?php echo $candidate['FirstName'];?>",
         lastName: "<?php echo $candidate['LastName'];?>",
@@ -520,6 +552,7 @@ var app = new Vue({
             echo "false";
         }; ?> ,
         convictionDetails : "<?php echo $candidate['ConvictionDetails'];?>",
+        youtubeLink: "",
     },
     methods: {
         uploadFiles: function() {
@@ -528,23 +561,50 @@ var app = new Vue({
             var userFiles = document.getElementById("userFiles");
             var len = userFiles.files.length;
             for (var i = 0; i < len; i++) {
-                //console.log(userFiles.files[i].name)
+                console.log(userFiles.files[i].name)
                 var formData = new FormData();
-                formData.append('condidateID', this.candidateID);
+                formData.append('candidateID', this.candidateID);
                 formData.append('userFile', userFiles.files[i]);
-                var urllink = "<?php echo base_Url(); ?>" + 'index.php/candidateMission/uploadFiles/'
+                var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/uploadFiles/'
                 this.$http.post(urllink, formData).then(res => {
                     var result = res.body
-                    this.message = this.message + result;
-
+                    if(result.length>this.userFiles.length){
+                    this.message = "Successful in uploading files"
+                    this.userFiles = result
+                    } else {
+                        this.message = "Failure in uploading files"
+                    }
                 }, res => {
-                    // error callback
-                    var result = res.body
-                    this.message = this.message + result;
-
+                    this.message = "Failure in uploading files"
                 })
             }
-
+              $('#myModal').modal('show')
+        },
+        uploadFileName: function(){
+            if(this.chosenFile.length>0){
+            var chosenFileSplit = this.chosenFile.split('\\')
+            this.labelFile = chosenFileSplit[chosenFileSplit.length-1];
+            }
+        },
+        removingFile: function(userFileX){
+                this.message = "";
+              
+                var formData = new FormData();
+                formData.append('candidateID', this.candidateID);
+                formData.append('userFile', userFileX);
+                var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/removeFile/'
+                this.$http.post(urllink, formData).then(res => {
+                    var result = res.body
+                    if(result.length<this.userFiles.length){
+                        this.message = "Successful in removing files"
+                        this.userFiles = res.body
+                    } else {
+                        this.message = "Failure in removing files"
+                    }
+                }, res => {
+                    this.message = "Failure in removing files, Server Error"
+                })
+            
             $('#myModal').modal('show')
         },
         editButton: function(){
@@ -628,6 +688,35 @@ var app = new Vue({
                 // error callback
 
             });
+        },
+        loadVideo: function(){
+            var videoUrl = document.getElementById('youtubeLinksID').value
+            if(videoUrl.length < 1){
+          
+                document.getElementById('video-preview').style.display = "none";
+            } else {
+                var urlID = this.youtubeLink.split("=")
+                document.getElementById("video-preview").src = 'https://youtube.com/embed/'+urlID[1];
+                document.getElementById('video-preview').style.display = "block";
+            }
+                var formData = new FormData();
+                formData.append('candidateID', this.candidateID);
+                formData.append('youtubeURL', this.youtubeLink);
+                var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateYoutubeURL/'
+                this.$http.post(urllink, formData).then(res => {
+                    
+                }, res => {
+
+            })
+        }
+    },
+    mounted: function() {
+        this.youtubeLink = '<?php echo $candidate['YoutubeURL'];?>';
+        if(this.youtubeLink.length>0){
+            var urlID = this.youtubeLink.split("=")
+            document.getElementById("video-preview").src = 'https://youtube.com/embed/'+urlID[1];
+            document.getElementById('video-preview').style.display = "block";
+            document.getElementById('video').style.display = "block";
         }
     }
 

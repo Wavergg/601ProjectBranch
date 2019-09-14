@@ -430,4 +430,11 @@ class Candidate_model extends CI_Model {
         $this->db->where('CandidateID',$candidateID);
         $this->db->update('Candidate',$data);
     }
+
+    //called from: Controller->CandidateMission->updateYoutubeLink()
+    //updating youtube link for the candidate
+    public function updateYoutubeLink($candidateID,$data){
+        $this->db->where('CandidateID',$candidateID);
+        $this->db->update('Candidate',$data);
+    }
 }
