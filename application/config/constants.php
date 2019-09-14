@@ -85,11 +85,11 @@ defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 // By Carl Li /var/www/html 
-define('CV_PATH', '/var/www/html/lib/candidatesCV/');
-define('JOB_IMAGE_PATH', '/var/www/html/lib/jobImages/');
-define('CANDIDATE_PICTURE_PATH', '/var/www/html/lib/candidateProfile/');
+// define('CV_PATH', '/var/www/html/lib/candidatesCV/');
+// define('JOB_IMAGE_PATH', '/var/www/html/lib/jobImages/');
+// define('CANDIDATE_PICTURE_PATH', '/var/www/html/lib/candidateProfile/');
 //please add a del folder under jobImages and candidatesCV
 
-// define('CV_PATH', 'C:\\xamppNew2\\htdocs\\candidatesCV\\');
-// define('JOB_IMAGE_PATH', 'C:\\xamppNew2\\htdocs\\jobImages\\');
-// define('CANDIDATE_PICTURE_PATH', 'C:\\xamppNew2\\htdocs\\candidateProfile\\');
+define('CV_PATH', 'C:\\xamppNew2\\htdocs\\candidatesCV\\');
+define('JOB_IMAGE_PATH', 'C:\\xamppNew2\\htdocs\\jobImages\\');
+define('CANDIDATE_PICTURE_PATH', 'C:\\xamppNew2\\htdocs\\candidateProfile\\');

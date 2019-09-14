@@ -6,7 +6,9 @@
     
     
     <div class="container ">
-
+        <button type="button" @click="showRemoveTab" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-outline-danger bg-danger">
+            <img style="height:39px; width:35px;" src="<?php echo base_url()?>lib/images/papershreeder.png">
+        </button>
         <!-- Collapse -->
         <a class="btn btn-outline-dark border border-dark form-control" style="border-radius: 15px 15px 0px 0px;" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
         <span class="font-weight-bold">Filters</span><i class="ml-1 icon ion-md-barcode mx-3"></i></a>
@@ -65,7 +67,7 @@
         
     </div>
     <!-- Table -->
-    <div class=" mb-5 px-5">
+    <div class=" mb-5 px-2">
     <div class="dragscroll" style=" overflow: scroll; cursor: grab; cursor : -o-grab; cursor : -moz-grab; cursor : -webkit-grab;" >
         
             <table class="table table-hover mt-5 mr-5">
@@ -73,14 +75,15 @@
                 <thead>
                     <tr>
                         <!-- <th scope="col" ><a href="#"  @click.stop.prevent="sortBy('Bookmark')" class="text-dark pr-3 pt-3"><img src="<?php echo base_url();?>lib/images/Bookmark1.png" style="height: 16px; width:16px;"></a></th> -->
+                        <th scope="col" v-bind:class="{ 'd-none': ! showRemoveStatus }"><a href="#" class="text-dark">Remove</a></th>
                         <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
-                        <th scope="col" ><a href="#" class="text-dark " @click.stop.prevent="sortBy('JobStatus')">Order Status</a></th>
+                        <th scope="col" ><a href="#" class="text-dark " @click.stop.prevent="sortBy('JobStatus')">Order_Status</a></th>
                         <!-- <th scope="col" ><a href="#" class="text-dark p-2 pr-3" @click.stop.prevent="sortBy('ClientTitle')">Title</a></th> -->
-                        <th scope="col" ><a href="#" class="text-dark " @click.stop.prevent="sortBy('ClientName')">Contact Person Name</a></th>
+                        <th scope="col" ><a href="#" class="text-dark " @click.stop.prevent="sortBy('ClientName')">Contact_Person_Name</a></th>
                         <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('Company')">Company</a></th>
                         <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('Email')">Email</a></th>
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('ContactNumber')">Contact Number</a></th>
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('JobTitle')">Job Title</a></th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('ContactNumber')">Contact_Number</a></th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('JobTitle')">Job_Title</a></th>
                         <!-- <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('JobType')">Job Type</a></th> -->
                         <!-- <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('Address')">Address</a></th> -->
                         <th scope="col" ><a href="#" class="text-dark  p-2 pr-3" @click.stop.prevent="sortBy('City')">City</a></th>
@@ -90,9 +93,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="job in jobs" :key="job.JobID">
+                    <tr v-for="job in jobs" :key="job.JobID" :id="'row'+job.JobID">
                         
                         <!-- <td > <input type="checkbox" :id="job.bookmarkUrl" v-on:click="updateBookmark(job.JobID)" :checked="job.bookmarkStat"></td> -->
+                        <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeJobApp(job.JobID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
                         <td class="textInfoPos" ><span class="textInfo text-center" style="left: -35px;width:190px;">See Order Details</span><a :href="job.ref" role="button"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></td>
                         <td v-text="job.JobStatus" ></td>
                         <!-- <td v-text="job.ClientTitle" ></td> -->
@@ -112,7 +116,7 @@
         </div>
     </div>
     <!-- Table End -->  
-    <div class="row  justify-content-center mb-4">
+    <div class="justify-content-center mb-4">
         <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item" v-for="pageNum in pageNums" :key="pageNum.id" :class="{ active: pageNum.isActive }">
@@ -162,6 +166,7 @@ var app = new Vue({
         jobs: <?php echo json_encode($jobs)?>,
         jobsCopy: [],
         activeJobNum: <?php echo $activeJobNum;?>,
+        showRemoveStatus: false,
         // filters
         filterCompany: "",
         filterCity: "",
@@ -194,6 +199,21 @@ var app = new Vue({
                 this.pageNums[0].isActive = true;
             }, res => {
             })
+        },
+        showRemoveTab: function(){
+            this.showRemoveStatus = !this.showRemoveStatus
+        },
+        removeJobApp: function(elementID){
+            var formData = new FormData()
+            formData.append('jobID',elementID)
+            var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/removeJobApplication/'
+            this.$http.post(urllink, formData).then(res => {
+                
+            }, res => {
+                
+            })
+            $('#row'+elementID).addClass('text-muted');
+            $('#row'+elementID).css('background-color',"#F0F0F0");
         },
         // filterByBookmark: function(){
         //     let jobsTemp = this.jobs

@@ -19,12 +19,15 @@
         class=" btn-sm btn-info">
         <i style="font-size:30px;" class="icon ion-md-create m-1"></i>
     </button>
-    <button type="button"
+    <button type="button" id="changeSavedBtn"
         @click="submitButton(<?php echo $candidate['CandidateID'];?>,<?php echo $candidate['UserID'];?>)"
         style="position:fixed;right: 20px; bottom:90px;z-index:1" class=" btn-sm btn-success">
         <i style="font-size:30px;" class="icon ion-md-save m-1"></i>
     </button>
     <?php endif;?>
+    <div id="savedMessage" hidden class="btn-sm btn-dark disabled">
+        
+    </div>
     <div class="container mt-5">
         <h1 class="text-dark mt-3 text-center"> Applicant's Personal Information </h1>
         <hr />
@@ -45,7 +48,10 @@
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade  show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <h3 class="text-warning mt-3"> Interest </h3>
+                <div class="d-flex">
+                <h3 class="text-warning mt-3"> Interest</h3>
+                <small class="ml-auto text-muted pt-1">Last Updated: <span v-text="updatedTime"></span></small>
+                </div>
                 <hr>
                 <div class="row">
                     <div class="col-md-4">
@@ -101,7 +107,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="DOBID" class="font-weight-bold mt-2">Date Of Birth:</label>
-                                <input type="text" v-model="DOB" class="form-control" readonly v-bind:class="{ 'border-0': !toggleEdit}" id="DOBID" >
+                                <input type="date" v-model="DOB" class="form-control" readonly v-bind:class="{ 'border-0': !toggleEdit}" id="DOBID" >
                             </div>
                         </div>
                     </div>
@@ -154,7 +160,7 @@
                     </div>
                     <div class="col-md-3">
                         <label for="workPermitExpiryID" class="font-weight-bold mt-2">Work Permit Expiry Date:</label>
-                        <input type="text" v-model="workPermitExpiry" class="form-control" readonly v-bind:class="{ 'border-0': !toggleEdit}" id="workPermitExpiryID" >
+                        <input type="date" v-model="workPermitExpiry" class="form-control" readonly v-bind:class="{ 'border-0': !toggleEdit}" id="workPermitExpiryID" >
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -296,12 +302,12 @@
                             </div>
                             <div class="row mx-3 mt-2">
                                 <label for="compensationDateFromID" class="font-weight-bold">Dates From</label>
-                                <input type="date" name="compensationDateFrom" v-model="compensationDateFrom"
+                                <input type="date" name="compensationDateFrom" readonly v-bind:class="{ 'border-0': !toggleEdit}" v-model="compensationDateFrom"
                                     id="compensationDateFromID" class="form-control">
 
 
                                 <label for="compensationDateToID" class="font-weight-bold mt-2">Dates To</label>
-                                <input type="date" name="compensationDateTo" v-model="compensationDateTo"
+                                <input type="date" name="compensationDateTo" readonly v-bind:class="{ 'border-0': !toggleEdit}" v-model="compensationDateTo"
                                     id="compensationDateToID" class="form-control">
 
                             </div>
@@ -339,7 +345,7 @@
                 </div>
                 </div>
                 <div class="row justify-content-center ">
-                    <div class="col-md-2 col-6">
+                    <div class="col-lg-2 col-md-3 col-6">
                     <button class="btn btn-light font-weight-bold border border-dark form-control mt-3" @click="uploadFiles">Upload Files</button>
                     </div>
                 </div>
@@ -406,7 +412,7 @@
 <!-- development version, includes helpful console warnings -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
 var app = new Vue({
     el: '#app',
@@ -422,13 +428,13 @@ var app = new Vue({
         phoneNumber: "<?php echo $candidate['PhoneNumber'];?>",
         email: "<?php echo $candidate['Email'];?>",
         gender: "<?php echo $candidate['Gender'];?>",
-        DOB: "<?php echo $candidate['DOB'];?>",
+        DOB: "<?php if($candidate['DOB'] !="0000-00-00"){echo $candidate['DOB'];}?>",
         citizenship: "<?php echo $candidate['Citizenship'];?>",
         nationality: "<?php echo $candidate['Nationality'];?>",
         passportCountry: "<?php echo $candidate['PassportCountry'];?>",
         passportNumber: "<?php echo $candidate['PassportNumber'];?>",
         workPermitNumber: "<?php echo $candidate['WorkPermitNumber'];?>",
-        workPermitExpiry: "<?php echo $candidate['WorkPermitExpiry'];?>",
+        workPermitExpiry: '<?php if($candidate['WorkPermitExpiry'] !="0000-00-00"){echo $candidate['WorkPermitExpiry'];}?>',
         city: "<?php echo $candidate['City'];?>",
         suburb: "<?php echo $candidate['Suburb'];?>",
         zipCode: "<?php echo $candidate['ZipCode'];?>",
@@ -440,6 +446,7 @@ var app = new Vue({
         licenseNumber: "<?php echo $candidate['LicenseNumber'];?>",
         classLicense: "<?php echo $candidate['ClassLicense'];?>",
         endorsement: "<?php echo $candidate['Endorsement'];?>",
+        updatedTime: "<?php echo $candidate['ApplyDate'];?>",
         asthma: <?php
         if ($candidate['Asthma'] == "true") {
             echo "true";
@@ -531,8 +538,8 @@ var app = new Vue({
             echo "false";
         }; ?> ,
         compensationInjury : "<?php echo $candidate['CompensationInjury'];?>",
-        compensationDateFrom: "<?php echo $candidate['CompensationDateFrom'];?>",
-        compensationDateTo: "<?php echo $candidate['CompensationDateTo'];?>",
+        compensationDateFrom: '<?php if($candidate['CompensationDateFrom'] !="0000-00-00") { echo $candidate['CompensationDateFrom'];}?>',
+        compensationDateTo: '<?php if($candidate['CompensationDateTo'] !="0000-00-00") { echo $candidate['CompensationDateTo'];}?>',
         dependants: <?php
         if ($candidate['Dependants'] == "true") {
             echo "true";
@@ -571,6 +578,7 @@ var app = new Vue({
                     if(result.length>this.userFiles.length){
                     this.message = "Successful in uploading files"
                     this.userFiles = result
+                    this.updatedTime = this.getCurrentDateTime()
                     } else {
                         this.message = "Failure in uploading files"
                     }
@@ -598,6 +606,7 @@ var app = new Vue({
                     if(result.length<this.userFiles.length){
                         this.message = "Successful in removing files"
                         this.userFiles = res.body
+                        this.updatedTime = this.getCurrentDateTime()
                     } else {
                         this.message = "Failure in removing files"
                     }
@@ -683,13 +692,45 @@ var app = new Vue({
             }
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateCandidateDetails/'+candidateID
             this.$http.post(urllink, formData).then(res => {
-
+                this.updatedTime = this.getCurrentDateTime()
+                
+                document.getElementById("savedMessage").removeAttribute("hidden");
+                document.getElementById("changeSavedBtn").classList
+                document.getElementById("savedMessage").style.opacity = 0;
+                document.getElementById('savedMessage').innerHTML = 'Changes Saved . . .'
+                this.unfade(document.getElementById("savedMessage"));
+                setTimeout(this.fade(document.getElementById("savedMessage"),10000))
             }, res => {
                 // error callback
 
             });
         },
+        unfade: function(element) {
+            var op = 0.1;  // initial opacity
+            element.style.display = 'block';
+            var timer = setInterval(function () {
+                if (op >= 1){
+                    clearInterval(timer);
+                }
+                element.style.opacity = op;
+                element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+                op += op * 0.1;
+            }, 10);
+        },
+        fade: function(element) {
+            var op = 1;  // initial opacity
+            var timer = setInterval(function () {
+                if (op <= 0.1){
+                    clearInterval(timer);
+                    element.style.display = 'none';
+                }
+                element.style.opacity = op;
+                element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+                op -= op * 0.1;
+            }, 50);
+        },
         loadVideo: function(){
+            this.updatedTime = this.getCurrentDateTime()
             var videoUrl = document.getElementById('youtubeLinksID').value
             if(videoUrl.length < 1){
           
@@ -708,16 +749,43 @@ var app = new Vue({
                 }, res => {
 
             })
+        },
+        getCurrentDateTime: function() {
+        var now     = new Date(); 
+        var year    = now.getFullYear();
+        var month   = now.getMonth()+1; 
+        var day     = now.getDate();
+        var hour    = now.getHours();
+        var minute  = now.getMinutes();
+        var second  = now.getSeconds(); 
+        if(month.toString().length == 1) {
+             month = '0'+month;
         }
+        if(day.toString().length == 1) {
+             day = '0'+day;
+        }   
+        if(hour.toString().length == 1) {
+             hour = '0'+hour;
+        }
+        if(minute.toString().length == 1) {
+             minute = '0'+minute;
+        }
+        if(second.toString().length == 1) {
+             second = '0'+second;
+        }   
+        var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
+         return dateTime;
+    }
     },
     mounted: function() {
-        this.youtubeLink = '<?php echo $candidate['YoutubeURL'];?>';
+        this.youtubeLink = '<?php if(!empty($candidate['YoutubeURL'])){echo $candidate['YoutubeURL'];}?>';
         if(this.youtubeLink.length>0){
             var urlID = this.youtubeLink.split("=")
             document.getElementById("video-preview").src = 'https://youtube.com/embed/'+urlID[1];
             document.getElementById('video-preview').style.display = "block";
             document.getElementById('video').style.display = "block";
         }
+    
     }
 
 })

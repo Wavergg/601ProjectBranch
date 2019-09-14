@@ -431,6 +431,21 @@ class Candidate_model extends CI_Model {
         $this->db->update('Candidate',$data);
     }
 
+    public function updateTimeChanged($candidateID){
+        $this->db->where('CandidateID',$candidateID);
+        
+        // $dt = new DateTime('now', new DateTimezone('NZ'));
+        // $dt->format('Y-m-d H:i:s');
+        // date_default_timezone_set('NZ');
+        // $dateTimeStamp = date('Y-m-d H:i:s');
+        $data = array(
+        );
+        
+        $this->db->set('ApplyDate', 'NOW()', FALSE);
+       
+        $this->db->update('Candidate',$data);
+    }
+
     //called from: Controller->CandidateMission->updateYoutubeLink()
     //updating youtube link for the candidate
     public function updateYoutubeLink($candidateID,$data){

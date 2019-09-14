@@ -21,4 +21,14 @@ $matchName = preg_grep('%^([a-zA-Z\.\,\'"&:/\- ]+[ ]?[#]?[0-9][a-zA-Z0-9 ]*|[#]?
 foreach($matchName as $res){
     echo $res  . '<br />' . '<br />';
 }
+
+date_default_timezone_set('UTC');
+$DATE = date('Y-m-d H:i:s');
+echo $DATE;
+
+
 ?>
+
+<?php $ci =& get_instance();
+                $ci->load->model('Candidate_model');
+               ?>

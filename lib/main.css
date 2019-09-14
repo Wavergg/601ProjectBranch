@@ -40,57 +40,64 @@
   /* Change the background color of the dropdown button when the dropdown content is shown */
   .dropdown:hover .dropbtn {background-color: #ff9900;}
 
+ #content {
+  background-image:url('./images/hiresPlaceHolder.jpg');
+  background-repeat:no-repeat;
+  background-size:100%;
+  background-position:center;
  
+  height: 270px;
+ }
   
 /* homepage picture */
 /* XL viewport */
-@media only screen and (min-width:1024px) {
+/* @media only screen and (min-width:1024px) {
   #content {
     background-image:url('./images/bannerlee.png');
     background-repeat:no-repeat;
     background-size:100%;
     background-position:center;
-    /* height: 840px; */
+   
     height: 148vh;
     }
-}
+} */
 /* LG viewport */
-@media only screen and (max-width: 1024px) {
+/* @media only screen and (max-width: 1024px) {
   #content {
     background-image:url('./images/bannerlee.png');
     background-repeat:no-repeat;
     background-size:100%;
     background-position:center;
-    /* height: 840px; */
+  
     height: 750px;
     }
-}
+} */
 /* MD viewport */
-@media only screen and (max-width: 768px) {
+/* @media only screen and (max-width: 768px) {
   #content {
     background-image:url('./images/bannerlee.png');
     background-repeat:no-repeat;
     background-size:100%;
     background-position:center;
-    /* height: 840px; */
+  
     height: 560px;
     }
-}
+} */
 /* SM viewport */
-@media only screen and (max-width: 460px) {
+/* @media only screen and (max-width: 460px) {
   #content {
     background-image:url('./images/bannerlee.png');
     background-repeat:no-repeat;
     background-size:100%;
     background-position:center;
-    /* height: 840px; */
+  
     height: 270px;
     }
-}
+} */
 
 /* positioning buttons in homepage center images */
   #content div.centerY{
-    top:  30%;
+    top:  60%;
     position: relative;
   }
 

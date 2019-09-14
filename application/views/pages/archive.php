@@ -5,7 +5,7 @@
     <h2 class="text-center"><?php echo $title; ?></h2>
     <hr />
     
-    <ul class="nav nav-tabs flex-column flex-sm-row" id="myTab" role="tablist">
+    <ul class="nav nav-tabs  flex-sm-row" id="myTab" role="tablist">
         <li class="nav-item ml-auto text-sm-center">
             <a class="nav-link active" id="OrdersArchives-tab" data-toggle="tab" href="#OrdersArchives" role="tab" aria-controls="OrdersArchives" aria-selected="true">Orders Archives</a>
         </li>
@@ -114,11 +114,11 @@
   <!-- start applicant Tab -->
   <div class="tab-pane fade" id="applicantsArchives" role="tabpanel" aria-labelledby="applicantsArchives-tab">
   <div class="container mt-5">
-        <a href="<?php echo base_url()?>index.php/CandidateMission/addingNewCandidateStaffOnly">
+        <!-- <a href="<?php echo base_url()?>index.php/CandidateMission/addingNewCandidateStaffOnly">
             <button type="button" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-dark btn-lg border-white">
             <i style="font-size:30px;" class="icon ion-md-add m-1 text-white"></i>
             </button>
-        </a>
+        </a> -->
         <!-- Collapse -->
         <a class="btn btn-outline-dark border border-dark form-control" style="border-radius: 15px 15px 0px 0px;" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
         <span class="font-weight-bold">Applicant Filters</span><i class="ml-1 icon ion-md-barcode mx-3"></i></a>
@@ -474,16 +474,24 @@ var app = new Vue({
     },
     mounted: function(){
         this.jobPageNums = [];
-        for(var i=0; i<this.archiveJobNum; i=i+10){
-            this.jobPageNums.push({id: i/10, isActive: false});
+        if(this.archiveJobNum == 0){
+            this.jobPageNums.push({id: 0, isActive: false})
+        } else {
+            for(var i=0; i<this.archiveJobNum; i=i+10){
+                this.jobPageNums.push({id: i/10, isActive: false});
+            }
         }
         this.jobPageNums[0].isActive = true;
         this.candidatesCopy = this.candidates;
 
         // inite pageNums
         this.candidatePageNums = [];
-        for(var i=0; i<this.candidateNum; i=i+10){
-            this.candidatePageNums.push({id: i/10, isActive: false});
+        if(this.candidateNum == 0){
+            this.candidatePageNums.push({id:0,isActive:false})
+        } else {
+            for(var i=0; i<this.candidateNum; i=i+10){
+                this.candidatePageNums.push({id: i/10, isActive: false});
+            }
         }
         this.candidatePageNums[0].isActive = true;
 

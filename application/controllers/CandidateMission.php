@@ -98,7 +98,7 @@ class CandidateMission extends CI_Controller{
     public function downloadFile($candidateID, $fileName){
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 
-            $path = constant('CV_PATH').$candidateID.'/'.$fileName;
+            $path = constant('CV_PATH').$candidateID.'\\'.$fileName;
             
             force_download($path, NULL);
         } else {
@@ -172,7 +172,7 @@ class CandidateMission extends CI_Controller{
             $userID = $userData['UserID'];
         
             //KVP K:FieldName in database V:Post value
-            $applyDate = date('Y-m-d');
+            $applyDate = date("Y-m-d H:i:s");
             $data = array(
             'JobInterest' => $this->filterGeneral($this->input->post('JobInterest')),
             'JobType' => $this->filterJobType($this->input->post('JobType')),
@@ -220,7 +220,7 @@ class CandidateMission extends CI_Controller{
             $data = array();
             $candidate = $this->candidate_model->getMaxIDByUserID($userID);
             
-            $path = constant('CV_PATH').$candidate['MaxID'].'/';
+            $path = constant('CV_PATH').$candidate['MaxID'].'\\';
 
             // create the folder
             mkdir($path);
@@ -333,7 +333,7 @@ class CandidateMission extends CI_Controller{
 
             } else {
 				$data['userFiles'] = directory_map($path);
-				
+				$this->candidate_model->updateTimeChanged($candidateID);
 				echo json_encode($data['userFiles']);
             }
 		}
@@ -344,11 +344,12 @@ class CandidateMission extends CI_Controller{
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 			$candidateID = $_POST['candidateID'];
 			$fileName = $_POST['userFile'];
-			$path = constant('CV_PATH').$candidateID.'/';
+			$path = constant('CV_PATH').$candidateID.'\\';
 			//let's not use this. it's dangerous as heck
 			//unlink($path.$fileName);
-			rename($path.$fileName,constant('CV_PATH').'del/'.$candidateID.$fileName);
-			$data['userFiles'] = directory_map($path);
+			rename($path.$fileName,constant('CV_PATH').'del\\'.$candidateID.$fileName);
+            $data['userFiles'] = directory_map($path);
+            $this->candidate_model->updateTimeChanged($candidateID);
 			echo json_encode($data['userFiles']);
         } else {
             redirect('/');
@@ -368,7 +369,7 @@ class CandidateMission extends CI_Controller{
             }
 
             // Find all the files under the candidate's folder
-            $path = constant('CV_PATH').$candidateID.'/';
+            $path = constant('CV_PATH').$candidateID.'\\';
             $data['userFiles'] = directory_map($path);
 
             
@@ -390,6 +391,7 @@ class CandidateMission extends CI_Controller{
                 'LastName' => xss_clean(stripslashes(trim($this->input->post('LastName')))),
                 'Address' => xss_clean(stripslashes(trim($this->input->post('Address')))),
                 'City' => xss_clean(stripslashes(trim($this->input->post('City')))),
+                'DOB' => xss_clean(stripslashes(trim($this->input->post('DOB')))),
                 'ZipCode' => xss_clean(stripslashes(trim($this->input->post('ZipCode')))),
                 'Suburb' => xss_clean(stripslashes(trim($this->input->post('Suburb')))),
                 'PhoneNumber' => xss_clean(stripslashes(trim($this->input->post('PhoneNumber')))),
@@ -435,7 +437,7 @@ class CandidateMission extends CI_Controller{
                 'Conviction' => $this->checkBoxFilter($this->input->post('Conviction')),
                 'ConvictionDetails' => $this->security->xss_clean(stripslashes(trim($this->input->post('ConvictionDetails')))),
                 'CandidateNotes' => $this->security->xss_clean(stripslashes(trim($this->input->post('CandidateNotes')))),
-                'ApplyDate' => date('Y-m-d'),
+                'ApplyDate' => date("Y-m-d H:i:s"),
                 );
 
                 if(isset($_FILES['UserPicture'])){
@@ -466,6 +468,7 @@ class CandidateMission extends CI_Controller{
                     }
                 }
                 $this->candidate_model->updateCandidateDetails($candidateID,$data);
+                $this->candidate_model->updateTimeChanged($candidateID);
         } else {
             redirect('/');
         }
@@ -477,6 +480,7 @@ class CandidateMission extends CI_Controller{
             $data['CandidateID'] = $_POST['candidateID'];
             $data['YoutubeURL'] = $_POST['youtubeURL'];
             $this->candidate_model->updateYoutubeLink($data['CandidateID'],$data);
+            $this->candidate_model->updateTimeChanged($data['CandidateID']);
         }
         else {
             redirect('/');
@@ -507,6 +511,7 @@ class CandidateMission extends CI_Controller{
         $candidateID = $_POST['candidateID'];
         
         $this->candidate_model->removeCandidateApp($candidateID);
+        $this->candidate_model->updateTimeChanged($candidateID);
     }
 
     //function that are called from CandidateMission->applyJob

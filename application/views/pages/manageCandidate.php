@@ -56,7 +56,7 @@
         
     </div>
     <!-- Table -->
-    <div class=" mb-5 px-5">
+    <div class=" mb-5 px-2">
     <div class="dragscroll" style="overflow: scroll; cursor: grab; cursor : -o-grab; cursor : -moz-grab; cursor : -webkit-grab;" >
         
             <table class="table table-hover mt-5 mr-5" id="candidateTable">
@@ -67,7 +67,7 @@
                         <th scope="col" v-bind:class="{ 'd-none': ! showRemoveStatus }"><a href="#" class="text-dark">Remove</a></th>
                         <th scope="col"><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
                         <th scope="col" >CV</th>
-                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="sortBy('ApplyDate')">Updated_Date</a></th>
+                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="sortBy('ApplyDate')">Last_Updated</a></th>
                         <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="sortBy('FirstName')">First_Name</a></th>
                         <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="sortBy('LastName')">Last_Name</a></th>
                         <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="sortBy('JobInterest')">Profession</a></th>
@@ -308,6 +308,7 @@ var app = new Vue({
                     if(this.candidates[i].CandidateID == candidateID){
                         this.candidates[i].CandidateNotes = document.getElementById(candidateID).value;
                         this.candidatesCopy[i].CandidateNotes = this.candidates[i].CandidateNotes;
+                        this.candidatesCopy[i].ApplyDate = this.getDateTime()
                     }
                 }
                 
@@ -327,6 +328,32 @@ var app = new Vue({
             var goToUrl = "<?php echo base_url() . 'index.php/Jobs/assignCandidate/';?>"+candidateID +"/"+issetJob;
             document.location.href = goToUrl;
         },
+        getDateTime: function() {
+        var now     = new Date(); 
+        var year    = now.getFullYear();
+        var month   = now.getMonth()+1; 
+        var day     = now.getDate();
+        var hour    = now.getHours();
+        var minute  = now.getMinutes();
+        var second  = now.getSeconds(); 
+        if(month.toString().length == 1) {
+             month = '0'+month;
+        }
+        if(day.toString().length == 1) {
+             day = '0'+day;
+        }   
+        if(hour.toString().length == 1) {
+             hour = '0'+hour;
+        }
+        if(minute.toString().length == 1) {
+             minute = '0'+minute;
+        }
+        if(second.toString().length == 1) {
+             second = '0'+second;
+        }   
+        var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
+         return dateTime;
+    }
         
         
     },
