@@ -44,7 +44,13 @@ class CandidateMission extends CI_Controller{
     // show the list of candidate that have registered their application in the form of table
 	public function manageCandidate($page="",$jobID= ""){
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-
+            $userID = $_SESSION['userID'];
+            $data['lastVisitCandidate'] = $_SESSION['visitedCandidate'];
+            
+            $this->candidate_model->updateVisitedManageCandidate($userID);
+            date_default_timezone_set('NZ');
+            $_SESSION['visitedCandidate'] = date('Y-m-d H:i:s');
+          
             $userdata['userType'] = $_SESSION['userType'];
             $data['title'] = "Manage Candidate";
             $data['message'] ="";
@@ -98,7 +104,7 @@ class CandidateMission extends CI_Controller{
     public function downloadFile($candidateID, $fileName){
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 
-            $path = constant('CV_PATH').$candidateID.'\\'.$fileName;
+            $path = constant('CV_PATH').$candidateID.'/'.$fileName;
             
             force_download($path, NULL);
         } else {
@@ -212,7 +218,7 @@ class CandidateMission extends CI_Controller{
             'ConvictionDetails' => $this->filterGeneral($this->input->post('ConvictionDetails')),
             'UserID' => $userID,
             'CandidateNotes' => $candidateNotes,
-            'ApplyDate' => $applyDate,
+            // 'ApplyDate' => $applyDate,
             );
             
             $this->candidate_model->applyJob($data);
@@ -220,7 +226,7 @@ class CandidateMission extends CI_Controller{
             $data = array();
             $candidate = $this->candidate_model->getMaxIDByUserID($userID);
             
-            $path = constant('CV_PATH').$candidate['MaxID'].'\\';
+            $path = constant('CV_PATH').$candidate['MaxID'].'/';
 
             // create the folder
             mkdir($path);
@@ -307,6 +313,7 @@ class CandidateMission extends CI_Controller{
         
     }
 
+
     
     // upload other files by Admin or Staff
     public function uploadFiles(){
@@ -315,7 +322,7 @@ class CandidateMission extends CI_Controller{
         }
         $candidateID = $this->input->post('candidateID');
         
-        $path = constant('CV_PATH').$candidateID.'\\';
+        $path = constant('CV_PATH').$candidateID.'/';
         $config['upload_path'] = $path;
 
         $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx|zip|7z';
@@ -344,10 +351,10 @@ class CandidateMission extends CI_Controller{
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 			$candidateID = $_POST['candidateID'];
 			$fileName = $_POST['userFile'];
-			$path = constant('CV_PATH').$candidateID.'\\';
+			$path = constant('CV_PATH').$candidateID.'/';
 			//let's not use this. it's dangerous as heck
 			//unlink($path.$fileName);
-			rename($path.$fileName,constant('CV_PATH').'del\\'.$candidateID.$fileName);
+			rename($path.$fileName,constant('CV_PATH').'del/'.$candidateID.$fileName);
             $data['userFiles'] = directory_map($path);
             $this->candidate_model->updateTimeChanged($candidateID);
 			echo json_encode($data['userFiles']);
@@ -369,7 +376,7 @@ class CandidateMission extends CI_Controller{
             }
 
             // Find all the files under the candidate's folder
-            $path = constant('CV_PATH').$candidateID.'\\';
+            $path = constant('CV_PATH').$candidateID.'/';
             $data['userFiles'] = directory_map($path);
 
             
@@ -437,7 +444,7 @@ class CandidateMission extends CI_Controller{
                 'Conviction' => $this->checkBoxFilter($this->input->post('Conviction')),
                 'ConvictionDetails' => $this->security->xss_clean(stripslashes(trim($this->input->post('ConvictionDetails')))),
                 'CandidateNotes' => $this->security->xss_clean(stripslashes(trim($this->input->post('CandidateNotes')))),
-                'ApplyDate' => date("Y-m-d H:i:s"),
+                // 'ApplyDate' => date("Y-m-d H:i:s"),
                 );
 
                 if(isset($_FILES['UserPicture'])){

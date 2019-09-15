@@ -96,10 +96,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="candidate in candidatesCopy" :key="candidate.CandidateID" :id="'row'+candidate.CandidateID">
+                    <tr v-for="candidate in candidatesCopy" v-bind:class="{ 'font-italic text-danger': compareDate(candidate.ApplyDate) }" :key="candidate.CandidateID" :id="'row'+candidate.CandidateID">
                         <th class="textInfoPos text-center" v-bind:class="{ 'd-none': ! showAssignCandidate }"><span class="textInfo text-center" style="left: 0px;overflow:initial;">Assign job <br>to this Candidate</span><a v-on:click="AssignIDURL(candidate.CandidateID)" role="button" class="text-info"><i style="font-size:30px;" class="ml-1 icon ion-md-contacts mx-3"></i></a></th>
                         <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeCandidateApp(candidate.CandidateID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
-                        <th class="textInfoPos"><span class="textInfo text-center" style="left: -35px;width:190px;">See Candidate's Details</span><a v-on:click="getUrl(candidate.CandidateID)" role="button" class="text-primary"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></th>
+                        <th class="textInfoPos"><span class="textInfo text-center" style="left: 0px;width:190px;">See Candidate's Details</span><a v-on:click="getUrl(candidate.CandidateID)" role="button" class="text-primary"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></th>
                         <th class="textInfoPos" ><span class="textInfo text-center" style="left: -45px;width:160px;">Download <br>Candidate's CV</span><a class="btn btn-outline-dark px-2" :href="'<?php echo base_Url(); ?>index.php/candidateMission/downloadCV/'+ candidate.JobCV">CV</a></th>
                         <th v-text="candidate.ApplyDate"></th>
                         <th v-text="candidate.FirstName" ></th>
@@ -187,7 +187,7 @@ var app = new Vue({
         toggle: false,
         candidates: <?php echo json_encode($candidates); ?>,
         candidatesCopy: [],
-        
+        lastVisitedCandidate: '<?php echo $lastVisitCandidate;?>',
         showAssignCandidate: <?php if(isset($job['JobID'])){echo "true";} else {echo "false";}?>,
         
         showRemoveStatus: false,
@@ -328,6 +328,13 @@ var app = new Vue({
             var goToUrl = "<?php echo base_url() . 'index.php/Jobs/assignCandidate/';?>"+candidateID +"/"+issetJob;
             document.location.href = goToUrl;
         },
+        compareDate: function(updateDate){
+            if(updateDate>=this.lastVisitedCandidate){
+                return true;
+            } else{
+                return false;
+            }
+        },
         getDateTime: function() {
         var now     = new Date(); 
         var year    = now.getFullYear();
@@ -373,14 +380,13 @@ var app = new Vue({
         
         
         this.candidatesCopy = this.candidates;
-
+        
         // inite pageNums
         this.pageNums = [];
         for(var i=0; i<this.candidateNum; i=i+10){
             this.pageNums.push({id: i/10, isActive: false});
         }
         this.pageNums[0].isActive = true;
-        
         
         this.filterJobInterest = "<?php echo $job['JobTitle'];?>";
         

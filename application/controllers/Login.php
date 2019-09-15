@@ -53,6 +53,8 @@ class Login extends CI_Controller {
                     'zip' => $data['user']['ZipCode'],
                     'suburb' => $data['user']['Suburb'],
                     'phoneNumber' => $data['user']['PhoneNumber'],
+                    'visitedCandidate' => $data['user']['VisitedCandidate'],
+                    'visitedClient' => $data['user']['VisitedClient'],
                 );
                 //set the session from array
                 $this->session->set_userdata($newdata);

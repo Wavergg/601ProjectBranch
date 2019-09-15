@@ -19,14 +19,14 @@
     <div class="row justify-content-center card-body p-1">
     <img style="width:140px;height:140px;"  src="<?php echo base_url()?>lib/images/Client.png">
     </div>
-    <div class="card-title font-weight-bold py-3">Manage Clients</div>
+    <div class="card-title font-weight-bold py-3" @click="updateVisitedClient">Manage Clients</div>
     <!-- <p class="card-text text-center p-3 m-2">Look through the clients applications, publish and assign candidates.</p> -->
 
     </div> </a>
     </div>
     <div class="card border border-dark col-md-3 p-0 m-0"  style="border-radius:0px;">
 
-    <a href="<?php echo base_url()?>index.php/candidateMission/manageCandidate/" style="color: black; text-decoration:none"><div class="container p-0 m-2 text-center">
+    <a href="<?php echo base_url()?>index.php/candidateMission/manageCandidate/" @click="updateVisitedCandidate" style="color: black; text-decoration:none"><div class="container p-0 m-2 text-center">
         <div class="row justify-content-center card-body p-1">
         <img style="width:140px;height:140px;"  src="<?php echo base_url()?>lib/images/Candidates.png">
         </div>

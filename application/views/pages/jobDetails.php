@@ -28,7 +28,7 @@
                         <table class="table table-sm table-hover">
                             <tbody>
                                 <?php foreach($job as $key => $value):?>
-                                <?php if($key == 'JobID' || $key == 'Description' || $key == 'Editor1' || $key == 'ThumbnailText' || $key == 'JobStatus' || $key == 'PublishTitle' || $key == "PublishDate" || $key == "Bookmark" || $key == "JobImage" || $key == "Checked")  :?>
+                                <?php if($key == 'JobID' || $key=='UpdateDate' || $key == 'Description' || $key == 'Editor1' || $key == 'ThumbnailText' || $key == 'JobStatus' || $key == 'PublishTitle' || $key == "PublishDate" || $key == "Bookmark" || $key == "JobImage" || $key == "Checked")  :?>
                                 <?php else :?>
                                 <tr>
                                 <th><?php if($key == 'Client Title'){ echo 'Client Title';} elseif ($key == 'ClientName') {
@@ -36,7 +36,7 @@
                                 } elseif ($key == 'ContactNumber') {echo 'Contact Number';} elseif ($key == 'JobTitle') {
                                     echo 'Job Title';
                                 } elseif ($key == 'JobType') { echo 'Job Type';} elseif ($key == 'JobSubmittedDate') { echo 'Job Submitted Date';} else { echo $key;};?></th>
-                                <td><?php echo $value?></th>
+                                <td><?php if($key=='JobSubmittedDate'){ $newVal = explode(' ',$value); echo $newVal[0];} else {echo $value;}?></th>
                                 </tr>
                                     <?php endif?>
                                 <?php endforeach;?>
@@ -107,7 +107,7 @@
                                         <img id="imgPreview" src="<?php echo base_url()?>lib/images/facebook.jpg" class="mx-md-2" style="width:275px;height:165px;">
                                     <?php else :?>
                                         <?php $setImgPreviewID = "imgPreview1" ;?>
-                                        <img id="imgPreview1" src="<?php echo base_url() . 'lib/jobImages/' . $job['JobID'] . '/'. $job['JobImage']?>"  class="mx-md-2" style="width:275px;height:165px;">
+                                        <img id="imgPreview1" src="<?php echo base_url() . 'jobImages/' . $job['JobImage']?>"  class="mx-md-2" style="width:275px;height:165px;">
                                     <?php endif;?>
                                     </div>
                                     <div class="row justify-content-center">

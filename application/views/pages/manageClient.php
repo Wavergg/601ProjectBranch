@@ -77,6 +77,7 @@
                         <!-- <th scope="col" ><a href="#"  @click.stop.prevent="sortBy('Bookmark')" class="text-dark pr-3 pt-3"><img src="<?php echo base_url();?>lib/images/Bookmark1.png" style="height: 16px; width:16px;"></a></th> -->
                         <th scope="col" v-bind:class="{ 'd-none': ! showRemoveStatus }"><a href="#" class="text-dark">Remove</a></th>
                         <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
+                        <th scope="col" ><a href="#" class="text-dark py-2" @click.stop.prevent="sortBy('UpdateDate')">Update Date</a></th>
                         <th scope="col" ><a href="#" class="text-dark " @click.stop.prevent="sortBy('JobStatus')">Order_Status</a></th>
                         <!-- <th scope="col" ><a href="#" class="text-dark p-2 pr-3" @click.stop.prevent="sortBy('ClientTitle')">Title</a></th> -->
                         <th scope="col" ><a href="#" class="text-dark " @click.stop.prevent="sortBy('ClientName')">Contact_Person_Name</a></th>
@@ -92,12 +93,13 @@
                         -->
                     </tr>
                 </thead>
-                <tbody>
-                    <tr v-for="job in jobs" :key="job.JobID" :id="'row'+job.JobID">
+                <tbody class="font-weight-bold">
+                    <tr v-for="job in jobs" v-bind:class="{ 'font-italic text-danger': compareDate(job.UpdateDate) }" :key="job.JobID" :id="'row'+job.JobID">
                         
                         <!-- <td > <input type="checkbox" :id="job.bookmarkUrl" v-on:click="updateBookmark(job.JobID)" :checked="job.bookmarkStat"></td> -->
                         <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeJobApp(job.JobID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
-                        <td class="textInfoPos" ><span class="textInfo text-center" style="left: -35px;width:190px;">See Order Details</span><a :href="job.ref" role="button"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></td>
+                        <td class="textInfoPos" ><span class="textInfo text-center" style="left: 0px;width:100px;">See Order<br/> Details</span><a :href="job.ref" role="button"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></td>
+                        <td v-text="job.UpdateDate"></td>
                         <td v-text="job.JobStatus" ></td>
                         <!-- <td v-text="job.ClientTitle" ></td> -->
                         <td v-text="job.ClientName" ></td>
@@ -162,6 +164,7 @@ var app = new Vue({
         errMessage: "",
         errors: "",
         bookmarkID: "",
+        lastVisitedClient: '<?php echo $lastVisitClient;?>',
         toggle: false,
         jobs: <?php echo json_encode($jobs)?>,
         jobsCopy: [],
@@ -266,6 +269,13 @@ var app = new Vue({
                 this.jobs.sort(function(a, b){
                     return b[sortKey].localeCompare(a[sortKey]);
                 })
+            }
+        },
+        compareDate: function(updateDate){
+            if(updateDate>=this.lastVisitedClient){
+                return true;
+            } else{
+                return false;
             }
         },
         // updateBookmark: function(jobID){

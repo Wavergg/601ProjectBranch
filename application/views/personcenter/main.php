@@ -39,9 +39,9 @@
   <div class="card text-center">
     <a href="<?php echo base_url()?>index.php/candidateMission/manageCandidate/" style="text-decoration:none;">
     <div class="row justify-content-center mt-3 ">
-    <img src="<?php echo base_url()?>lib/images/Candidates.png" style="width:140px;height:140px;" class="card-img-top" alt="">
+    <img src="<?php echo base_url()?>lib/images/CandidatesBK.png" style="width:140px;height:140px;" class="card-img-top" alt="">
     </div>
-    <div class="card-body">
+    <div class="card-body px-2">
       <h5 class="card-title text-dark">Manage Applicant</h5>
       <!-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
     </div>
@@ -52,7 +52,7 @@
   <div class="card text-center">
     <a href="<?php echo base_url()?>index.php/Archive" style="text-decoration:none;">
     <div class="row justify-content-center mt-3 ">
-    <img src="<?php echo base_url()?>lib/images/Archive.png" style="width:140px;height:140px;" class="card-img-top" alt="">
+    <img src="<?php echo base_url()?>lib/images/ArchiveBK.png" style="width:140px;height:140px;" class="card-img-top" alt="">
     </div>
     <div class="card-body">
       <h5 class="card-title text-dark">Archive</h5>
@@ -78,10 +78,23 @@
     var app = new Vue({
         el: '#app',
         data: {
-            
+            // userID: '<?php echo $_SESSION['userID'];?>'
         },
         methods: {
+          updateVisitedCandidate: function(){
+            
+                // var formData = new FormData();
+                // formData.append('userID', this.userID);
+                // var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateVisitedCandidate/'
+                // this.$http.post(urllink, formData).then(res => {
+                //     var result = res.body
+                //     alert(this.userID)
+                // }, res => {
+                // })
+          },
+          updateVisitedClient: function(){
 
+          }
         }
         
     })

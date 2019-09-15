@@ -113,6 +113,13 @@ class Candidate_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function updateVisitedManageCandidate($userID){
+        $this->db->where('UserID',$userID);
+        $data = array();
+        $this->db->set('VisitedCandidate', 'NOW()', FALSE);
+        $this->db->update('User',$data);
+    }
+
     // get all users
     public function getUsers(){
         $query = $this->db->get('User');
@@ -130,7 +137,7 @@ class Candidate_model extends CI_Model {
     // called from Controller->CandidateMission->manageCandidate() or Controller->CandidateMission->getCandidates()
     // get all candidate with the firstname and lastname of the user
     public function getCandidatesWithName($limitNum, $offsetNum,$page="",$city="",$jobType="",$jobInterest="",$firstName="",$lastName="",$suburb="",$phoneNumber="",$email=""){
-        $this->db->select('User.FirstName, User.LastName,User.DOB,User.City,User.Address,User.Suburb,User.PhoneNumber,User.Email,User.Gender,Candidate.*');
+        $this->db->select('User.FirstName, User.LastName,User.DOB,User.City,User.Address,User.Suburb,User.PhoneNumber,User.Email,User.Gender,User.VisitedCandidate,User.VisitedClient,Candidate.*');
         $this->db->from('Candidate');
         $this->db->join('User', 'Candidate.UserID = User.UserID');
         
@@ -320,7 +327,7 @@ class Candidate_model extends CI_Model {
     public function getFilterCandidate($page="",$city="",$jobType="",$jobInterest="",$firstName="",$lastName="",$suburb="",$phoneNumber="",$email=""){
         //$mySql = "SELECT User.FirstName, User.LastName, Candidate.* FROM Candidate INNER JOIN User ON Candidate.UserID=User.UserID";
         //$query = $this->db->query($mySql);
-        $this->db->select('User.FirstName, User.LastName,User.DOB,User.City,User.Address,User.Suburb,User.PhoneNumber,User.Email,User.Gender,Candidate.*');
+        $this->db->select('User.FirstName, User.LastName,User.DOB,User.City,User.Address,User.Suburb,User.PhoneNumber,User.Email,User.Gender,User.VisitedCandidate,User.VisitedClient,Candidate.*');
         $this->db->from('Candidate');
         $this->db->join('User', 'Candidate.UserID = User.UserID');
         
@@ -371,6 +378,7 @@ class Candidate_model extends CI_Model {
     // called from: Controller->CandidateMission->applyJob()
     //insert the candidate data to database
     public function applyJob($data) {
+        $this->db->set('ApplyDate', 'NOW()', FALSE);
         $this->db->insert('Candidate', $data);
     }
 
@@ -407,8 +415,8 @@ class Candidate_model extends CI_Model {
 
     //called from: view->templates->header
     //return the number of unchecked job as notification
-    public function countNumberUncheckedCandidate(){
-        $mySql = "SELECT Checked FROM Candidate WHERE Checked IS NULL";
+    public function countNumberUncheckedCandidate($visitedTimeCandidate){
+        $mySql = "SELECT ApplyDate FROM Candidate WHERE ApplyDate > " . $this->db->escape($visitedTimeCandidate);
         $query = $this->db->query($mySql);
         return $query->num_rows();
     }

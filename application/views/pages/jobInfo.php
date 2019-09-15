@@ -14,7 +14,9 @@
                     <?php foreach($job as $key => $value):?>
                         <?php if(($key == 'JobTitle' || $key == 'JobType' || $key == 'City' || $key == 'Suburb' || $key == 'PublishDate') && $value != NULL):?>
                         <tr>
-                        <th><?php echo $key . ':';?></th>
+                        <th><?php if($key=='JobTitle'){ echo 'Job Title:';} else if($key=='JobType'){ echo 'Job Type:';}
+                            else if($key=='PublishDate') {echo 'Publish Date:';} else { echo $key . ':';}?>
+                        </th>
                         <td><?php echo $value?></th>
                         </tr>
                         <?php endif?>
@@ -27,13 +29,13 @@
                       <?php if($job['JobImage'] == 0 || $job['JobImage'] == NULL || $job['JobImage'] == ""):?>
                         <img src="<?php echo base_url()?>lib/images/facebook.jpg">
                     <?php else :?>
-                        <img src="<?php echo base_url() . 'lib/jobImages/' . $job['JobImage']?>" class="mx-md-2" style="width:275px;height:165px;">
+                        <img src="<?php echo base_url() . 'jobImages/' . $job['JobImage']?>" class="mx-md-2" style="width:250px;height:165px;">
                     <?php endif;?>
                     </div>
             </div>
         </div>
         <p class="mt-5"><?php echo $job['ThumbnailText'];?></p>
-         <div >
+         <div class="jumbotron bg-white pt-0 pl-0">
             <p class="mt-3"><?php echo $job['Editor1'];?></p>  
         </div>
         <div class="text-right pt-3">

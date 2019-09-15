@@ -45,7 +45,7 @@ class Personcenter extends CI_Controller {
 		
 		$userdata['userType'] = $_SESSION['userType'];
 		
-		if($_SESSION['userType']=='admin'){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] == 'staff'){
 
 			$data['title'] = "Manage Staff";
 			$data['message'] ="";
@@ -54,11 +54,12 @@ class Personcenter extends CI_Controller {
 			$data['userID'] = $_SESSION['userID'];
 			$data['userEmail'] = $_SESSION['userEmail'];
 			$this->load->view('templates/header',$userdata);
-				$this->load->view('settings/tabHeader',$data);
-				$this->load->view('settings/personalInfo',$data);
-				$this->load->view('settings/manageStaff',$data);
+			$this->load->view('settings/tabHeader',$data);
+			$this->load->view('settings/personalInfo',$data);
+			
+			$this->load->view('settings/manageStaff',$data);
 				
-				$this->load->view('settings/vue');
+			$this->load->view('settings/vue');
 			$this->load->view('templates/footer');
 		} else {
 			redirect('/');

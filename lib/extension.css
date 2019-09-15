@@ -66,3 +66,63 @@ a .card:hover{
         z-index:1;
     }
 }
+
+@keyframes fadeOutIn {
+    0% {opacity: 0;}
+    50% {opacity: 1;}
+    100% {opacity: 0;}
+  }
+  
+.fadeOutIn {
+    animation-name: fadeOutIn;
+    animation-duration: 1000ms;
+}
+
+.tooltipX {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .tooltipX .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #eee;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+  }
+  /* pointer */
+  .tooltipX .tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #eee transparent;
+  }
+  
+  .tooltipX:hover .tooltiptext {
+    visibility: visible;
+  }
+
+  .nav-tabs > li > a.nav-link {
+    font-weight:bolder;
+    color: #777;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+  }
+
+  .nav-tabs > li > a.nav-link.active {
+    font-weight:bolder;
+    color: black;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+  }
+
+  

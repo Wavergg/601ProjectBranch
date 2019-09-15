@@ -108,7 +108,7 @@
         
 
     </div>
-        <h3 class="text-warning mt-3"> Interest </h3>
+        <h3 class="text-warning mt-3"> Profession </h3>
         <hr />
         
         <div class="row">

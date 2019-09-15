@@ -34,12 +34,16 @@
                 <?php $ci =& get_instance();
                 $ci->load->model('Candidate_model');
                 $ci->load->model('Job_model');
-                $numUncheckedJob = $ci->Job_model->countNumberUncheckedJob();
-                $numUncheckedCandidate = $ci->Candidate_model->countNumberUncheckedCandidate();?>
+                $numUncheckedJob = $ci->Job_model->countNumberUncheckedJob($_SESSION['visitedClient']);
+                $numUncheckedCandidate = $ci->Candidate_model->countNumberUncheckedCandidate($_SESSION['visitedCandidate']);?>
                 <!-- icon for notification and the number -->
                 <span class="notification">
-                    <span><i style="font-size:30px;" class="icon ion-md-notifications-outline"></i></span>
+                    <span class=" tooltipX"><i style="font-size:30px;" class="icon ion-md-notifications-outline"></i>
+                    <span class="tooltiptext"><i style="font-size:30px;" class="icon ion-md-briefcase"></i> <?php echo $numUncheckedJob;?> &nbsp; &nbsp; &nbsp;
+                    <i style="font-size:30px;" class="icon ion-md-person"></i> <?php echo $numUncheckedCandidate;?></span>
+                    </span>
                     <span class="text-primary"><?php echo $numUncheckedCandidate+$numUncheckedJob?></span>
+                   
                 </span>
                 <?php endif;?>
             <?php endif;?>

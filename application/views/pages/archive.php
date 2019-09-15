@@ -5,12 +5,12 @@
     <h2 class="text-center"><?php echo $title; ?></h2>
     <hr />
     
-    <ul class="nav nav-tabs  flex-sm-row" id="myTab" role="tablist">
+    <ul class="nav nav-tabs flex-sm-row" id="myTab" role="tablist">
         <li class="nav-item ml-auto text-sm-center">
             <a class="nav-link active" id="OrdersArchives-tab" data-toggle="tab" href="#OrdersArchives" role="tab" aria-controls="OrdersArchives" aria-selected="true">Orders Archives</a>
         </li>
         <li class="nav-item mr-auto text-sm-center">
-            <a class="nav-link" id="applicantsArchives-tab" data-toggle="tab" href="#applicantsArchives" role="tab" aria-controls="applicantsArchives" aria-selected="false">Applicants Archives</a>
+            <a class="nav-link " id="applicantsArchives-tab" data-toggle="tab" href="#applicantsArchives" role="tab" aria-controls="applicantsArchives" aria-selected="false">Applicants Archives</a>
         </li>
     </ul>
 <div class="tab-content" id="myTabContent">

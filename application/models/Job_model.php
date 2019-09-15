@@ -20,7 +20,7 @@ class Job_model extends CI_Model {
             $this->db->where_not_in('JobStatus',$data);
             $this->db->limit(10,$offset * 10);
         }
-        $this->db->order_by('JobSubmittedDate', 'DESC');
+        $this->db->order_by('UpdateDate', 'DESC');
         $query = $this->db->get('Job');
         return $query->result_array();
     }
@@ -122,6 +122,7 @@ class Job_model extends CI_Model {
             'Suburb' => $suburb,
             'JobSubmittedDate' => $dateJobSubmitted,
         );
+        $this->db->set('UpdateDate', 'NOW()', FALSE);
         $this->db->insert('Job', $data);
     }
 
@@ -140,10 +141,17 @@ class Job_model extends CI_Model {
         if(!empty($fileDestination)){
             $data['JobImage'] = $fileDestination;
         }
+        $this->db->set('UpdateDate', 'NOW()', FALSE);
         $this->db->where('JobID',$jobID);
         $this->db->update('Job',$data);
     }
     
+    public function updateVisitedManageClient($userID){
+        $this->db->where('UserID',$userID);
+        $data = array();
+        $this->db->set('VisitedClient', 'NOW()', FALSE);
+        $this->db->update('User',$data);
+    }
 
     // called from: Controller->Jobs->jobUnpublish()
     // change the status to whatever the status parameter passed in
@@ -153,6 +161,7 @@ class Job_model extends CI_Model {
             'JobStatus' => $status,
         );
         $this->db->where('JobID',$jobID);
+        $this->db->set('UpdateDate', 'NOW()', FALSE);
         $this->db->update('Job',$data);
     }
 
@@ -174,6 +183,7 @@ class Job_model extends CI_Model {
         $data = array(
             'JobStatus' => 'active',
         );
+        $this->db->set('UpdateDate', 'NOW()', FALSE);
         $this->db->update('Job',$data);
     }
 
@@ -185,6 +195,7 @@ class Job_model extends CI_Model {
         $data = array(
             'JobStatus' => '',
         );
+        $this->db->set('UpdateDate', 'NOW()', FALSE);
         $this->db->update('Job',$data);
     }
 
@@ -274,8 +285,8 @@ class Job_model extends CI_Model {
 
     //called from: view->templates->header
     //return the number of unchecked job as notification
-    public function countNumberUncheckedJob(){
-        $mySql = "SELECT Checked FROM Job WHERE Checked IS NULL";
+    public function countNumberUncheckedJob($visitedTimeJob){
+        $mySql = "SELECT UpdateDate FROM Job WHERE UpdateDate > " . $this->db->escape($visitedTimeJob);
         $query = $this->db->query($mySql);
         return $query->num_rows();
     }

@@ -19,7 +19,7 @@
         class=" btn-sm btn-info">
         <i style="font-size:30px;" class="icon ion-md-create m-1"></i>
     </button>
-    <button type="button" id="changeSavedBtn"
+    <button type="button" id="changeSavedBtn" onclick="updateChange()"
         @click="submitButton(<?php echo $candidate['CandidateID'];?>,<?php echo $candidate['UserID'];?>)"
         style="position:fixed;right: 20px; bottom:90px;z-index:1" class=" btn-sm btn-success">
         <i style="font-size:30px;" class="icon ion-md-save m-1"></i>
@@ -48,6 +48,7 @@
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade  show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div onchange="trackChanges()"> <!--applicantPageStart-->
                 <div class="d-flex">
                 <h3 class="text-warning mt-3"> Interest</h3>
                 <small class="ml-auto text-muted pt-1">Last Updated: <span v-text="updatedTime"></span></small>
@@ -331,6 +332,7 @@
                     </textarea>
 
                 </div>
+            </div> <!--onchangeDiv end-->
             </div>
             <!--applicant profile end-->
             <!-- attachement tab -->
@@ -413,6 +415,23 @@
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+var unsaved = false;
+function trackChanges(){
+    this.unsaved = true
+   // alert(this.unsaved)
+}
+function updateChange(){
+    this.unsaved = false
+  //  alert(this.unsaved)
+}
+window.addEventListener("beforeunload", function(event) {
+    if(this.unsaved){
+        //just return something so the popup window will show
+    event.returnValue = "Write something clever here..";
+    }
+});
+</script>
 <script>
 var app = new Vue({
     el: '#app',
@@ -560,8 +579,13 @@ var app = new Vue({
         }; ?> ,
         convictionDetails : "<?php echo $candidate['ConvictionDetails'];?>",
         youtubeLink: "",
+        // unsaved: false,
     },
     methods: {
+        trackChanges: function(){
+            alert('changes made')
+            this.unsaved = true
+        },
         uploadFiles: function() {
             console.log(this.candidateID);
             this.message = "";
@@ -639,6 +663,7 @@ var app = new Vue({
             }
         },
         submitButton: function(candidateID, userID) {
+            this.unsaved = false;
             var formData = new FormData()
             formData.append('UserID',userID);
             formData.append('FirstName',this.firstName);
@@ -698,36 +723,13 @@ var app = new Vue({
                 document.getElementById("changeSavedBtn").classList
                 document.getElementById("savedMessage").style.opacity = 0;
                 document.getElementById('savedMessage').innerHTML = 'Changes Saved . . .'
-                this.unfade(document.getElementById("savedMessage"));
-                setTimeout(this.fade(document.getElementById("savedMessage"),10000))
+                //transition animation from css file
+                document.getElementById("savedMessage").classList.add("fadeOutIn");
+                //remove it after using it
+                setTimeout(function(){document.getElementById("savedMessage").classList.remove("fadeOutIn");}, 1100);
             }, res => {
                 // error callback
-
             });
-        },
-        unfade: function(element) {
-            var op = 0.1;  // initial opacity
-            element.style.display = 'block';
-            var timer = setInterval(function () {
-                if (op >= 1){
-                    clearInterval(timer);
-                }
-                element.style.opacity = op;
-                element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-                op += op * 0.1;
-            }, 10);
-        },
-        fade: function(element) {
-            var op = 1;  // initial opacity
-            var timer = setInterval(function () {
-                if (op <= 0.1){
-                    clearInterval(timer);
-                    element.style.display = 'none';
-                }
-                element.style.opacity = op;
-                element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-                op -= op * 0.1;
-            }, 50);
         },
         loadVideo: function(){
             this.updatedTime = this.getCurrentDateTime()
@@ -775,7 +777,7 @@ var app = new Vue({
         }   
         var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
          return dateTime;
-    }
+        },
     },
     mounted: function() {
         this.youtubeLink = '<?php if(!empty($candidate['YoutubeURL'])){echo $candidate['YoutubeURL'];}?>';
@@ -785,8 +787,6 @@ var app = new Vue({
             document.getElementById('video-preview').style.display = "block";
             document.getElementById('video').style.display = "block";
         }
-    
-    }
-
+    },
 })
 </script>

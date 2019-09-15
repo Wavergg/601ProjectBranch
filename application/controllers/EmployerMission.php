@@ -50,6 +50,11 @@ class EmployerMission extends CI_Controller{
         $errMessage = array();
         $errorIsTrue = false;
        
+        $data['active1'] = '';
+        $data['active2'] = '';
+        $data['active3'] = 'active';
+        $data['message'] = '';
+
         if(isset($_POST['clientTitle'])){
             //matched with string that starts with m or d or -
             
@@ -78,12 +83,6 @@ class EmployerMission extends CI_Controller{
                 $clientEmail = $this->security->xss_clean($_POST['clientEmail']);
             } else { $errorIsTrue = true; array_push($errMessage,'Invalid Email Address');}
         } else { $errorIsTrue = true; array_push($errMessage,'Please enter an email');}
-        
-        
-        $data['active1'] = '';
-        $data['active2'] = '';
-        $data['active3'] = 'active';
-        $data['message'] = '';
         
         if(isset($_POST['clientContact'])){
             //check contact is it valid or not
@@ -118,6 +117,7 @@ class EmployerMission extends CI_Controller{
         if(isset($_POST['clientSuburb'])){
             $clientSuburb = $this->security->xss_clean(stripslashes(trim($_POST['clientSuburb'])));
         } else { $errorIsTrue = true; array_push($errMessage,'Please enter the suburb'); }
+
         if(isset($_POST['clientJobTitle'])){
             $clientJobTitle = $this->security->xss_clean(stripslashes(trim($_POST['clientJobTitle'])));
         } else { $errorIsTrue = true; array_push($errMessage,'Please enter the job title');}
@@ -130,7 +130,7 @@ class EmployerMission extends CI_Controller{
 
         $description = $this->security->xss_clean(stripslashes(trim($_POST['description'])));
         //instantly record the date of when the application is submitted
-        $dateJobSubmitted = date('Y-m-d'); 
+        //$dateJobSubmitted = date('Y-m-d H:i:s'); 
         
         $userdata['userType'] = 'anyone';
         $data['message'] = array();
@@ -138,9 +138,10 @@ class EmployerMission extends CI_Controller{
             $userdata['userEmail'] = $_SESSION['userEmail'];
 			$userdata['userType'] = $_SESSION['userType'];
         }
-        //if the error is not detected adding the information to database else return a warning message 
+        //if the error is not detected adding the information to database else return a warning message
         if(!$errorIsTrue){
-            $this->job_model->addJob($clientTitle,$clientName,$clientCompany,$clientEmail,$clientContact,$clientCity,$clientAddress,$clientJobTitle,$clientJobType,$description,$clientSuburb,$dateJobSubmitted);
+            $currentDate = date('Y-m-d');
+            $this->job_model->addJob($clientTitle,$clientName,$clientCompany,$clientEmail,$clientContact,$clientCity,$clientAddress,$clientJobTitle,$clientJobType,$description,$clientSuburb,$currentDate);
             $data['title'] = 'Job was added successfully.';
 
             // create a folder for the job, named as JobID
