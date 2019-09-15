@@ -367,18 +367,26 @@
             <!-- attachement tab end -->
             <!-- Youtube Start -->
             <div class="tab-pane fade mb-5" id="Youtube" role="tabpanel" aria-labelledby="Youtube-tab">
+               
                 
-                <label for="youtubeLinksID" class="display-4 font-weight-bold mt-4">Youtube URL:</label>
-                <input type="text" id="youtubeLinksID"  v-model="youtubeLink" @change="loadVideo" class="form-control" >
-                
-                <div class="container my-4 ">
+                <div class="container jumbotron mt-5 bg-light">
+                <div class="row justify-content-center">
+                <img src="<?php echo base_url()?>lib/images/youtube.png" class="align-self-center mt-2" style="width:48px;height:48px; ">
+               
+                <span class="font-weight-bold align-self-center" style="font-size:48px;">YouTube URL</span>
+                 </div>
+                 <div class="row justify-content-center">
+                <input type="text" id="youtubeLinksID"  v-model="youtubeLink" @change="loadVideo" class="form-control mt-1 col-9" >
+                </div>
+                </div> 
+              
                 <!-- <div class="row justify-content-center"> -->
                     <div id="video justify-content-center row">
                         <div class="wrapper">
                             <iframe id="video-preview" style="display:none" src=""></iframe>
                         </div>
                     </div>
-                </div> 
+                
             </div>
             <!-- Youtube End -->
         </div>
@@ -738,7 +746,7 @@ var app = new Vue({
           
                 document.getElementById('video-preview').style.display = "none";
             } else {
-                var urlID = this.youtubeLink.split("=")
+                var urlID = this.youtubeLink.split(/[\=&]/)
                 document.getElementById("video-preview").src = 'https://youtube.com/embed/'+urlID[1];
                 document.getElementById('video-preview').style.display = "block";
             }

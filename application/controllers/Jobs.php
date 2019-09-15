@@ -227,7 +227,7 @@ class Jobs extends CI_Controller {
 			//select the job 
 			//refresh the value
 			// Find all the files under the job's folder
-            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'\\';
 			$data['userFiles'] = directory_map($path);
 			$data['job'] = $this->job_model->get_specificJob($paramJobID);
 			$data['candidatesData'] = $this->candidate_model->getCandidatesJobDetails($paramJobID);
@@ -257,7 +257,7 @@ class Jobs extends CI_Controller {
 			$this->job_model->unpublishJob($paramJobID,$status);
 			//select the job 
 			// Find all the files under the job's folder
-            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'\\';
 			$data['userFiles'] = directory_map($path);
 			$data['job'] = $this->job_model->get_specificJob($paramJobID);
 			
@@ -306,7 +306,7 @@ class Jobs extends CI_Controller {
         <th scope="col">Applicant_Name</th>
         <th scope="col">Contact_Number</th>
 		<th scope="col">Email</th>
-        <th scope="col">Address</th>
+        <th scope="col">Applicant_Address</th>
         <th scope="col">Job_Type</th>
         <th scope="col">Hours_worked</th>
         <th scope="col">JobRates</th>
@@ -354,7 +354,7 @@ class Jobs extends CI_Controller {
 			$data['candidatesData'] = $this->candidate_model->getCandidatesJobDetails($jobID);
 			
 			// Find all the files under the job's folder
-            $path = constant('JOB_IMAGE_PATH').$jobID.'/';
+            $path = constant('JOB_IMAGE_PATH').$jobID.'\\';
 			$data['userFiles'] = directory_map($path);
 
 			$this->load->view('templates/header',$userdata);
@@ -541,15 +541,18 @@ class Jobs extends CI_Controller {
 	//called from: view->manageClient
     //calling the model of candidate and updating the candidateStatus of candidate to removed so it wont appear in the candidate table anymore
     public function removeJobApplication(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
         $jobID = $_POST['jobID'];
-        $this->job_model->updateJobStatusToComplete($jobID);
+		$this->job_model->updateJobStatusToComplete($jobID);
+		} else {
+			redirect('/');
+		}
 	}
 	
 	// upload other files by Admin or Staff
     public function uploadFiles(){
-        if($_SESSION['userType']!='admin' && $_SESSION['userType'] !='staff'){
-          
-        }
+        if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+        
 		$jobID = $this->input->post('jobID');
 		$path = constant('JOB_IMAGE_PATH').$jobID.'/';
         $config['upload_path'] = $path;
@@ -573,6 +576,8 @@ class Jobs extends CI_Controller {
 				echo json_encode($data['userFiles']);
             }
 		}
+		  
+		} else { redirect('/');}
 	}
 	
 	
@@ -599,6 +604,55 @@ class Jobs extends CI_Controller {
 			rename($path.$fileName,constant('JOB_IMAGE_PATH').'del/'.$jobID.$fileName);
 			$data['userFiles'] = directory_map($path);
 			echo json_encode($data['userFiles']);
+        } else {
+            redirect('/');
+        }
+	}
+
+	//update TOB download
+	public function updateTOBfile(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			$jobID = $_POST['jobID'];
+			$TOBfile = $_POST['TOBfile'];
+			$this->job_model->updateTOBLink($jobID,$TOBfile);
+        } else {
+            redirect('/');
+        }
+	}
+
+	//download TOB
+	public function downloadTOB($jobID,$fileName){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			if(empty($fileName) || $fileName == 'null'){
+                echo 'TOB doesn\'t exists';
+            }
+         
+            $path = constant('JOB_IMAGE_PATH').$jobID .'/'.$fileName;
+            
+            force_download($path, NULL);
+        } else {
+            redirect('/');
+        }
+	}
+
+	//set job status back to noaction / null
+	public function retrieveJob($paramJobID){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			$userdata['userType'] = $_SESSION['userType'];
+			$data['title'] = "Job Order Details";
+			$status="";
+			$data['candidatesData'] = $this->candidate_model->getCandidatesJobDetails($paramJobID);
+			
+			$this->job_model->unpublishJob($paramJobID,$status);
+			//select the job 
+			// Find all the files under the job's folder
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
+			$data['userFiles'] = directory_map($path);
+			$data['job'] = $this->job_model->get_specificJob($paramJobID);
+			
+			$this->load->view('templates/header',$userdata);
+			$this->load->view('pages/jobDetails',$data);
+			$this->load->view('templates/footer');
         } else {
             redirect('/');
         }

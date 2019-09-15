@@ -299,4 +299,11 @@ class Job_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function updateTOBLink($jobID,$TOBfile){
+        $this->db->where('JobID',$jobID);
+        $data['TOB'] = $TOBfile;
+        $this->db->set('UpdateDate', 'NOW()', FALSE);
+        $this->db->update('Job',$data);
+    }
+
 }

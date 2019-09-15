@@ -28,7 +28,7 @@
                         <table class="table table-sm table-hover">
                             <tbody>
                                 <?php foreach($job as $key => $value):?>
-                                <?php if($key == 'JobID' || $key=='UpdateDate' || $key == 'Description' || $key == 'Editor1' || $key == 'ThumbnailText' || $key == 'JobStatus' || $key == 'PublishTitle' || $key == "PublishDate" || $key == "Bookmark" || $key == "JobImage" || $key == "Checked")  :?>
+                                <?php if($key == 'JobID' || $key=='TOB' || $key=='UpdateDate' || $key == 'Description' || $key == 'Editor1' || $key == 'ThumbnailText' || $key == 'JobStatus' || $key == 'PublishTitle' || $key == "PublishDate" || $key == "Bookmark" || $key == "JobImage" || $key == "Checked")  :?>
                                 <?php else :?>
                                 <tr>
                                 <th><?php if($key == 'Client Title'){ echo 'Client Title';} elseif ($key == 'ClientName') {
@@ -62,17 +62,18 @@
                 <!-- Archive Button -->
                 <div class="row justify-content-center">
                     <?php if( sizeof($candidatesData)>0 && $job['JobStatus'] != "completed") :?>
-                        <a class="btn btn-outline-danger col-md-3 col-9 m-2" href="<?php echo base_url()?>index.php/Jobs/updateJobToArchive/<?php echo $job['JobID'];?>">Send job to Archive</a>
-                    <?php endif;?>
-                    <?php if( $job['JobStatus'] == 'published') :?>
-                        <a class="btn btn-outline-dark col-md-3 col-9 m-2" href="<?php echo base_url()?>index.php/Jobs/jobUnpublish/<?php echo $job['JobID'];?>">Unpublish job</a>
+                        <a class="btn btn-outline-danger col-md-3 col-9 m-2" href="<?php echo base_url()?>index.php/Jobs/updateJobToArchive/<?php echo $job['JobID'];?>">Send order to Archive</a>
+                    <?php elseif( $job['JobStatus'] == 'completed'):?>
+                    <a class="btn btn-outline-dark col-md-3 col-9 m-2" href="<?php echo base_url()?>index.php/Jobs/retrieveJob/<?php echo $job['JobID'];?>">Retrieve order from Archive</a>
+                    <?php elseif( $job['JobStatus'] == 'published') :?>
+                        <a class="btn btn-outline-dark col-md-3 col-9 m-2" href="<?php echo base_url()?>index.php/Jobs/jobUnpublish/<?php echo $job['JobID'];?>">Unpublish order</a>
                     <?php endif;?>
                 </div>
                 <!-- Archive Button End -->
 
 
                 <!-- Editable Page For Job -->
-                <h2 class="text-center mt-md-0 mt-5">WebContent</h2>
+                <h2 class="text-center mt-md-0 pt-3 mt-5">WebContent</h2>
                 <hr class="border border-dark"/>
                 <div class="container mb-5">
                     <form action="<?php echo base_url()?>index.php/Jobs/jobPublish/<?php echo $job['JobID'];?>" method="post" enctype="multipart/form-data">
@@ -138,7 +139,7 @@
                                     <th scope="col">Applicant_Name</th>
                                     <th scope="col">Contact_Number</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Address</th>
+                                    <th scope="col">Applicant_Address</th>
                                     <th scope="col">Job_Type</th>
                                     <th scope="col">Hours_worked</th>
                                     <th scope="col">Job_Rates</th>
@@ -201,12 +202,22 @@
             </div>
                 
                 <!-- List of the files -->
-                <div class="mt-4"><h2 class="text-dark">Files Attached:</h2></div>
-
+                <div class="mt-4"><h2 class="text-dark">Files Attached:</h2> </div>
+                <div class="d-flex mt-4">
+                    
+                    <span style="position:relative;top:3px;">TOB:</span>
+                    <div class="col-md-3">
+                    <select class="custom-select custom-select-sm" @change="updateTOB" v-model="TOBselected" id="TOBselectedID">
+                        <option v-text="TOBselected" selected></option>
+                        <option v-for="userFile in userFiles" :value="userFile" v-text="userFile"></option>
+                    </select>
+                    </div>
+                </div>
                 <div v-if="userFiles.length > 0" class="mt-3">
                     <div v-for="userFile in userFiles" class="">
                         
                         <div class="btn btn-danger border-danger" v-on:click="removingFile(userFile)" style="border-radius: 5px 0px 0px 5px">X</div><a class="btn btn-outline-dark px-5 my-1" style="border-radius:0px 5px 5px 0px;" :href="'<?php echo base_Url(); ?>index.php/Jobs/downloadFile/' + jobID + '/' + userFile">{{ userFile }}</a>
+                        
                     </div>
                 </div>
                 <!-- List of the files end -->
@@ -255,6 +266,7 @@ var app = new Vue({
         jobID: "<?php echo $job['JobID'];?>",
         chosenFile: "",
         labelFile: "",
+        TOBselected: "<?php if(empty($job['TOB'])){ echo 'Open this select menu';} else { echo $job['TOB'];}?>",
     },
     methods: {
         uploadFiles: function() {
@@ -311,6 +323,22 @@ var app = new Vue({
             
             $('#myModal').modal('show')
     
+        },
+        updateTOB: function(){
+            this.message = "";
+
+                var formData = new FormData();
+                formData.append('jobID', this.jobID);
+                formData.append('TOBfile', this.TOBselected);
+                var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/updateTOBfile/'
+                this.$http.post(urllink, formData).then(res => {
+                    var result = res.body
+                    
+                }, res => {
+                    // this.message = "Failure in removing files, Server Error"
+                })
+            
+            // $('#myModal').modal('show')
         }
     }
 });

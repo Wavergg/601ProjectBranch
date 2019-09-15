@@ -283,7 +283,7 @@ class CandidateMission extends CI_Controller{
 
         $config['upload_path'] = constant('CV_PATH');
         $config['allowed_types'] = 'pdf|png|doc|docx';
-        $config['max_size'] = 10000;
+        $config['max_size'] = 30000; //30MB
         $config['max_width'] = 0;
         $config['max_height'] = 0;
         $config['file_name'] = $maxID."CV"; // the uploaded file's extension will be applied
@@ -515,10 +515,15 @@ class CandidateMission extends CI_Controller{
     //called from: view->pages->manageCandidate , view->applicant->vue
     //calling the model of candidate and updating the candidateStatus of candidate to removed so it wont appear in the candidate table anymore
     public function removeCandidateApplication(){
+        if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
         $candidateID = $_POST['candidateID'];
         
         $this->candidate_model->removeCandidateApp($candidateID);
         $this->candidate_model->updateTimeChanged($candidateID);
+        }
+        else {
+            redirect('/');
+        }
     }
 
     //function that are called from CandidateMission->applyJob
