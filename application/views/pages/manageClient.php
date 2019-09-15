@@ -1,4 +1,10 @@
 <div id="app">
+
+<?php if(!empty($fromPage)&& sizeof($candidateData)>0):?>
+<div class="form-control bg-success text-center text-white font-weight-bold rounded-0" style="position:fixed; top:0px;z-index:1;opacity:0.9">
+    Assigning Order to <?php echo $candidateData['FirstName'];?>, Profession: <?php echo $candidateData['JobInterest'] . ' in ' . $candidateData['City'];?>
+</div>
+<?php endif;?>
     <div style="height: 50px;"></div>
 
     <h2 class="text-center">Manage Orders</h2>
@@ -57,8 +63,8 @@
                 </div> -->
             </div>
             <button class="btn btn-outline-info " @click="applyFilters">Apply</button>
-            <a href="<?php echo base_url()?>index.php/Jobs/manageClient" id="clearBtn" class="btn btn-outline-dark mx-2">Clear</a>
-
+            <!-- <a href="<?php echo base_url()?>index.php/Jobs/manageClient" id="clearBtn" class="btn btn-outline-dark mx-2">Clear</a> -->
+            <button class="btn btn-outline-dark mx-2" @click="clearFilters">Clear</button>
             
         </div>
         <!-- Collapse End -->
@@ -75,10 +81,11 @@
                 <thead>
                     <tr>
                         <!-- <th scope="col" ><a href="#"  @click.stop.prevent="sortBy('Bookmark')" class="text-dark pr-3 pt-3"><img src="<?php echo base_url();?>lib/images/Bookmark1.png" style="height: 16px; width:16px;"></a></th> -->
+                        <th scope="col" v-bind:class="{ 'd-none': !showAssignCandidate }"><a href="#" class="text-dark ml-2">Assign Applicant</a></th>
                         <th scope="col" v-bind:class="{ 'd-none': ! showRemoveStatus }"><a href="#" class="text-dark">Remove</a></th>
                         <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
                         <th scope="col" >TOB</th>
-                        <th scope="col" ><a href="#" class="text-dark py-2" @click.stop.prevent="sortBy('UpdateDate')">Update Date</a></th>
+                        <th scope="col" ><a href="#" class="text-dark py-2" @click.stop.prevent="sortBy('UpdateDate')">Update_Date</a></th>
                         <th scope="col" ><a href="#" class="text-dark " @click.stop.prevent="sortBy('JobStatus')">Order_Status</a></th>
                         <!-- <th scope="col" ><a href="#" class="text-dark p-2 pr-3" @click.stop.prevent="sortBy('ClientTitle')">Title</a></th> -->
                         <th scope="col" ><a href="#" class="text-dark " @click.stop.prevent="sortBy('ClientName')">Contact_Person_Name</a></th>
@@ -98,6 +105,7 @@
                     <tr v-for="job in jobs" v-bind:class="{ 'font-italic text-danger': compareDate(job.UpdateDate) }" :key="job.JobID" :id="'row'+job.JobID">
                         
                         <!-- <td > <input type="checkbox" :id="job.bookmarkUrl" v-on:click="updateBookmark(job.JobID)" :checked="job.bookmarkStat"></td> -->
+                        <th class="textInfoPos text-center" v-bind:class="{ 'd-none': !showAssignCandidate }"><span class="textInfo text-center" style="left: 0px;overflow:initial;">Assign job <br>to this Applicant</span><a v-on:click="AssignIDURL(job.JobID)" role="button" class="text-info"><i style="font-size:30px;" class="ml-1 icon ion-md-contacts mx-3"></i></a></th>
                         <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeJobApp(job.JobID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
                         <td class="textInfoPos" ><span class="textInfo text-center" style="left: 0px;width:100px;">See Order<br/> Details</span><a :href="job.ref" role="button"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></td>
                         <th class="textInfoPos" ><span class="textInfo text-center" style="left: -45px;width:160px;">Download TOB</span><a class="btn btn-outline-dark px-2" :href="'<?php echo base_Url(); ?>index.php/Jobs/downloadTOB/'+ job.JobID +'/'+job.TOB">TOB</a></th>
@@ -172,9 +180,12 @@ var app = new Vue({
         jobsCopy: [],
         activeJobNum: <?php echo $activeJobNum;?>,
         showRemoveStatus: false,
+        candidateID: "<?php if(!empty($candidateData['CandidateID'])){echo $candidateData['CandidateID'];}?>",
+        showAssignCandidate: '<?php if(sizeof($candidateData)>0){echo true;} else { echo false;};?>',
         // filters
         filterCompany: "",
-        filterCity: "",
+        filterCity: "<?php if(!empty($candidateData['City'])){echo $candidateData['City'];}?>",
+        fromPage: "<?php echo $fromPage;?>",
         // filterJobTitle: "",
         // filterContactNumber: "",
         filterContactPerson: "",
@@ -204,6 +215,16 @@ var app = new Vue({
                 this.pageNums[0].isActive = true;
             }, res => {
             })
+        },
+        clearFilters: function(){
+            if(this.fromPage != "candidatePage"){
+                document.location.reload();
+            } else {
+            this.filterCompany = "";
+            this.filterCity = "";
+            this.filterContactPerson = "";
+            this.applyFilters();
+            }
         },
         showRemoveTab: function(){
             this.showRemoveStatus = !this.showRemoveStatus
@@ -279,6 +300,11 @@ var app = new Vue({
             } else{
                 return false;
             }
+        },
+        AssignIDURL: function(jobID){
+          //  var issetJob = "<?php if(isset($job['JobID'])){ echo $job['JobID'];}?>"
+            var goToUrl = "<?php echo base_url() . 'index.php/Jobs/assignCandidate/';?>"+this.candidateID +"/"+jobID;
+            document.location.href = goToUrl;
         },
         // updateBookmark: function(jobID){
         //     var xRequest = new XMLHttpRequest;

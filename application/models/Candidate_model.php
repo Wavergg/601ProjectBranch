@@ -74,7 +74,7 @@ class Candidate_model extends CI_Model {
     //Controller->Jobs->resetCandidateData(),
     //get candidate based on ID return inner joined table between candidate and user, so far it has been only used on jobdetails table
     public function getCandidateByID($candidateID){
-        $mySql = "SELECT Candidate.CandidateID,User.FirstName, User.LastName, User.PhoneNumber, User.Email,User.Address, Candidate.JobType,Candidate.CandidateHoursWorked,Candidate.CandidateNotes,Candidate.CandidateEarnings,Candidate.JobRate,Candidate.CandidateNotes FROM Candidate INNER JOIN User ON Candidate.UserID=User.UserID WHERE Candidate.CandidateID=" . $candidateID ;
+        $mySql = "SELECT Candidate.CandidateID, User.City, User.FirstName, User.LastName, User.PhoneNumber, User.Email,User.Address, Candidate.JobType,Candidate.CandidateHoursWorked,Candidate.CandidateNotes,Candidate.CandidateEarnings,Candidate.JobRate,Candidate.CandidateNotes,Candidate.JobInterest FROM Candidate INNER JOIN User ON Candidate.UserID=User.UserID WHERE Candidate.CandidateID=" . $candidateID ;
         $query = $this->db->query($mySql);
         return $query->row_array();
     }
@@ -159,13 +159,15 @@ class Candidate_model extends CI_Model {
         if(!empty($city)){
             $this->db->where('User.City',$city);
         }
-        if(!empty($jobType)){
-        $this->db->where('Candidate.JobType',$jobType);
-        }
+        // if(!empty($jobType)){
+        // $this->db->where('Candidate.JobType',$jobType);
+        // }
         if(!empty($jobInterest)){
             //get the closest match by jobInterest
+            
             $this->db->group_start();
-                $this->db->like('Candidate.JobInterest',$jobInterest);
+           
+                $this->db->like('Candidate.JobInterest',$jobInterest,'both');
                 //if it contains space split them up and compare each words with the jobInterest request from job
                 if(strpos($jobInterest,' ')!==false){
                     $parts = explode(' ',$jobInterest);
@@ -173,25 +175,25 @@ class Candidate_model extends CI_Model {
                         if(strlen($jobPart)>2){
                             //remove suffix -er -or -ers -ing -man -person and compare again
                             if(substr($jobPart,-2)=='er' || substr($jobPart,-2)=='or'){
-                                $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobPart)-2));
+                                $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobPart)-2),'both');
                             } else if(substr($jobPart,-3)=='ers' || substr($jobPart,-3)=='ing' || substr($jobPart,-3)=='man'){
-                                $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobPart)-3));
+                                $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobPart)-3),'both');
                             } else if(substr($jobPart,-6)=='person'){
-                                $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobPart)-6));
+                                $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobPart)-6),'both');
                             }
-                            $this->db->or_like('JobInterest',$jobPart);
+                            $this->db->or_like('JobInterest',$jobPart,'both');
                         }
                     }
                 } else {
                     //remove suffix -er -or -ers -ing -man -person and compare again
                     if(substr($jobInterest,-6)=='person'){
-                        $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobInterest)-6));
+                        $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobInterest)-6),'both');
                     } else if(substr($jobInterest,-3)=='ers' || substr($jobInterest,-3)=='ing' || substr($jobInterest,-3)=='man'){
-                        $this->db->or_like('JobInterest',substr($jobInterest,0,strlen($jobInterest)-3));
+                        $this->db->or_like('JobInterest',substr($jobInterest,0,strlen($jobInterest)-3),'both');
                     } else if(substr($jobInterest,-2)=='er' || substr($jobInterest,-2)=='or'){
-                        $this->db->or_like('JobInterest',substr($jobInterest,0,strlen($jobInterest)-2));
+                        $this->db->or_like('JobInterest',substr($jobInterest,0,strlen($jobInterest)-2),'both');
                     } else if(substr($jobInterest,-1)=='s'){
-                        $this->db->or_like('JobInterest',$jobInterest);
+                        $this->db->or_like('JobInterest',$jobInterest,'both');
                     } 
                 }
             $this->db->group_end();
@@ -235,7 +237,7 @@ class Candidate_model extends CI_Model {
             'UserPicture' => $profilePictureLink,
         );
         $this->db->where('CandidateID',$candidateID);
-        $this->db->update('candidate',$data);
+        $this->db->update('Candidate',$data);
     }
 
     // called from: Controller->CandidateMission->manageCandidate() 
@@ -262,9 +264,9 @@ class Candidate_model extends CI_Model {
         if(!empty($city)){
             $this->db->where('City',$city);
         }
-        if(!empty($jobType)){
-            $this->db->where('JobType',$jobType);
-        }
+        // if(!empty($jobType)){
+        //     $this->db->where('JobType',$jobType);
+        // }
         if(!empty($jobInterest)){
             if($page=="jobDetails"){
                  //get the closest match by jobInterest
@@ -458,6 +460,17 @@ class Candidate_model extends CI_Model {
     //updating youtube link for the candidate
     public function updateYoutubeLink($candidateID,$data){
         $this->db->where('CandidateID',$candidateID);
+        $this->db->update('Candidate',$data);
+    }
+
+    //called from: Controller->CandidateMission->updateCVfile()
+    //updating CV file for specific candidate
+    public function updateCVLink($candidateID,$CVfile){
+        $this->db->where('CandidateID',$candidateID);
+        $data = array(
+            'JobCV' => $CVfile,
+        );
+        $this->db->set('ApplyDate', 'NOW()', FALSE);
         $this->db->update('Candidate',$data);
     }
 }

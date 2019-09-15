@@ -52,19 +52,32 @@ class Jobs extends CI_Controller {
 
 	// called from view->personcenter->adminPanel , view->personcenter->staffPanel
 	// show client tables
-	public function manageClient(){
+	public function manageClient($page="",$candidateID=""){
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 			$userdata['userType'] = $_SESSION['userType'];
 			$userID = $_SESSION['userID'];
+			//update visited time
 			$data['lastVisitClient'] = $_SESSION['visitedClient'];
 
 			$this->job_model->updateVisitedManageClient($userID);
             date_default_timezone_set('NZ');
-            $_SESSION['visitedClient'] = date('Y-m-d H:i:s');
-          
+			$_SESSION['visitedClient'] = date('Y-m-d H:i:s');
+			//end visit time
+
+			//if it loads from candidatedetails page, get the candidate data and the job
+			if(!empty($candidateID)){
+				$data['candidateData'] = $this->candidate_model->getCandidateByID($candidateID);
+				$data['jobs'] = $this->job_model->get_filterjobs($data['candidateData']['City'],$data['candidateData']['JobInterest']);
+				$data['activeJobNum'] = $this->job_model->countAllActiveJob($data['candidateData']['City'],$data['candidateData']['JobInterest']);
+			} else {
+				$data['jobs'] = $this->job_model->get_jobs();
+				$data['candidateData'] = array();
+				$data['activeJobNum'] = $this->job_model->countAllActiveJob();
+			}
+
 			$data['title'] = "Manage Client";
 			$data['message'] ="";
-			$data['jobs'] = $this->job_model->get_jobs();
+			
 			$bookmarkStat= "";
 			//adding 3 more field into jobs ref,bookmarkStat,bookmarkUrl
             for($i=0;$i<sizeof($data['jobs']);$i++){
@@ -77,7 +90,8 @@ class Jobs extends CI_Controller {
                 $data['jobs'][$i]['bookmarkStat'] = $bookmarkStat;
                 $data['jobs'][$i]['bookmarkUrl'] = $bookmarkUrl;
 			}
-			$data['activeJobNum'] = $this->job_model->countAllActiveJob();
+			
+			$data['fromPage'] = $page; 
 			$this->load->view('templates/header',$userdata);
 			$this->load->view('pages/manageClient',$data);
 			$this->load->view('templates/footer');
@@ -126,7 +140,7 @@ class Jobs extends CI_Controller {
 			$data['job'] = $this->job_model->get_specificJob($paramJobID);
 			
 			// Find all the files under the job's folder
-            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'\\';
 			$data['userFiles'] = directory_map($path);
 
 			//if a candidate is assigned load it as well
@@ -150,7 +164,7 @@ class Jobs extends CI_Controller {
 			$this->job_model->updateJobStatusToComplete($paramJobID);
 
 			// Find all the files under the job's folder
-            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'\\';
 			$data['userFiles'] = directory_map($path);
 
 			//get the new refreshed data
@@ -554,7 +568,7 @@ class Jobs extends CI_Controller {
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
         
 		$jobID = $this->input->post('jobID');
-		$path = constant('JOB_IMAGE_PATH').$jobID.'/';
+		$path = constant('JOB_IMAGE_PATH').$jobID.'\\';
         $config['upload_path'] = $path;
 
         $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx|zip|7z';
@@ -585,7 +599,7 @@ class Jobs extends CI_Controller {
 	public function downloadFile($jobID, $fileName){
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 
-            $path = constant('JOB_IMAGE_PATH').$jobID.'/'.$fileName;
+            $path = constant('JOB_IMAGE_PATH').$jobID.'\\'.$fileName;
             
             force_download($path, NULL);
         } else {
@@ -598,10 +612,10 @@ class Jobs extends CI_Controller {
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 			$jobID = $_POST['jobID'];
 			$fileName = $_POST['userFile'];
-			$path = constant('JOB_IMAGE_PATH').$jobID.'/';
+			$path = constant('JOB_IMAGE_PATH').$jobID.'\\';
 			//let's not use this. it's dangerous as heck
 			//unlink($path.$fileName);
-			rename($path.$fileName,constant('JOB_IMAGE_PATH').'del/'.$jobID.$fileName);
+			rename($path.$fileName,constant('JOB_IMAGE_PATH').'del\\'.$jobID.$fileName);
 			$data['userFiles'] = directory_map($path);
 			echo json_encode($data['userFiles']);
         } else {
@@ -627,7 +641,7 @@ class Jobs extends CI_Controller {
                 echo 'TOB doesn\'t exists';
             }
          
-            $path = constant('JOB_IMAGE_PATH').$jobID .'/'.$fileName;
+            $path = constant('JOB_IMAGE_PATH').$jobID .'\\'.$fileName;
             
             force_download($path, NULL);
         } else {
@@ -646,7 +660,7 @@ class Jobs extends CI_Controller {
 			$this->job_model->unpublishJob($paramJobID,$status);
 			//select the job 
 			// Find all the files under the job's folder
-            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'\\';
 			$data['userFiles'] = directory_map($path);
 			$data['job'] = $this->job_model->get_specificJob($paramJobID);
 			

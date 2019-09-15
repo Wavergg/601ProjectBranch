@@ -59,7 +59,7 @@ class EmployerMission extends CI_Controller{
             //matched with string that starts with m or d or -
             
             //followed by 3 character combinations of r i s with possibility of . at the end
-            if(preg_match('%^[MD\-][ris]{1,3}[\.]?$%',stripslashes(trim($_POST['clientTitle'])))){
+            if(preg_match('%^[MD\-][ris]{0,3}[\.]?$%',stripslashes(trim($_POST['clientTitle'])))){
                 $clientTitle = $this->security->xss_clean(stripslashes($_POST['clientTitle']));
             } else { $errorIsTrue = true; array_push($errMessage,'Please choose your title from dropdown list'); }
         } else { $clientTitle = "-";}

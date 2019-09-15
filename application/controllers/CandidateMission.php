@@ -73,8 +73,6 @@ class CandidateMission extends CI_Controller{
             //matches the cityLocation,JobInterest/JobTitle, and jobType
             $data['candidates'] = $this->candidate_model->getCandidatesWithName(10, 0,$page,$data['job']['City'],$data['job']['JobType'],$data['job']['JobTitle']);
             
-            //is it a good idea to match the interest from candidate / job?
-            
             $data['fromPage'] = $page; 
             $this->load->view('templates/header',$userdata);
             $this->load->view('pages/manageCandidate',$data);
@@ -87,13 +85,13 @@ class CandidateMission extends CI_Controller{
 
     // function to download CV that are submitted by candidate
     // accessible from view->pages->candidateDetails || view->pages->manageCandidate
-    public function downloadCV($fileName){
+    public function downloadCV($candidateID,$fileName){
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-            if(empty($fileName) || $fileName == 'null'){
+            if(empty($fileName) || $fileName == 'null' || $fileName == 'Open%20this%20select%20menu'){
                 echo 'Candidate CV doesn\'t exists';
             }
            // $candidateID = explode('.',$fileName);
-            $path = constant('CV_PATH').$fileName;
+            $path = constant('CV_PATH').$candidateID.'\\'.$fileName;
             
             force_download($path, NULL);
         } else {
@@ -104,7 +102,7 @@ class CandidateMission extends CI_Controller{
     public function downloadFile($candidateID, $fileName){
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 
-            $path = constant('CV_PATH').$candidateID.'/'.$fileName;
+            $path = constant('CV_PATH').$candidateID.'\\'.$fileName;
             
             force_download($path, NULL);
         } else {
@@ -226,7 +224,7 @@ class CandidateMission extends CI_Controller{
             $data = array();
             $candidate = $this->candidate_model->getMaxIDByUserID($userID);
             
-            $path = constant('CV_PATH').$candidate['MaxID'].'/';
+            $path = constant('CV_PATH').$candidate['MaxID'].'\\';
 
             // create the folder
             mkdir($path);
@@ -281,7 +279,7 @@ class CandidateMission extends CI_Controller{
         $candidate = $this->candidate_model->getMaxIDByUserID($userID);
         $maxID=$candidate['MaxID'];
 
-        $config['upload_path'] = constant('CV_PATH');
+        $config['upload_path'] = constant('CV_PATH').$candidate['MaxID'].'\\';
         $config['allowed_types'] = 'pdf|png|doc|docx';
         $config['max_size'] = 30000; //30MB
         $config['max_width'] = 0;
@@ -318,11 +316,11 @@ class CandidateMission extends CI_Controller{
     // upload other files by Admin or Staff
     public function uploadFiles(){
         if($_SESSION['userType']!='admin' && $_SESSION['userType'] !='staff'){
-            echo "Please login";
+            redirect('/');
         }
         $candidateID = $this->input->post('candidateID');
         
-        $path = constant('CV_PATH').$candidateID.'/';
+        $path = constant('CV_PATH').$candidateID.'\\';
         $config['upload_path'] = $path;
 
         $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx|zip|7z';
@@ -351,10 +349,10 @@ class CandidateMission extends CI_Controller{
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 			$candidateID = $_POST['candidateID'];
 			$fileName = $_POST['userFile'];
-			$path = constant('CV_PATH').$candidateID.'/';
+			$path = constant('CV_PATH').$candidateID.'\\';
 			//let's not use this. it's dangerous as heck
 			//unlink($path.$fileName);
-			rename($path.$fileName,constant('CV_PATH').'del/'.$candidateID.$fileName);
+			rename($path.$fileName,constant('CV_PATH').'del\\'.$candidateID.$fileName);
             $data['userFiles'] = directory_map($path);
             $this->candidate_model->updateTimeChanged($candidateID);
 			echo json_encode($data['userFiles']);
@@ -376,7 +374,7 @@ class CandidateMission extends CI_Controller{
             }
 
             // Find all the files under the candidate's folder
-            $path = constant('CV_PATH').$candidateID.'/';
+            $path = constant('CV_PATH').$candidateID.'\\';
             $data['userFiles'] = directory_map($path);
 
             
@@ -603,6 +601,16 @@ class CandidateMission extends CI_Controller{
         $newUserPasswd = do_hash($newUserPasswd, 'sha256');
         $this->register_model->addUser($firstName, $lastName, $userEmail, $newUserPasswd, $userAddress, $city, $zipCode, $suburb, $userType, $phoneNumber, $DOB, $gender);
         } 
+    }
+
+    public function updateCVfile(){
+        if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			$candidateID = $_POST['candidateID'];
+			$CVfile = $_POST['CVfile'];
+			$this->candidate_model->updateCVLink($candidateID,$CVfile);
+        } else {
+            redirect('/');
+        }
     }
 
     public function filterGeneral($general){

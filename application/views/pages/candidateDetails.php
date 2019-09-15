@@ -15,16 +15,21 @@
     <?php endif;?>
 
     <?php if(empty($job)):?>
-    <button type="button" @click="editButton()" style="position:fixed;right: 20px; bottom:154px;z-index:1"
+    <button type="button" @click="editButton()" style="position:fixed;right: 20px; bottom:146px;z-index:1"
         class=" btn-sm btn-info">
         <i style="font-size:30px;" class="icon ion-md-create m-1"></i>
     </button>
     <button type="button" id="changeSavedBtn" onclick="updateChange()"
         @click="submitButton(<?php echo $candidate['CandidateID'];?>,<?php echo $candidate['UserID'];?>)"
-        style="position:fixed;right: 20px; bottom:90px;z-index:1" class=" btn-sm btn-success">
+        style="position:fixed;right: 20px; bottom:82px;z-index:1" class=" btn-sm btn-success">
         <i style="font-size:30px;" class="icon ion-md-save m-1"></i>
     </button>
+    <a href="<?php echo base_url()?>index.php/Jobs/manageClient/candidatePage/<?php echo $candidate['CandidateID'];?>" style="position:fixed;right: 20px; bottom:20px;z-index:1"
+        class=" btn-sm btn-dark border border-secondary">
+        <i style="font-size:30px;" class="icon ion-md-contacts m-1"></i>
+    </a>
     <?php endif;?>
+
     <div id="savedMessage" hidden class="btn-sm btn-dark disabled">
         
     </div>
@@ -115,9 +120,9 @@
                     <div class="row col-md-4">
                         <div class="col-md-12">
                             <div class="row ml-3"><label for="candidateCVID" class="font-weight-bold mt-2">Candidate's CV:</label></div>
-                            <div class="row ml-3"><a href="<?php echo base_url()?>index.php/CandidateMission/downloadCV/<?php if(!empty($candidate['JobCV'])){echo $candidate['JobCV'];} else { echo '0';}?>" id="candidateCVID" class="btn btn-primary">CandidateCV</a></div>   
+                            <div class="row ml-3"><a :href="'<?php echo base_url()?>index.php/CandidateMission/downloadCV/'+candidateID+'/'+CVselected" id="candidateCVID" class="btn btn-primary">CandidateCV</a></div>   
                 
-                            <div class="row mt-5 mb-0 ml-4">
+                            <div class="row mt-5 mb-0 ml-5">
                     
                                 <div class="row">
                                 <?php $setImgPreviewID = "" ;?>
@@ -355,7 +360,16 @@
                 
                 <!-- List of the files -->
                 <div class="mt-5"><h2 class="text-dark">Files Attached:</h2></div>
-
+                <div class="d-flex mt-4">
+                    
+                    <span style="position:relative;top:3px;">CV:</span>
+                    <div class="col-md-3">
+                    <select class="custom-select custom-select-sm" @change="updateCV" v-model="CVselected" id="CVselectedID">
+                        <option v-text="CVselected" selected></option>
+                        <option v-for="userFile in userFiles" :value="userFile" v-text="userFile"></option>
+                    </select>
+                    </div>
+                </div>
                 <div v-if="userFiles.length > 0" class="mt-3 mb-5">
                     <div v-for="userFile in userFiles">
                         <div class="btn btn-danger border-danger" v-on:click="removingFile(userFile)" style="border-radius: 5px 0px 0px 5px">X</div><a class="btn btn-outline-dark px-5 my-1" style="border-radius:0px 5px 5px 0px;" :href="'<?php echo base_Url(); ?>index.php/CandidateMission/downloadFile/' + candidateID + '/' + userFile">{{ userFile }}</a>
@@ -587,6 +601,7 @@ var app = new Vue({
         }; ?> ,
         convictionDetails : "<?php echo $candidate['ConvictionDetails'];?>",
         youtubeLink: "",
+        CVselected: "<?php if(empty($candidate['JobCV'])){ echo 'Open this select menu';} else { echo $candidate['JobCV'];}?>",
         // unsaved: false,
     },
     methods: {
@@ -738,6 +753,22 @@ var app = new Vue({
             }, res => {
                 // error callback
             });
+        },
+        updateCV: function(){
+            this.message = "";
+            this.updatedTime = this.getCurrentDateTime()
+                var formData = new FormData();
+                formData.append('candidateID', this.candidateID);
+                formData.append('CVfile', this.CVselected);
+                var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateCVfile/'
+                this.$http.post(urllink, formData).then(res => {
+                    var result = res.body
+                    
+                }, res => {
+                    // this.message = "Failure in removing files, Server Error"
+                })
+            
+            // $('#myModal').modal('show')
         },
         loadVideo: function(){
             this.updatedTime = this.getCurrentDateTime()

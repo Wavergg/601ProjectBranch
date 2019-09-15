@@ -28,7 +28,3 @@ echo $DATE;
 
 
 ?>
-
-<?php $ci =& get_instance();
-                $ci->load->model('Candidate_model');
-               ?>

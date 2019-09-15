@@ -245,6 +245,59 @@ class Job_model extends CI_Model {
                 $this->db->where('JobStatus',$jobStatus);
             }
         }
+        $this->db->order_by('UpdateDate', 'DESC');
+        $query = $this->db->get('Job');
+        return $query->result_array();
+    }
+
+    
+    //get similar location and city to get matched with candidate
+    //called from: Controller->Jobs->manageClient()
+    public function get_filterjobs($city,$jobTitle,$offset=0){
+        
+        $data = array('JobStatus','completed');
+        $this->db->where_not_in('JobStatus',$data);
+        $this->db->limit(10,$offset * 10);
+        if(!empty($city)){
+            $this->db->like('City',$city);
+        }
+        
+        if(!empty($jobTitle)){
+            //get the closest match by jobInterest
+            $this->db->group_start();
+                //$this->db->like('JobTitle',$jobTitle);
+                //if it contains space split them up and compare each words with the jobInterest request from job
+                if(strpos($jobTitle,' ')!==false){
+                    $parts = explode(' ',$jobTitle);
+                    foreach($parts as $jobPart){
+                        if(strlen($jobPart)>2){
+                            //remove suffix -er -or -ers -ing -man -person and compare again
+                            if(substr($jobPart,-2)=='er' || substr($jobPart,-2)=='or'){
+                                $this->db->or_like('JobTitle',substr($jobPart,0,strlen($jobPart)-2),'both');
+                            } else if(substr($jobPart,-3)=='ers' || substr($jobPart,-3)=='ing' || substr($jobPart,-3)=='man'){
+                                $this->db->or_like('JobTitle',substr($jobPart,0,strlen($jobPart)-3),'both');
+                            } else if(substr($jobPart,-6)=='person'){
+                                $this->db->or_like('JobTitle',substr($jobPart,0,strlen($jobPart)-6),'both');
+                            }
+                            $this->db->or_like('JobTitle',$jobPart,'both');
+                        }
+                    }
+                } else {
+                    //remove suffix -er -or -ers -ing -man -person and compare again
+                    if(substr($jobTitle,-6)=='person'){
+                        $this->db->or_like('JobTitle',substr($jobPart,0,strlen($jobTitle)-6),'both');
+                    } else if(substr($jobTitle,-3)=='ers' || substr($jobTitle,-3)=='ing' || substr($jobTitle,-3)=='man'){
+                        $this->db->or_like('JobTitle',substr($jobTitle,0,strlen($jobTitle)-3),'both');
+                    } else if(substr($jobTitle,-2)=='er' || substr($jobTitle,-2)=='or'){
+                        $this->db->or_like('JobTitle',substr($jobTitle,0,strlen($jobTitle)-2),'both');
+                    } else if(substr($jobTitle,-1)=='s'){
+                        $this->db->or_like('JobTitle',$jobTitle,'both');
+                    } 
+                }
+            $this->db->group_end();
+        }
+
+        $this->db->order_by('UpdateDate', 'DESC');
         $query = $this->db->get('Job');
         return $query->result_array();
     }
@@ -265,11 +318,51 @@ class Job_model extends CI_Model {
 
     //called from: Controller->Jobs->manageClient()
     //get the number of jobs where the status is not completed, for paging purposes
-    public function countAllActiveJob(){
+    public function countAllActiveJob($city="",$jobTitle=""){
         $data = array(
             'JobStatus' => 'completed',
         );
         $this->db->where_not_in('JobStatus',$data);
+        
+        if(!empty($city)){
+            $this->db->like('City',$city);
+        }
+
+        if(!empty($jobTitle)){
+            //get the closest match by jobInterest
+            $this->db->group_start();
+                //$this->db->like('JobTitle',$jobTitle);
+                //if it contains space split them up and compare each words with the jobInterest request from job
+                if(strpos($jobTitle,' ')!==false){
+                    $parts = explode(' ',$jobTitle);
+                    foreach($parts as $jobPart){
+                        if(strlen($jobPart)>2){
+                            //remove suffix -er -or -ers -ing -man -person and compare again
+                            if(substr($jobPart,-2)=='er' || substr($jobPart,-2)=='or'){
+                                $this->db->or_like('JobTitle',substr($jobPart,0,strlen($jobPart)-2),'both');
+                            } else if(substr($jobPart,-3)=='ers' || substr($jobPart,-3)=='ing' || substr($jobPart,-3)=='man'){
+                                $this->db->or_like('JobTitle',substr($jobPart,0,strlen($jobPart)-3),'both');
+                            } else if(substr($jobPart,-6)=='person'){
+                                $this->db->or_like('JobTitle',substr($jobPart,0,strlen($jobPart)-6),'both');
+                            }
+                            $this->db->or_like('JobTitle',$jobPart,'both');
+                        }
+                    }
+                } else {
+                    //remove suffix -er -or -ers -ing -man -person and compare again
+                    if(substr($jobTitle,-6)=='person'){
+                        $this->db->or_like('JobTitle',substr($jobPart,0,strlen($jobTitle)-6),'both');
+                    } else if(substr($jobTitle,-3)=='ers' || substr($jobTitle,-3)=='ing' || substr($jobTitle,-3)=='man'){
+                        $this->db->or_like('JobTitle',substr($jobTitle,0,strlen($jobTitle)-3),'both');
+                    } else if(substr($jobTitle,-2)=='er' || substr($jobTitle,-2)=='or'){
+                        $this->db->or_like('JobTitle',substr($jobTitle,0,strlen($jobTitle)-2),'both');
+                    } else if(substr($jobTitle,-1)=='s'){
+                        $this->db->or_like('JobTitle',$jobTitle,'both');
+                    } 
+                }
+            $this->db->group_end();
+        }
+        
         return $this->db->count_all_results('Job');
     }
 
@@ -305,5 +398,4 @@ class Job_model extends CI_Model {
         $this->db->set('UpdateDate', 'NOW()', FALSE);
         $this->db->update('Job',$data);
     }
-
 }
