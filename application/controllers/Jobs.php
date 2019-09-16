@@ -140,7 +140,7 @@ class Jobs extends CI_Controller {
 			$data['job'] = $this->job_model->get_specificJob($paramJobID);
 			
 			// Find all the files under the job's folder
-            $path = constant('JOB_IMAGE_PATH').$paramJobID.'\\';
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
 			$data['userFiles'] = directory_map($path);
 
 			//if a candidate is assigned load it as well
@@ -164,7 +164,7 @@ class Jobs extends CI_Controller {
 			$this->job_model->updateJobStatusToComplete($paramJobID);
 
 			// Find all the files under the job's folder
-            $path = constant('JOB_IMAGE_PATH').$paramJobID.'\\';
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
 			$data['userFiles'] = directory_map($path);
 
 			//get the new refreshed data
@@ -241,7 +241,7 @@ class Jobs extends CI_Controller {
 			//select the job 
 			//refresh the value
 			// Find all the files under the job's folder
-            $path = constant('JOB_IMAGE_PATH').$paramJobID.'\\';
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
 			$data['userFiles'] = directory_map($path);
 			$data['job'] = $this->job_model->get_specificJob($paramJobID);
 			$data['candidatesData'] = $this->candidate_model->getCandidatesJobDetails($paramJobID);
@@ -271,7 +271,7 @@ class Jobs extends CI_Controller {
 			$this->job_model->unpublishJob($paramJobID,$status);
 			//select the job 
 			// Find all the files under the job's folder
-            $path = constant('JOB_IMAGE_PATH').$paramJobID.'\\';
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
 			$data['userFiles'] = directory_map($path);
 			$data['job'] = $this->job_model->get_specificJob($paramJobID);
 			
@@ -368,7 +368,7 @@ class Jobs extends CI_Controller {
 			$data['candidatesData'] = $this->candidate_model->getCandidatesJobDetails($jobID);
 			
 			// Find all the files under the job's folder
-            $path = constant('JOB_IMAGE_PATH').$jobID.'\\';
+            $path = constant('JOB_IMAGE_PATH').$jobID.'/';
 			$data['userFiles'] = directory_map($path);
 
 			$this->load->view('templates/header',$userdata);
@@ -568,7 +568,7 @@ class Jobs extends CI_Controller {
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
         
 		$jobID = $this->input->post('jobID');
-		$path = constant('JOB_IMAGE_PATH').$jobID.'\\';
+		$path = constant('JOB_IMAGE_PATH').$jobID.'/';
         $config['upload_path'] = $path;
 
         $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx|zip|7z';
@@ -599,7 +599,7 @@ class Jobs extends CI_Controller {
 	public function downloadFile($jobID, $fileName){
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 
-            $path = constant('JOB_IMAGE_PATH').$jobID.'\\'.$fileName;
+            $path = constant('JOB_IMAGE_PATH').$jobID.'/'.$fileName;
             
             force_download($path, NULL);
         } else {
@@ -612,10 +612,10 @@ class Jobs extends CI_Controller {
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 			$jobID = $_POST['jobID'];
 			$fileName = $_POST['userFile'];
-			$path = constant('JOB_IMAGE_PATH').$jobID.'\\';
+			$path = constant('JOB_IMAGE_PATH').$jobID.'/';
 			//let's not use this. it's dangerous as heck
 			//unlink($path.$fileName);
-			rename($path.$fileName,constant('JOB_IMAGE_PATH').'del\\'.$jobID.$fileName);
+			rename($path.$fileName,constant('JOB_IMAGE_PATH').'del/'.$jobID.$fileName);
 			$data['userFiles'] = directory_map($path);
 			echo json_encode($data['userFiles']);
         } else {
@@ -641,7 +641,7 @@ class Jobs extends CI_Controller {
                 echo 'TOB doesn\'t exists';
             }
          
-            $path = constant('JOB_IMAGE_PATH').$jobID .'\\'.$fileName;
+            $path = constant('JOB_IMAGE_PATH').$jobID .'/'.$fileName;
             
             force_download($path, NULL);
         } else {
@@ -660,7 +660,7 @@ class Jobs extends CI_Controller {
 			$this->job_model->unpublishJob($paramJobID,$status);
 			//select the job 
 			// Find all the files under the job's folder
-            $path = constant('JOB_IMAGE_PATH').$paramJobID.'\\';
+            $path = constant('JOB_IMAGE_PATH').$paramJobID.'/';
 			$data['userFiles'] = directory_map($path);
 			$data['job'] = $this->job_model->get_specificJob($paramJobID);
 			
