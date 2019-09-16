@@ -55,13 +55,13 @@
             <div class="tab-pane fade  show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <div onchange="trackChanges()"> <!--applicantPageStart-->
                 <div class="d-flex">
-                <h3 class="text-warning mt-3"> Interest</h3>
+                <h3 class="text-warning mt-3"> Profession </h3>
                 <small class="ml-auto text-muted pt-1">Last Updated: <span v-text="updatedTime"></span></small>
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-md-4">
-                        <label for="jobInterestID" class="font-weight-bold mt-2">Profession:</label>
+                        <label for="jobInterestID" class="font-weight-bold mt-2">Job Interested In:</label>
                         <input type="text" v-model="jobInterest" class="form-control" readonly
                             v-bind:class="{ 'border-0': !toggleEdit}" id="jobInterestID">
                     </div>
@@ -821,7 +821,7 @@ var app = new Vue({
     mounted: function() {
         this.youtubeLink = '<?php if(!empty($candidate['YoutubeURL'])){echo $candidate['YoutubeURL'];}?>';
         if(this.youtubeLink.length>0){
-            var urlID = this.youtubeLink.split("=")
+            var urlID = this.youtubeLink.split(/[\=&]/)
             document.getElementById("video-preview").src = 'https://youtube.com/embed/'+urlID[1];
             document.getElementById('video-preview').style.display = "block";
             document.getElementById('video').style.display = "block";

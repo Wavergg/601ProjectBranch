@@ -418,7 +418,7 @@ class Candidate_model extends CI_Model {
     //called from: view->templates->header
     //return the number of unchecked job as notification
     public function countNumberUncheckedCandidate($visitedTimeCandidate){
-        $mySql = "SELECT ApplyDate FROM Candidate WHERE ApplyDate > " . $this->db->escape($visitedTimeCandidate);
+        $mySql = "SELECT ApplyDate FROM Candidate WHERE CandidateStatus !='removed' AND ApplyDate > " . $this->db->escape($visitedTimeCandidate);
         $query = $this->db->query($mySql);
         return $query->num_rows();
     }

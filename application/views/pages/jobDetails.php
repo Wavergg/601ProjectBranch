@@ -4,6 +4,9 @@
     <div class="container mb-2 p-md-3">
         <h2 class="text-center"><?php echo $title; ?></h2>
         <hr />
+        <div class="d-flex">
+            <small class="ml-auto text-muted pt-1">Last Updated: <span v-text="updatedTime"></span></small>
+        </div>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
 
             <li class="nav-item">
@@ -15,11 +18,12 @@
                     aria-controls="attachment" aria-selected="false">Attachment</a>
             </li>
         </ul>
+        
         <!-- Tab content -->
         <div class="tab-content mt-4" id="myTabContent">
             <!-- Order Brief Tab -->
             <div class="tab-pane fade  show active" id="orderBrief" role="tabpanel" aria-labelledby="orderBrief-tab">
-        
+            
                 <!-- Client Breief and Job Description -->
                 <div class="row justify-content-center">
                     <!-- Client Brief -->
@@ -267,6 +271,7 @@ var app = new Vue({
         chosenFile: "",
         labelFile: "",
         TOBselected: "<?php if(empty($job['TOB'])){ echo 'Open this select menu';} else { echo $job['TOB'];}?>",
+        updatedTime: "<?php echo $job['UpdateDate'];?>",
     },
     methods: {
         uploadFiles: function() {
@@ -285,6 +290,7 @@ var app = new Vue({
                     if(result.length>this.userFiles.length){
                     this.message = "Successful in uploading files"
                     this.userFiles = result
+                    this.updatedTime = this.getCurrentDateTime()
                     } else {
                         this.message = "Failure in uploading files"
                     }
@@ -303,7 +309,7 @@ var app = new Vue({
         removingFile: function(userFileX){
             console.log(this.jobID);
             this.message = "";
-            
+                
              
                 var formData = new FormData();
                 formData.append('jobID', this.jobID);
@@ -314,6 +320,7 @@ var app = new Vue({
                     if(result.length<this.userFiles.length){
                         this.message = "Successful in removing files"
                         this.userFiles = res.body
+                        this.updatedTime = this.getCurrentDateTime()
                     } else {
                         this.message = "Failure in removing files"
                     }
@@ -326,7 +333,7 @@ var app = new Vue({
         },
         updateTOB: function(){
             this.message = "";
-
+            this.updatedTime = this.getCurrentDateTime()
                 var formData = new FormData();
                 formData.append('jobID', this.jobID);
                 formData.append('TOBfile', this.TOBselected);
@@ -339,7 +346,33 @@ var app = new Vue({
                 })
             
             // $('#myModal').modal('show')
+        },
+        getCurrentDateTime: function() {
+        var now     = new Date(); 
+        var year    = now.getFullYear();
+        var month   = now.getMonth()+1; 
+        var day     = now.getDate();
+        var hour    = now.getHours();
+        var minute  = now.getMinutes();
+        var second  = now.getSeconds(); 
+        if(month.toString().length == 1) {
+             month = '0'+month;
         }
+        if(day.toString().length == 1) {
+             day = '0'+day;
+        }   
+        if(hour.toString().length == 1) {
+             hour = '0'+hour;
+        }
+        if(minute.toString().length == 1) {
+             minute = '0'+minute;
+        }
+        if(second.toString().length == 1) {
+             second = '0'+second;
+        }   
+        var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
+         return dateTime;
+        },
     }
 });
 </script>

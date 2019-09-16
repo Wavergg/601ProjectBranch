@@ -51,8 +51,10 @@
             <!-- topmost Right nav -->
             <nav class="col-md-4 navbar navbar-expand-sm justify-content-around">
                 <?php if($userType == 'anyone'): ?>
-                <a class="nav-link text-dark mx-4" href="<?php echo base_url() ?>index.php/login">Login</a>
-                <a class="nav-link text-dark mx-4" href="<?php echo base_url() ?>index.php/Register">Register</a>
+                <div class="justify-content-end ml-md-5 pl-md-5">
+                <a class="nav-link text-dark mx-4 pl-md-5" href="<?php echo base_url() ?>index.php/login">Login</a>
+                <!-- <a class="nav-link text-dark mx-4" href="<?php echo base_url() ?>index.php/Register">Register</a> -->
+                </div>
                 <?php else: ?>
                 <a class="nav-link text-dark mx-4" href="<?php echo base_url() ?>index.php/personcenter">Dashboard</a>
                 <a class="nav-link text-dark mx-4" href="<?php echo base_url() ?>index.php/login/logout">Logout</a>

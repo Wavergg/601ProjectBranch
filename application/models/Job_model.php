@@ -173,6 +173,7 @@ class Job_model extends CI_Model {
             'JobStatus' => 'completed',
             'Checked' => 'true',
         );
+        $this->db->set('UpdateDate', 'NOW()', FALSE);
         $this->db->update('Job',$data);
     }
 
@@ -379,7 +380,7 @@ class Job_model extends CI_Model {
     //called from: view->templates->header
     //return the number of unchecked job as notification
     public function countNumberUncheckedJob($visitedTimeJob){
-        $mySql = "SELECT UpdateDate FROM Job WHERE UpdateDate > " . $this->db->escape($visitedTimeJob);
+        $mySql = "SELECT UpdateDate FROM Job WHERE JobStatus != 'completed' AND UpdateDate > " . $this->db->escape($visitedTimeJob);
         $query = $this->db->query($mySql);
         return $query->num_rows();
     }

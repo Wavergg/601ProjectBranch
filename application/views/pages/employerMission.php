@@ -93,9 +93,9 @@
 
 <div class="tab-pane fade show <?php echo $active3?>" id="v-pills-submitVacancy" role="tabpanel" aria-labelledby="v-pills-submitVacancy-tab">
     
-    <div class="container m-5" id="app">
+    <div class="container m-md-5 p-2" id="app">
         
-            <span class="display-4">SubmitVacancy</span>
+            <span class="display-4">Vacancy Application</span>
             <hr>
             <?php if(sizeof($message)>0){
                 echo '<ul>';

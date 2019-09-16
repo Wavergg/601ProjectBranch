@@ -449,7 +449,7 @@ class Jobs extends CI_Controller {
 	//set the value of jobRates, hoursworked and candidateEarnings to 0
 	public function resetCandidateData($candidateID){
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-
+			
 			$this->candidate_model->resetCandidateJobDetailsData($candidateID);
 			$candidateData = $this->candidate_model->getCandidateByID($candidateID);
 			$workingHoursSaved = $_POST['workingHoursSaved'];
@@ -553,8 +553,8 @@ class Jobs extends CI_Controller {
 	}
 
 	//called from: view->manageClient
-    //calling the model of candidate and updating the candidateStatus of candidate to removed so it wont appear in the candidate table anymore
-    public function removeJobApplication(){
+	//change the status of job to completed, so it wont appear in manage order page
+	public function removeJobApplication(){
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
         $jobID = $_POST['jobID'];
 		$this->job_model->updateJobStatusToComplete($jobID);

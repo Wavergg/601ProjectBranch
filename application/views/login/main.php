@@ -18,9 +18,9 @@
             <small class="text-danger text-muted" v-text="passwdError"></small>
         </div>
         <?php if($wrongInfo!='undefined') { echo '<small class="text-danger"> You entered either incorrect email or password, please try again. </small>';} ?>
-        <input type="submit" class="border-secondary btn btn-warning form-control mt-4" value="Log In">
+        <input type="submit" class="border-secondary btn btn-warning form-control mt-5" value="Log In">
         
-        <a href="<?php echo base_url() ?>index.php/Register" class="btn btn-outline-dark form-control mt-3"> Register</a>
+        <!-- <a href="<?php echo base_url() ?>index.php/Register" class="btn btn-outline-dark form-control mt-3"> Register</a> -->
         
         <input type="hidden" name="submittedLoginForm" value="TRUE" />
     </form>
