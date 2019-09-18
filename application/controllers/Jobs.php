@@ -236,7 +236,8 @@ class Jobs extends CI_Controller {
 			}
 			//4digitsYear-2digitsMonth-2digitsDay Format to match sql
 			$publishDate = date('Y-m-d');
-			//update the job
+			//update the 
+			
 			$this->job_model->publishJob($paramJobID,$textEditor,$thumbnailText,$publishTitle,$publishDate,$fileNameNew);
 			//select the job 
 			//refresh the value
