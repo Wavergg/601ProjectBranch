@@ -122,7 +122,10 @@
                 </div>
                 <div class="col-5 px-1 px-md-4">
                 <label for="clientNameID" class="font-weight-bold"><small class="text-danger mr-1">*</small>Contact Person:</label>
-                <input type="text" placeholder="Enter Name" class="form-control" name="clientName" id="clientNameID" required>
+                <input type="text" placeholder="Enter Name" v-model="clientName" @change="checkName" class="form-control" name="clientName" id="clientNameID" required>
+                <div class="mt-3" v-if="clientNameError.length">
+                        <p class="text-danger" v-text="clientNameError"></p>
+                    </div>
                 </div>
                 <div class="col-5 p-0">
                 <label for="clientCompanyID" class="font-weight-bold"><small class="text-danger mr-1">*</small>Company Name:</label>
@@ -151,7 +154,7 @@
             <div class="row mt-3">
              <div class="col-6 col-md-3 pl-0">
                  <label for="clientCityID" class="font-weight-bold"><small class="text-danger mr-1">*</small>City:</label>
-                 <select class="form-control" type="text" v-model="city" name="clientCity" id="clientCityID" required>
+                 <select class="form-control" type="text" @change="checkCity" v-model="city" name="clientCity" id="clientCityID" required>
                     <option selected>Enter City</option>
                     <?php foreach($cities as $city): ?>
                     <option value="<?php echo $city['CityName']; ?>"><?php echo $city['CityName']; ?></option>
@@ -228,6 +231,8 @@
             addressError: "",
             contactError: "",
             contact: "",
+            clientName: "",
+            clientNameError: "",
             emailError: "",
             email: "",
             isButton: false
@@ -275,7 +280,7 @@
             },
             checkAddress: function(){
                 if(this.address.length>0){
-                    var re = /^([a-zA-Z\.\,\'"&:/\- ]+[ ]?[#]?[0-9][a-zA-Z0-9 ]*|[#]?[ ]?[0-9]+[ ]?[a-zA-Z][ a-zA-Z0-9\.\,\'"&:/\-]*)$/;
+                    var re = /^([a-zA-Z\.\,\'"&:/\- ]+[ ]?[#]?[0-9][a-zA-Z0-9 ]*|[#]?[ ]?[0-9]+[ ]?[\-/]?[0-9]*[ ]?[a-zA-Z][ a-zA-Z0-9\.\,\'"&:/\-]*)$/;
                     if(re.test(this.address)){
                         this.addressError = ""
                         this.isButton = false
@@ -288,6 +293,26 @@
                     this.isButton = true
                 }
             },
+            checkCity: function(){
+                if(this.city.length>0){
+                    this.cityError = ""
+                }
+            },
+            checkName: function(){
+                if(this.clientName.length>0){
+                    var re = /^[a-zA-Z\.\'\-:\"\, /&]{2,}$/;
+                    if(re.test(this.clientName)){
+                        this.clientNameError = ""
+                        this.isButton = false
+                    } else {
+                        this.clientNameError = "Invalid name"
+                        this.isButton = true
+                    }
+               
+                } else {
+                    
+                }
+            }
         },
         
     })

@@ -158,6 +158,7 @@ var app = new Vue({
         workPermitExpiry: "",
         compensationInjury : "",
         compensationDateFrom : "",
+        compensationError: "",
         compensationDateTo : "",
         emptyRequiredError: "",
         asthma : false,
@@ -222,12 +223,12 @@ var app = new Vue({
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/addUserByStaff/'
             await this.$http.post(urllink, formData).then(res => {
                 var result = res.body
-                this.messages = res.body
-                $('#myModal').modal('show');
+                
+             
             }, res => {
                 // error callback
-                this.messages=res.body;
-                $('#myModal').modal('show');
+              
+              
             });
 
             var candidateCV = document.getElementById("JobCVID");
@@ -305,8 +306,8 @@ var app = new Vue({
                 if(jobCV.indexOf(".")>-1){
                     var res = jobCV.split(".");
                     //pdf|png|doc|docx
-                    if(res[res.length-1].toLowerCase()=="pdf" || res[res.length-1].toLowerCase()=="png" ||
-                    res[res.length-1].toLowerCase()=="doc" || res[res.length-1].toLowerCase()=="docx" ){
+                    if(res[res.length-1].toLowerCase()=="pdf" || res[res.length-1].toLowerCase()=="png" || res[res.length-1].toLowerCase()=="jpg" ||
+                    res[res.length-1].toLowerCase()=="doc" || res[res.length-1].toLowerCase()=="docx" || res[res.length-1].toLowerCase()=="jpeg" ){
                         this.jobCVError="";
                         this.buttonDisabledCheck()
                     } else {this.isButton = true; this.jobCVError="Invalid file format, only accepts pdf,doc,png or docx"}
@@ -369,7 +370,7 @@ var app = new Vue({
             },
             checkAddress: function(){
                 if(this.userAddress.length>0){
-                    var re = /^([a-zA-Z\.\,\'"&:/\- ]+[ ]?[#]?[0-9][a-zA-Z0-9 ]*|[#]?[ ]?[0-9]+[ ]?[a-zA-Z][ a-zA-Z0-9\.\,\'"&:/\-]*)$/;
+                    var re = /^([a-zA-Z\.\,\'"&:/\- ]+[ ]?[#]?[0-9][a-zA-Z0-9 ]*|[#]?[ ]?[0-9]+[ ]?[\-/]?[0-9]*[ ]?[a-zA-Z][ a-zA-Z0-9\.\,\'"&:/\-]*)$/;
                     if(re.test(this.userAddress)){
                         this.addressError = ""
                         this.buttonDisabledCheck()

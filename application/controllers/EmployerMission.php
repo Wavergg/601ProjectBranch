@@ -106,7 +106,8 @@ class EmployerMission extends CI_Controller{
         
         //address should contains number
         if(isset($_POST['clientAddress'])){
-            if(preg_match('%^([a-zA-Z\.\,\'"&:/\- ]+[ ]?[#]?[0-9][a-zA-Z0-9 ]*|[#]?[ ]?[0-9]+[ ]?[a-zA-Z][ a-zA-Z0-9\.\,\'"&:/\-]*)$%',stripslashes(trim($_POST['clientAddress'])))){
+           
+            if(preg_match('%^([a-zA-Z\.\,\'"&:/\- ]+[ ]?[#]?[0-9][a-zA-Z0-9 ]*|[#]?[ ]?[0-9]+[ ]?[\-/]?[0-9]*[ ]?[a-zA-Z][ a-zA-Z0-9\.\,\'"&:/\-]*)$%',stripslashes(trim($_POST['clientAddress'])))){
                 $clientAddress = $this->security->xss_clean($_POST['clientAddress']);
             } else {
                 $errorIsTrue = true; array_push($errMessage,'invalid address, contains unallowed special characters or it\'s incomplete');

@@ -8,7 +8,7 @@
               <li>Email: mark@leerecruitment.co.nz</li>
               <li style="color:white">Phone: (03) 928 5062</li>
               <li>Mobile: 021 08 323 373</li>
-              <li>https://leerecruitment.co.nz/</li>
+              <li>https://leerecruitment.co.nz</li>
               <li>228 Dee St, Invercargill</li>
             </ul>
           </div>

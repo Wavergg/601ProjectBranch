@@ -42,10 +42,7 @@
             <th scope="col"><a style="color:black" href="#" @click.stop.prevent="sortBy('email')">Email<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
             <th scope="col"><a style="color:black" href="#" @click.stop.prevent="sortBy('firstName')">FirstName<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
             <th scope="col"><a style="color:black" href="#" @click.stop.prevent="sortBy('lastName')">LastName<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
-            <th scope="col"><a style="color:black" href="#" @click.stop.prevent="sortBy('city')">City<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
-            <th scope="col"><a style="color:black" href="#" @click.stop.prevent="sortBy('address')">Address<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
-            <th scope="col"><a style="color:black" href="#" @click.stop.prevent="sortBy('phoneNumber')">PhoneNumber<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
-          </tr>
+           </tr>
         </thead>
         <tbody >  
           <tr v-for="staff in staffs" :key="staff.id">
@@ -53,9 +50,7 @@
             <td v-text="staff.email"></td>
             <td v-text="staff.firstName"></td>
             <td v-text="staff.lastName"></td>
-            <td v-text="staff.city"></td>
-            <td v-text="staff.address"></td>
-            <td v-text="staff.phoneNumber"></td>
+        
           </tr>
         </tbody>
       </table>

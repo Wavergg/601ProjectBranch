@@ -57,7 +57,7 @@
 <hr>
 <div class="container row col-md-12 align-items-center mb-5 mx-1">
 <div class="col-1"></div>
-  <div class="col-md-7 lead text-justify" style="font-size:1.1rem">
+  <div class="col-md-7 lead text-md-justify" style="font-size:1.1rem">
     <p>Lee Recruitment started in 2013. It is a locally owned and operated recruitment agency with an
     aim to help build a better community for all of us through meaningful employment. </p>
     <p>Our Goal is to find suitable employment for people in accordance with their skills and ambitions. </p>

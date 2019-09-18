@@ -323,12 +323,14 @@
                     </div>
                     <div class="row mt-2">
                         <label for="compensationDateFromID" class="font-weight-bold">Dates From</label>
-                        <input type="date" v-model="compensationDateFrom" name="compensationDateFrom" id="compensationDateFromID" class="form-control">
+                        <input type="date" v-model="compensationDateFrom" @change="checkCompensationDate" name="compensationDateFrom" id="compensationDateFromID" class="form-control">
 
 
                         <label for="compensationDateToID" class="font-weight-bold mt-2">Dates To</label>
-                        <input type="date" v-model="compensationDateTo" name="compensationDateTo" id="compensationDateToID" class="form-control">
-
+                        <input type="date" v-model="compensationDateTo" @change="checkCompensationDate" name="compensationDateTo" id="compensationDateToID" class="form-control">
+                        <div class="row mt-3 mx-3" v-if="compensationError.length>0">
+                            <p v-text="compensationError"></p>
+                        </div>
                     </div>
                 </div>
             </div>

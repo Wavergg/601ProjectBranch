@@ -271,7 +271,7 @@ class CandidateMission extends CI_Controller{
         $maxID=$candidate['MaxID'];
 
         $config['upload_path'] = constant('CV_PATH').$maxID.'/';
-        $config['allowed_types'] = 'pdf|png|doc|docx';
+        $config['allowed_types'] = 'pdf|png|doc|docx|jpg|jpeg';
         $config['max_size'] = 30000; //30MB
         $config['max_width'] = 0;
         $config['max_height'] = 0;
@@ -667,7 +667,7 @@ class CandidateMission extends CI_Controller{
 
     public function filterAddress($address){
         if(!empty($address)){
-            if(preg_match('%^([a-zA-Z\.\,\'"&:/\- ]+[ ]?[#]?[0-9][a-zA-Z0-9 ]*|[#]?[ ]?[0-9]+[ ]?[a-zA-Z][ a-zA-Z0-9\.\,\'"&:/\-]*)$%',stripslashes(trim($address)))){
+            if(preg_match('%^([a-zA-Z\.\,\'"&:/\- ]+[ ]?[#]?[0-9][a-zA-Z0-9 ]*|[#]?[ ]?[0-9]+[ ]?[\-/]?[0-9]*[ ]?[a-zA-Z][ a-zA-Z0-9\.\,\'"&:/\-]*)$%',stripslashes(trim($address)))){
                return true;
             } else {
                 return false;
