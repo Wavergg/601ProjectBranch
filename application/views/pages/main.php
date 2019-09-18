@@ -17,7 +17,8 @@
 
 <!-- FormPHP -->
 <div class="container border-bottom">
-  <div class="row p-4 justify-content-around">
+  <div class="row justify-content-center">
+  <div class="col-md-9 p-4 justify-content-around">
 
   <form action="<?php echo base_url();?>index.php/Jobs" method="POST">
             <div class="row">
@@ -49,6 +50,7 @@
             </div>
         </form> 
 
+  </div>
   </div>
 </div>
 

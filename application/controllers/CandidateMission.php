@@ -166,7 +166,7 @@ class CandidateMission extends CI_Controller{
             $userID = $userData['UserID'];
         
             //KVP K:FieldName in database V:Post value
-            $applyDate = date("Y-m-d H:i:s");
+           
             $data = array(
             'JobInterest' => $this->filterGeneral($this->input->post('JobInterest')),
             'JobType' => $this->filterJobType($this->input->post('JobType')),
@@ -206,7 +206,6 @@ class CandidateMission extends CI_Controller{
             'ConvictionDetails' => $this->filterGeneral($this->input->post('ConvictionDetails')),
             'UserID' => $userID,
             'CandidateNotes' => $candidateNotes,
-            // 'ApplyDate' => $applyDate,
             );
             
             $this->candidate_model->applyJob($data);
@@ -215,39 +214,54 @@ class CandidateMission extends CI_Controller{
             $candidate = $this->candidate_model->getMaxIDByUserID($userID);
             
             $path = constant('CV_PATH').$candidate['MaxID'].'/';
-
+            $uploadCVErrorStatus = false;
             // create the folder
             mkdir($path);
+            if(!empty($candidate['MaxID'])){
+                if(!empty($_FILES['JobCV'])){
+                    $uploadCVErrorStatus = $this->uploadCV($candidate['MaxID']);
+                    echo 'Application Submitted';
+                } else {
+                    echo 'Application Submitted No Job CV attached';
+                }
+            } else { echo 'There is an error in submitting your application, please retry it.'; }
 
-            if(!empty($_FILES['UserPicture'])){
+            if(!$uploadCVErrorStatus){
                 
-                $fileName = $_FILES['UserPicture']['name'];
-                $fileTmpName = $_FILES['UserPicture']['tmp_name'];
-                $fileSize = $_FILES['UserPicture']['size'];
-                $fileError = $_FILES['UserPicture']['error'];
+                    if(!empty($_FILES['UserPicture'])){
+                        
+                        $fileName = $_FILES['UserPicture']['name'];
+                        $fileTmpName = $_FILES['UserPicture']['tmp_name'];
+                        $fileSize = $_FILES['UserPicture']['size'];
+                        $fileError = $_FILES['UserPicture']['error'];
 
-                $fileExt = explode(".",$fileName);
-                $fileRealExt = strtolower(end($fileExt));
-                $allowed = array('jpg','jpeg','png','gif');
+                        $fileExt = explode(".",$fileName);
+                        $fileRealExt = strtolower(end($fileExt));
+                        $allowed = array('jpg','jpeg','png','gif');
 
-                if(in_array($fileRealExt,$allowed)){
-                    if($fileError === 0){
-                        if($fileSize < 64000000){
-                            $fileNameNew = $candidate['MaxID'] . $fileName;
-                            $fileDestination = constant('CANDIDATE_PICTURE_PATH') . $fileNameNew;
-                            move_uploaded_file($fileTmpName,$fileDestination);
-                            $this->candidate_model->updateProfilePictureLink($candidate['MaxID'],$fileNameNew);
-                            echo 'Successful in uploading user image';
+                        if(in_array($fileRealExt,$allowed)){
+                            if($fileError === 0){
+                                if($fileSize < 64000000){
+                                    $fileNameNew = $candidate['MaxID'] . $fileName;
+                                    $fileDestination = constant('CANDIDATE_PICTURE_PATH') . $fileNameNew;
+                                    move_uploaded_file($fileTmpName,$fileDestination);
+                                    $this->candidate_model->updateProfilePictureLink($candidate['MaxID'],$fileNameNew);
+                                    //echo 'Successful in uploading user image';
+                                } else {
+                                echo ', But the user profile image profile is too big';
+                                }
+                            } else {
+                            echo ', But there was an error uploading the image for profile';
+                            }
                         } else {
-                        echo 'The file is too big';
+                        echo ', But there image upload picture format is not supported';
                         }
-                    } else {
-                    echo 'There was an error uploading the file';
                     }
                 } else {
-                echo 'You cannot upload the file of this type';
+                    echo 'Failure in uploading CV Please retry it';
+                    $this->candidate_model->removeCandidateData($candidate['MaxID']);
+                    $this->user_model->removeUserData($userID);
                 }
-            }
         } else {
             echo 'Failure in inserting data into database, please try again';
         }
@@ -256,19 +270,21 @@ class CandidateMission extends CI_Controller{
     //function that manage an upload cv from candidate
     //called by ajax in CandidateMission->index and CandidateMission->addingNewCandidateStaffOnly
     //candidate_model->updateLinkByID($maxID, $downloadName); calling this model to update the CV link
-    public function uploadCV(){
+    public function uploadCV($candidateID){
       
        
-
-        $firstName = $this->input->post('firstName');
-        $lastName = $this->input->post('lastName');
-        //get the last ID for database with firstname and lastname criteria
-        $userData = $this->candidate_model->getUserByData($firstName,$lastName);
-        $userID = $userData['UserID'];
+        $uploadErrorStatus = true;
+        // $firstName = $this->input->post('firstName');
+        // $lastName = $this->input->post('lastName');
+        // //get the last ID for database with firstname and lastname criteria
+        // $userData = $this->candidate_model->getUserByData($firstName,$lastName);
+        // $userID = $userData['UserID'];
         
-        // get max candidate ID
-        $candidate = $this->candidate_model->getMaxIDByUserID($userID);
-        $maxID=$candidate['MaxID'];
+        // // get max candidate ID
+        // $candidate = $this->candidate_model->getMaxIDByUserID($userID);
+        // $maxID=$candidate['MaxID'];
+
+        $maxID = $candidateID;
 
         $config['upload_path'] = constant('CV_PATH').$maxID.'/';
         $config['allowed_types'] = 'pdf|png|doc|docx|jpg|jpeg';
@@ -285,21 +301,24 @@ class CandidateMission extends CI_Controller{
         } else {
             $this->load->library('upload', $config);
             if (!$this->upload->do_upload('JobCV')) {
-                echo "Apply Failed.";
+                // echo "Apply Failed.";
+                $uploadErrorStatus = true;
             } else {
-                echo "Apply Successfully";
+                // echo "Apply Successfully";
+                $uploadErrorStatus = false;
+                 // Update the download link
+                $uploadName = $_FILES['JobCV']['name'];
+                $items = explode(".", $uploadName);
+                $extent = $items[count($items) - 1];
+                $downloadName = $config['file_name'].'.'.$extent;
+                
+                //update the filename in database to retrieve data
+                $this->candidate_model->updateLinkByID($maxID, $downloadName);
             }
         }
         
-        // Update the download link
-        $uploadName = $_FILES['JobCV']['name'];
-        $items = explode(".", $uploadName);
-        $extent = $items[count($items) - 1];
-        $downloadName = $config['file_name'].'.'.$extent;
-        
-        //update the filename in database to retrieve data
-        $this->candidate_model->updateLinkByID($maxID, $downloadName);
-        
+       
+        return $uploadErrorStatus;
     }
 
 
@@ -534,26 +553,26 @@ class CandidateMission extends CI_Controller{
         if($this->filterName($this->input->post('firstName'))){
         $firstName = xss_clean(stripslashes(trim($this->input->post('firstName'))));
         } else {
-            $isError = true; echo 'Failure to enter the application into database, Cause: invalid First Name ';
+            $isError = true; echo 'Invalid First Name ';
         }
 
         if($this->filterName($this->input->post('lastName'))){
         $lastName = xss_clean(stripslashes(trim($this->input->post('lastName'))));
         } else {
-            $isError = true; echo 'Failure to enter the application into database, Cause: Invalid Last Name ';
+            $isError = true; echo 'Invalid Last Name ';
         }
         
         if($this->filterAddress(($this->input->post('userAddress')))){
         $userAddress = xss_clean(stripslashes(trim($this->input->post('userAddress'))));
         } else {
-            $isError = true; echo 'Failure to enter the application into database, Cause: Invalid Address ';
+            $isError = true; echo 'Invalid Address ';
         }
        
         if(!empty($_POST['DOB'])){
             if($this->filterDOB($this->input->post('DOB'))){
             $DOB = xss_clean(stripslashes(trim($this->input->post('DOB'))));
             } else {
-                $isError = true; echo 'Failure to enter the application into database, Cause: Invalid DOB ';
+                $isError = true; echo 'Invalid DOB ';
             }
         } else {
             $DOB = '0000-00-00';
@@ -562,7 +581,7 @@ class CandidateMission extends CI_Controller{
         if($this->filterCity($this->input->post('city'))){
             $city = xss_clean(stripslashes(trim($this->input->post('city'))));
         } else {
-            $isError = true; echo 'Failure to enter the application into database, Cause: Invalid City ';
+            $isError = true; echo 'Invalid City ';
         }
 
         $zipCode = $this->filterZIP(($this->input->post('zipCode')));
@@ -571,14 +590,14 @@ class CandidateMission extends CI_Controller{
             if($this->filterSuburb($this->input->post('suburb'))){
                 $suburb = xss_clean(stripslashes(trim($this->input->post('suburb'))));
             } else {
-                $isError = true; echo 'Failure to enter the application into database, Cause: Invalid Suburb ';
+                $isError = true; echo 'Invalid Suburb ';
             }
         } else { $suburb = "";}
 
         if($this->filterPhone($this->input->post('phoneNumber'))){
         $phoneNumber = xss_clean(stripslashes(trim($this->input->post('phoneNumber'))));
         } else {
-            $isError = true; echo 'Failure to enter the application into database, Cause: Invalid Phone number ';
+            $isError = true; echo 'Invalid Phone number ';
         }
 
         if($this->filterGender($this->input->post('gender'))){
@@ -589,7 +608,7 @@ class CandidateMission extends CI_Controller{
 
         if($this->filterEmail($this->input->post('userEmail'))){
             $userEmail = xss_clean(stripslashes(trim($this->input->post('userEmail'))));
-        } else { $isError = true; echo 'Failure to enter the application into database, Cause: Invalid Email ';}
+        } else { $isError = true; echo 'Invalid Email ';}
 
         //generate an email and password that are almost impossible for the user to login so there is no conflict when a staff added a new candidate
         //because it requires a user as well

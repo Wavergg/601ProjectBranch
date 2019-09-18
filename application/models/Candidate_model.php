@@ -475,4 +475,9 @@ class Candidate_model extends CI_Model {
         $this->db->set('ApplyDate', 'NOW()', FALSE);
         $this->db->update('Candidate',$data);
     }
+
+    public function removeCandidateData($candidateID,$userID){
+        $this->db->where('CandidateID',$candidateID);
+        $this->db->delete('Candidate');
+    }
 }

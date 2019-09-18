@@ -461,94 +461,105 @@ var app = new Vue ({
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/addUserByStaff/'
             await this.$http.post(urllink, formData).then(res => {
                 var result = res.body
-                
+                this.message = result
             }, res => {
                 // error callback
                 this.message="Cannot add a user, please try it later.";
                 $('#myModal').modal('show');
             });
 
-            // Add a candidate
-            var formData = new FormData()
-            // firstName and lastName for getting the user ID
-            formData.append('firstName', this.firstName);
-            formData.append('lastName', this.lastName);
-            // one more thing is candidateNotes
-            formData.append('candidateNotes', this.candidateNotes);
-            // Below are the same as apply job form
-            formData.append('JobInterest', this.jobInterest);
-            formData.append('JobType', this.jobType);
-            formData.append('Transportation', this.transportation);
-            formData.append('LicenseNumber', this.licenseNumber);
-            formData.append('ClassLicense', this.classLicense);
-            formData.append('Endorsement', this.endorsement);
-            formData.append('Citizenship', this.citizenship);
-            formData.append('Nationality', this.nationality);
-            formData.append('PassportCountry', this.passportCountry);
-            formData.append('PassportNumber', this.passportNumber);
-            formData.append('WorkPermitExpiry', this.workPermitExpiry);
-            formData.append('WorkPermitNumber', this.workPermitNumber);
-            formData.append('CompensationInjury', this.compensationInjury);
-            formData.append('CompensationDateFrom', this.compensationDateFrom);
-            formData.append('CompensationDateTo', this.compensationDateTo);
-            formData.append('Asthma', this.asthma);
-            formData.append('BlackOut', this.blackOut);
-            formData.append('Diabetes', this.diabetes);
-            formData.append('Bronchitis', this.bronchitis);
-            formData.append('BackInjury', this.backInjury);
-            formData.append('Deafness', this.deafness);
-            formData.append('Dermatitis', this.dermatitis);
-            formData.append('SkinInfection', this.skinInfection);
-            formData.append('Allergies', this.allergies);
-            formData.append('Hernia', this.hernia);
-            formData.append('HighBloodPressure', this.highBloodPressure);
-            formData.append('HeartProblems', this.heartProblems);
-            formData.append('UsingDrugs', this.usingDrugs);
-            formData.append('UsingContactLenses', this.usingContactLenses);
-            formData.append('RSI', this.RSI);
-            formData.append('Dependants', this.dependants);
-            formData.append('Smoke', this.smoke);
-            formData.append('Conviction', this.conviction);
-            formData.append('ConvictionDetails', this.convictionDetails);
-            
-            if(document.getElementById("UserPicture").value.length>0){
-                var userPic = document.getElementById("UserPicture");
-                
-                formData.append('UserPicture',userPic.files[0]);
-            }
-            var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/applyJob/'
-            await this.$http.post(urllink, formData).then(res => {
-                
-            }, res => {
-                // error callback
-                
-            }
-            );
-            
-            // upload CV
-            var candidateCV = document.getElementById("JobCVID");
-            if(candidateCV.files.length > 0){
-                var candidateCV = document.getElementById("JobCVID");
-                
+            //if message length is more than 1 that means that there was an error
+            if(this.message.length<1){ 
+                // Add a candidate
                 var formData = new FormData()
                 // firstName and lastName for getting the user ID
                 formData.append('firstName', this.firstName);
                 formData.append('lastName', this.lastName);
-                formData.append('JobCV', candidateCV.files[0]);
-                var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/uploadCV/'
-                this.$http.post(urllink, formData).then(res => {
-                    var result = res.body
-                    this.message=result;
-                    $('#myModal').modal('show');
+                // one more thing is candidateNotes
+                formData.append('candidateNotes', this.candidateNotes);
+                // Below are the same as apply job form
+                formData.append('JobInterest', this.jobInterest);
+                formData.append('JobType', this.jobType);
+                formData.append('Transportation', this.transportation);
+                formData.append('LicenseNumber', this.licenseNumber);
+                formData.append('ClassLicense', this.classLicense);
+                formData.append('Endorsement', this.endorsement);
+                formData.append('Citizenship', this.citizenship);
+                formData.append('Nationality', this.nationality);
+                formData.append('PassportCountry', this.passportCountry);
+                formData.append('PassportNumber', this.passportNumber);
+                formData.append('WorkPermitExpiry', this.workPermitExpiry);
+                formData.append('WorkPermitNumber', this.workPermitNumber);
+                formData.append('CompensationInjury', this.compensationInjury);
+                formData.append('CompensationDateFrom', this.compensationDateFrom);
+                formData.append('CompensationDateTo', this.compensationDateTo);
+                formData.append('Asthma', this.asthma);
+                formData.append('BlackOut', this.blackOut);
+                formData.append('Diabetes', this.diabetes);
+                formData.append('Bronchitis', this.bronchitis);
+                formData.append('BackInjury', this.backInjury);
+                formData.append('Deafness', this.deafness);
+                formData.append('Dermatitis', this.dermatitis);
+                formData.append('SkinInfection', this.skinInfection);
+                formData.append('Allergies', this.allergies);
+                formData.append('Hernia', this.hernia);
+                formData.append('HighBloodPressure', this.highBloodPressure);
+                formData.append('HeartProblems', this.heartProblems);
+                formData.append('UsingDrugs', this.usingDrugs);
+                formData.append('UsingContactLenses', this.usingContactLenses);
+                formData.append('RSI', this.RSI);
+                formData.append('Dependants', this.dependants);
+                formData.append('Smoke', this.smoke);
+                formData.append('Conviction', this.conviction);
+                formData.append('ConvictionDetails', this.convictionDetails);
+                
+                if(document.getElementById("UserPicture").value.length>0){
+                    var userPic = document.getElementById("UserPicture");
                     
+                    formData.append('UserPicture',userPic.files[0]);
+                }
+                var candidateCV = document.getElementById("JobCVID");
+                if(candidateCV.files.length > 0){
+                    var candidateCV = document.getElementById("JobCVID");
+                    formData.append('JobCV', candidateCV.files[0]);
+                }
+                var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/applyJob/'
+                await this.$http.post(urllink, formData).then(res => {
+                    var result = res.body
+                    this.message = res.body
+                    $('#myModal').modal('show');
                 }, res => {
                     // error callback
-                    this.message="CV upload was failed, please try again.";
+                    this.message = 'Failure in submitting your application'
                     $('#myModal').modal('show');
-                })
-            } else {
-                this.message="Success, no job CV attached";
-                $('#myModal').modal('show');
+                }
+                );
+            
+                // // upload CV
+                // var candidateCV = document.getElementById("JobCVID");
+                // if(candidateCV.files.length > 0){
+                //     var candidateCV = document.getElementById("JobCVID");
+                    
+                //     var formData = new FormData()
+                //     // firstName and lastName for getting the user ID
+                //     formData.append('firstName', this.firstName);
+                //     formData.append('lastName', this.lastName);
+                //     formData.append('JobCV', candidateCV.files[0]);
+                //     var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/uploadCV/'
+                //     this.$http.post(urllink, formData).then(res => {
+                //         var result = res.body
+                //         this.message=result;
+                //         $('#myModal').modal('show');
+                        
+                //     }, res => {
+                //         // error callback
+                //         this.message="CV upload was failed, please try again.";
+                //         $('#myModal').modal('show');
+                //     })
+                // } else {
+                //     this.message="Success, no job CV attached";
+                //     $('#myModal').modal('show');
+                // }
             }
             
         } 
@@ -623,7 +634,7 @@ var app = new Vue ({
             },
             checkAddress: function(){
                 if(this.userAddress.length>0){
-                    var re = /^([a-zA-Z\.\,\'"&:/\- ]+[ ]?[#]?[0-9][a-zA-Z0-9 ]*|[#]?[ ]?[0-9]+[ ]?[a-zA-Z][ a-zA-Z0-9\.\,\'"&:/\-]*)$/;
+                    var re = /^([a-zA-Z\.\,\'"&:/\- ]+[ ]?[#]?[0-9][a-zA-Z0-9 ]*|[#]?[ ]?[0-9]+[ ]?[\-/]?[0-9]*[ ]?[a-zA-Z][ a-zA-Z0-9\.\,\'"&:/\-]*)$/;
                     if(re.test(this.userAddress)){
                         this.addressError = ""
                         this.isButton = false

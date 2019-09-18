@@ -85,4 +85,9 @@ class User_model extends CI_Model {
         $this->db->where('UserID',$userID);
         $this->db->update('User',$data);
     }
+
+    public function removeUserData($userID){
+        $this->db->where('UserID',$userID);
+        $this->db->delete('User');
+    }
 }

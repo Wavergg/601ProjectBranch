@@ -7,7 +7,8 @@
         suit your skills, experience and ambitions.
     </p>
     <div class="container my-3">
-        <div class="row p-4 justify-content-around">
+        <div class="row justify-content-center">
+        <div class="col-md-9 p-4 justify-content-around">
             <!-- startForm -->
             <form action="<?php echo base_url()?>index.php/Jobs" method="POST">
                 <div class="row">
@@ -38,6 +39,8 @@
                     </div>
                 </div>
             </form>
+            </div>
+        </div>
             <!-- endform -->
 
             <!-- Job Table -->
