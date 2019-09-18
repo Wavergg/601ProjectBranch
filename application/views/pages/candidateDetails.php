@@ -120,7 +120,7 @@
                     <div class="row col-md-4">
                         <div class="col-md-12">
                             <div class="row ml-3"><label for="candidateCVID" class="font-weight-bold mt-2">Candidate's CV:</label></div>
-                            <div class="row ml-3"><a :href="'<?php echo base_url()?>index.php/CandidateMission/downloadCV/'+candidateID+'/'+CVselected" id="candidateCVID" class="btn btn-primary">CandidateCV</a></div>   
+                            <div class="row ml-3"><a :href="'<?php echo base_url()?>index.php/CandidateMission/downloadFile/'+candidateID+'/'+CVselected" id="candidateCVID" class="btn btn-primary">CandidateCV</a></div>   
                 
                             <div class="row mt-5 mb-0 ml-5">
                     
@@ -131,7 +131,7 @@
                                         <img id="imgPreview" src="<?php echo base_url()?>lib/images/user-512.png" style="width:150px;height:150px;">
                                     <?php else :?>
                                         <?php $setImgPreviewID = "imgPreview1" ;?>
-                                        <img id="imgPreview1" src="<?php echo base_url() . 'candidateProfile/' . $candidate['UserPicture']?>" style="width:150px;height:150px;">
+                                        <img id="imgPreview1" src="<?php echo base_url() . 'lib/candidateProfile/' . $candidate['UserPicture']?>" style="width:150px;height:150px;">
                                     <?php endif;?>
                                 </div>
                                 <div class="row justify-content-center">
@@ -791,6 +791,7 @@ var app = new Vue({
 
             })
         },
+
         getCurrentDateTime: function() {
         var now     = new Date(); 
         var year    = now.getFullYear();
@@ -817,6 +818,23 @@ var app = new Vue({
         var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
          return dateTime;
         },
+        updateCV: function(){
+            this.message = "";
+
+                var formData = new FormData();
+                formData.append('candidateID', this.candidateID);
+                formData.append('CVfile', this.CVselected);
+                var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateCVFile/'
+                this.$http.post(urllink, formData).then(res => {
+                    var result = res.body
+                    console.log('Good')
+                }, res => {
+                    console.log('Bad')
+                    // this.message = "Failure in removing files, Server Error"
+                })
+            
+            // $('#myModal').modal('show')
+        }
     },
     mounted: function() {
         this.youtubeLink = '<?php if(!empty($candidate['YoutubeURL'])){echo $candidate['YoutubeURL'];}?>';

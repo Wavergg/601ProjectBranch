@@ -517,7 +517,7 @@ var app = new Vue ({
                 formData.append('UserPicture',userPic.files[0]);
             }
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/applyJob/'
-            this.$http.post(urllink, formData).then(res => {
+            await this.$http.post(urllink, formData).then(res => {
                 
             }, res => {
                 // error callback
@@ -525,13 +525,13 @@ var app = new Vue ({
             }
             );
             
-            // // upload CV
+            // upload CV
             var candidateCV = document.getElementById("JobCVID");
             if(candidateCV.files.length > 0){
                 var candidateCV = document.getElementById("JobCVID");
                 
                 var formData = new FormData()
-               // // firstName and lastName for getting the user ID
+                // firstName and lastName for getting the user ID
                 formData.append('firstName', this.firstName);
                 formData.append('lastName', this.lastName);
                 formData.append('JobCV', candidateCV.files[0]);
@@ -550,6 +550,7 @@ var app = new Vue ({
                 this.message="Success, no job CV attached";
                 $('#myModal').modal('show');
             }
+            
         } 
 
         },checkJobCV: function(){

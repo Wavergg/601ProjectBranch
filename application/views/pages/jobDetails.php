@@ -112,7 +112,7 @@
                                         <img id="imgPreview" src="<?php echo base_url()?>lib/images/facebook.jpg" class="mx-md-2" style="width:275px;height:165px;">
                                     <?php else :?>
                                         <?php $setImgPreviewID = "imgPreview1" ;?>
-                                        <img id="imgPreview1" src="<?php echo base_url() . 'jobImages/' . $job['JobImage']?>"  class="mx-md-2" style="width:275px;height:165px;">
+                                        <img id="imgPreview1" src="<?php echo base_url() . 'lib/jobImages/' . $job['JobImage']?>"  class="mx-md-2" style="width:275px;height:165px;">
                                     <?php endif;?>
                                     </div>
                                     <div class="row justify-content-center">
@@ -292,10 +292,10 @@ var app = new Vue({
                     this.userFiles = result
                     this.updatedTime = this.getCurrentDateTime()
                     } else {
-                        this.message = "Failure in uploading files"
+                        this.message = res.body
                     }
                 }, res => {
-                    this.message = "Failure in uploading files"
+                    this.message = res.body
                 })
             }
               $('#myModal').modal('show')

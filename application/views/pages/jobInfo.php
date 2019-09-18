@@ -29,7 +29,7 @@
                       <?php if($job['JobImage'] == 0 || $job['JobImage'] == NULL || $job['JobImage'] == ""):?>
                         <img src="<?php echo base_url()?>lib/images/facebook.jpg">
                     <?php else :?>
-                        <img src="<?php echo base_url() . 'jobImages/' . $job['JobImage']?>" class="mx-md-2" style="width:250px;height:165px;">
+                        <img src="<?php echo base_url() . 'lib/jobImages/' . $job['JobImage']?>" class="mx-md-2" style="width:250px;height:165px;">
                     <?php endif;?>
                     </div>
             </div>

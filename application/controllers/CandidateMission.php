@@ -83,22 +83,8 @@ class CandidateMission extends CI_Controller{
 		
     }
 
-    // function to download CV that are submitted by candidate
+    // function to download files that are submitted by candidate
     // accessible from view->pages->candidateDetails || view->pages->manageCandidate
-    public function downloadCV($candidateID,$fileName){
-        if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-            if(empty($fileName) || $fileName == 'null' || $fileName == 'Open%20this%20select%20menu'){
-                echo 'Candidate CV doesn\'t exists';
-            }
-           // $candidateID = explode('.',$fileName);
-            $path = constant('CV_PATH').$candidateID.'/'.$fileName;
-            
-            force_download($path, NULL);
-        } else {
-            redirect('/');
-        }
-    }
-    
     public function downloadFile($candidateID, $fileName){
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 
@@ -230,6 +216,7 @@ class CandidateMission extends CI_Controller{
             mkdir($path);
 
             if(!empty($_FILES['UserPicture'])){
+                
                 $fileName = $_FILES['UserPicture']['name'];
                 $fileTmpName = $_FILES['UserPicture']['tmp_name'];
                 $fileSize = $_FILES['UserPicture']['size'];
@@ -241,7 +228,7 @@ class CandidateMission extends CI_Controller{
 
                 if(in_array($fileRealExt,$allowed)){
                     if($fileError === 0){
-                        if($fileSize < 1000000){
+                        if($fileSize < 64000000){
                             $fileNameNew = $candidate['MaxID'] . $fileName;
                             $fileDestination = constant('CANDIDATE_PICTURE_PATH') . $fileNameNew;
                             move_uploaded_file($fileTmpName,$fileDestination);
@@ -279,7 +266,7 @@ class CandidateMission extends CI_Controller{
         $candidate = $this->candidate_model->getMaxIDByUserID($userID);
         $maxID=$candidate['MaxID'];
 
-        $config['upload_path'] = constant('CV_PATH').$candidate['MaxID'].'/';
+        $config['upload_path'] = constant('CV_PATH').$maxID.'/';
         $config['allowed_types'] = 'pdf|png|doc|docx';
         $config['max_size'] = 30000; //30MB
         $config['max_width'] = 0;
@@ -343,6 +330,17 @@ class CandidateMission extends CI_Controller{
             }
 		}
     }
+
+    //update CV download
+	public function updateCVFile(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			$CandidateID = $_POST['candidateID'];
+			$CVfile = $_POST['CVfile'];
+			$this->candidate_model->updateCVLink($CandidateID,$CVfile);
+        } else {
+            redirect('/');
+        }
+	}
 
     //removing file from candidateDetails
     public function removeFile(){
