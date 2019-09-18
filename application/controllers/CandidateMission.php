@@ -641,12 +641,12 @@ class CandidateMission extends CI_Controller{
     }
 
     public function filterTextArea($textArea){
-        // if(!empty($textArea)){
-        //     if(preg_match('%^[a-zA-Z0-9/\.\'\-\"\, \r\n\(\)]+$%',stripslashes(trim($textArea)))){
-        //       return xss_clean(stripslashes(trim($textArea)));
-        //     } else { return ''; }
-        // } else { return '';}
-        return $textArea;
+        if(!empty($textArea)){
+            if(preg_match('%^[a-zA-Z0-9/\.\'\-\"\, \r\n\(\)]+$%',stripslashes(trim($textArea)))){
+              return xss_clean(stripslashes(trim($textArea)));
+            } else { return ''; }
+        } else { return '';}
+       // return $textArea;
     }
 
     public function filterJobType($jobType){
