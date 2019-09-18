@@ -292,7 +292,7 @@ var app = new Vue({
                     this.userFiles = result
                     this.updatedTime = this.getCurrentDateTime()
                     } else {
-                        this.message = res.body
+                        this.message = 'Failure in uploading file, unallowed extensions or file is too big';
                     }
                 }, res => {
                     this.message = res.body

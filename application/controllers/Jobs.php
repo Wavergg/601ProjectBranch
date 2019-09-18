@@ -584,7 +584,7 @@ class Jobs extends CI_Controller {
         } else {
             $this->load->library('upload', $config);
             if (!$this->upload->do_upload('userFile')) {
-				//echo $path;
+			//	echo 'Failure in uploading files, unallowed extension or file too big.';
 				
             } else {
 				$data['userFiles'] = directory_map($path);
