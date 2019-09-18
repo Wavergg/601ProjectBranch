@@ -213,7 +213,7 @@ class CandidateMission extends CI_Controller{
             $data = array();
             $candidate = $this->candidate_model->getMaxIDByUserID($userID);
             
-            $path = constant('CV_PATH').$candidate['MaxID'].'\\';
+            $path = constant('CV_PATH').$candidate['MaxID'].'/';
             $uploadCVErrorStatus = false;
             // create the folder
             mkdir($path);
@@ -286,7 +286,7 @@ class CandidateMission extends CI_Controller{
 
         $maxID = $candidateID;
 
-        $config['upload_path'] = constant('CV_PATH').$maxID.'\\';
+        $config['upload_path'] = constant('CV_PATH').$maxID.'/';
         $config['allowed_types'] = 'pdf|png|doc|docx|jpg|jpeg';
         $config['max_size'] = 30000; //30MB
         $config['max_width'] = 0;
