@@ -83,7 +83,7 @@
           <a class="text-dark" style="text-decoration: none;" href="<?php echo base_url()?>index.php/Jobs/jobInfo/<?php echo $job['JobID'];?>">
             <div class="card" style="width: 18rem;">
               <?php if(!empty($job['JobImage'])): ?>
-                <img src="<?php echo base_url() . 'jobImages/' .$job['JobImage']?>" class="card-img-top image img-fluid" style="height:157px;" alt="<?php echo $job['JobTitle']. $job['City'];?>">
+                <img src="<?php echo base_url() . 'lib/jobImages/' .$job['JobImage']?>" class="card-img-top image img-fluid" style="height:157px;" alt="<?php echo $job['JobTitle']. $job['City'];?>">
               <?php else : ?>
                 <img src="<?php echo base_url()?>lib/images/facebook.jpg" class="card-img-top image img-fluid" style="height:157px;" alt="<?php echo $job['JobTitle']. $job['City'];?>">
                 <?php endif;?>

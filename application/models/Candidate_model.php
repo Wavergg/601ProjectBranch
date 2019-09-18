@@ -235,7 +235,7 @@ class Candidate_model extends CI_Model {
             'UserPicture' => $profilePictureLink,
         );
         $this->db->where('CandidateID',$candidateID);
-        $this->db->update('candidate',$data);
+        $this->db->update('Candidate',$data);
     }
 
     // called from: Controller->CandidateMission->manageCandidate() 
@@ -436,6 +436,7 @@ class Candidate_model extends CI_Model {
     //update the every field in candidate
     public function updateCandidateDetails($candidateID,$data){
         $this->db->where('CandidateID',$candidateID);
+        
         $this->db->update('Candidate',$data);
     }
 
@@ -458,6 +459,14 @@ class Candidate_model extends CI_Model {
     //updating youtube link for the candidate
     public function updateYoutubeLink($candidateID,$data){
         $this->db->where('CandidateID',$candidateID);
+       
+        $this->db->update('Candidate',$data);
+    }
+
+    public function updateCVLink($CandidateID,$CVfile){
+        $this->db->where('CandidateID',$CandidateID);
+        $data['JobCV'] = $CVfile;
+        $this->db->set('ApplyDate', 'NOW()', FALSE);
         $this->db->update('Candidate',$data);
     }
 }

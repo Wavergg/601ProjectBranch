@@ -84,10 +84,13 @@ defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-// By Carl Li /var/www/html 
-define('CV_PATH', '/var/www/html/lib/candidatesCV/');
+// By Carl Li
+define('CV_PATH', '/var/www/candidatesCV/');
+define('JOB_FILES', '/var/www/jobFiles/');
+// Should be shown in the web site
 define('JOB_IMAGE_PATH', '/var/www/html/lib/jobImages/');
 define('CANDIDATE_PICTURE_PATH', '/var/www/html/lib/candidateProfile/');
+
 //please add a del folder under jobImages and candidatesCV
 
 // define('CV_PATH', 'C:\\xamppNewZ\\htdocs\\candidatesCV\\');

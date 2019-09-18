@@ -147,7 +147,7 @@ class EmployerMission extends CI_Controller{
             // create a folder for the job, named as JobID
             // so when upload any files for this job, they should be here
             $jobMaxID = $this->job_model->get_maxJobID();
-            $filePath = constant('JOB_IMAGE_PATH').$jobMaxID['JobID'];
+            $filePath = constant('JOB_FILES').$jobMaxID['JobID'];
             mkdir($filePath);
 
         } else {
