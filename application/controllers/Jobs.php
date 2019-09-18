@@ -639,7 +639,7 @@ class Jobs extends CI_Controller {
 	//download TOB
 	public function downloadTOB($jobID,$fileName){
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-			if(empty($fileName) || $fileName == 'null'){
+			if(empty($fileName) || $fileName == 'null' || $fileName == 'Open%20this%20select%20menu'){
                 echo 'TOB doesn\'t exists';
             }
          

@@ -87,7 +87,11 @@ class CandidateMission extends CI_Controller{
     // accessible from view->pages->candidateDetails || view->pages->manageCandidate
     public function downloadFile($candidateID, $fileName){
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-
+            
+            
+            if(empty($fileName) || $fileName == 'null' || $fileName == 'Open%20this%20select%20menu'){
+                echo 'File doesn\'t exists';
+            }
             $path = constant('CV_PATH').$candidateID.'/'.$fileName;
             
             force_download($path, NULL);
