@@ -601,15 +601,7 @@ class CandidateMission extends CI_Controller{
         } 
     }
 
-    public function updateCVfile(){
-        if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-			$candidateID = $_POST['candidateID'];
-			$CVfile = $_POST['CVfile'];
-			$this->candidate_model->updateCVLink($candidateID,$CVfile);
-        } else {
-            redirect('/');
-        }
-    }
+
 
     public function filterGeneral($general){
         if(!empty($general)){
