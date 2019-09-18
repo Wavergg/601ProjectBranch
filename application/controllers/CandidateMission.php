@@ -203,7 +203,7 @@ class CandidateMission extends CI_Controller{
             'Smoke' => $this->checkBoxFilter($this->input->post('Smoke')),
             'Conviction' => $this->checkBoxFilter($this->input->post('Conviction')),
 
-            'ConvictionDetails' => $this->filterGeneral($this->input->post('ConvictionDetails')),
+            'ConvictionDetails' => $this->filterTextArea($this->input->post('ConvictionDetails')),
             'UserID' => $userID,
             'CandidateNotes' => $candidateNotes,
             );
@@ -213,7 +213,7 @@ class CandidateMission extends CI_Controller{
             $data = array();
             $candidate = $this->candidate_model->getMaxIDByUserID($userID);
             
-            $path = constant('CV_PATH').$candidate['MaxID'].'/';
+            $path = constant('CV_PATH').$candidate['MaxID'].'\\';
             $uploadCVErrorStatus = false;
             // create the folder
             mkdir($path);
@@ -286,7 +286,7 @@ class CandidateMission extends CI_Controller{
 
         $maxID = $candidateID;
 
-        $config['upload_path'] = constant('CV_PATH').$maxID.'/';
+        $config['upload_path'] = constant('CV_PATH').$maxID.'\\';
         $config['allowed_types'] = 'pdf|png|doc|docx|jpg|jpeg';
         $config['max_size'] = 30000; //30MB
         $config['max_width'] = 0;
@@ -398,7 +398,6 @@ class CandidateMission extends CI_Controller{
             $path = constant('CV_PATH').$candidateID.'/';
             $data['userFiles'] = directory_map($path);
 
-            
             $this->load->view('templates/header',$userdata);
             $this->load->view('pages/candidateDetails',$data);
             $this->load->view('templates/footer');
@@ -461,8 +460,8 @@ class CandidateMission extends CI_Controller{
                 'Dependants' => $this->checkBoxFilter($this->input->post('Dependants')),
                 'Smoke' => $this->checkBoxFilter($this->input->post('Smoke')),
                 'Conviction' => $this->checkBoxFilter($this->input->post('Conviction')),
-                'ConvictionDetails' => $this->security->xss_clean(stripslashes(trim($this->input->post('ConvictionDetails')))),
-                'CandidateNotes' => $this->security->xss_clean(stripslashes(trim($this->input->post('CandidateNotes')))),
+                'ConvictionDetails' => $this->filterTextArea($this->input->post('ConvictionDetails')),
+                'CandidateNotes' => $this->filterTextArea($this->input->post('CandidateNotes')),
                 // 'ApplyDate' => date("Y-m-d H:i:s"),
                 );
 
@@ -624,14 +623,30 @@ class CandidateMission extends CI_Controller{
         } 
     }
 
+    /*From this part onward it consists of validation method, 
+    some will return empty string or predetermined string if the value is bad, 
+    this kind of type are mostly the value that aren't that important
 
-
+    the one that returns either true or false value is important field that the user should fill
+    if bad values are to happen, it will prevent the data to enter into database. And it will prompt the user to enter 
+    the valid data. 
+    */
+    
     public function filterGeneral($general){
         if(!empty($general)){
-            if(preg_match('%^[a-zA-Z0-9/\.\'\-\"\, ]+$%',stripslashes(trim($general)))){
+            if(preg_match('%^[a-zA-Z0-9/\.\'\-\"\, \(\)]+$%',stripslashes(trim($general)))){
               return xss_clean(stripslashes(trim($general)));
             } else { return ""; }
         } else { return "";}
+    }
+
+    public function filterTextArea($textArea){
+        // if(!empty($textArea)){
+        //     if(preg_match('%^[a-zA-Z0-9/\.\'\-\"\, \r\n\(\)]+$%',stripslashes(trim($textArea)))){
+        //       return xss_clean(stripslashes(trim($textArea)));
+        //     } else { return ''; }
+        // } else { return '';}
+        return $textArea;
     }
 
     public function filterJobType($jobType){
@@ -658,7 +673,6 @@ class CandidateMission extends CI_Controller{
             }
         } else { return ""; }
     }
-
 
     public function filterName($candidateName){
         if(!empty($candidateName)){

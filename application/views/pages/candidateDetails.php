@@ -74,9 +74,8 @@
                 <div class="row">
                     <div class="col-md-9">
                         <label for="candidateNotesID" class="mt-3 font-weight-bold">Comments:</label>
-                        <textarea readonly class="form-control rounded" v-model="notes" rows="2"
-                            id="candidateNotesID" name="candidateNotes">
-                        </textarea>
+                        <textarea readonly class="form-control rounded" rows="2"
+                            id="candidateNotesID" name="candidateNotes"><?php echo $candidate['CandidateNotes'];?></textarea>
                     </div>  
                 </div>
                 <h3 class="text-warning mt-3"> Personal Details </h3>
@@ -332,9 +331,8 @@
                     <input type="checkbox" class="form-check-inline" v-model="conviction" :disabled="!toggleEdit"
                         name="conviction"> Having conviction against the law<br>
                     <label for="convictionDetailsID" class="mt-3">Details of convictions </label>
-                    <textarea class="form-control rounded-0" v-model="convictionDetails" id="convictionDetailsID"
-                        rows="2" readonly v-bind:class="{ 'border-0': !toggleEdit}" name="convictionDetails">
-                    </textarea>
+                    <textarea class="form-control rounded-0" id="convictionDetailsID"
+                        rows="2" readonly v-bind:class="{ 'border-0': !toggleEdit}" name="convictionDetails"><?php echo $candidate['ConvictionDetails'];?></textarea>
 
                 </div>
             </div> <!--onchangeDiv end-->
@@ -482,7 +480,7 @@ var app = new Vue({
         address: "<?php echo $candidate['Address'];?>",
         jobInterest: "<?php echo $candidate['JobInterest'];?>",
         jobType: "<?php echo $candidate['JobType'];?>",
-        notes: "<?php echo $candidate['CandidateNotes'];?>",
+       
         transportation: "<?php echo $candidate['Transportation'];?>",
         licenseNumber: "<?php echo $candidate['LicenseNumber'];?>",
         classLicense: "<?php echo $candidate['ClassLicense'];?>",
@@ -599,7 +597,7 @@ var app = new Vue({
         } else {
             echo "false";
         }; ?> ,
-        convictionDetails : "<?php echo $candidate['ConvictionDetails'];?>",
+        
         youtubeLink: "",
         CVselected: "<?php if(empty($candidate['JobCV'])){ echo 'Open this select menu';} else { echo $candidate['JobCV'];}?>",
         // unsaved: false,
@@ -707,7 +705,7 @@ var app = new Vue({
             formData.append('Address',this.address);
             formData.append('JobInterest',this.jobInterest);
             formData.append('JobType',this.jobType);
-            formData.append('CandidateNotes',this.notes);
+            formData.append('CandidateNotes',document.getElementById('candidateNotesID').value);
             formData.append('Transportation',this.transportation);
             formData.append('LicenseNumber',this.licenseNumber);
             formData.append('ClassLicense',this.classLicense);
@@ -733,7 +731,7 @@ var app = new Vue({
             formData.append('Dependants',this.dependants);
             formData.append('Smoke',this.smoke);
             formData.append('Conviction',this.conviction);
-            formData.append('ConvictionDetails',this.convictionDetails);
+            formData.append('ConvictionDetails',document.getElementById('convictionDetailsID').value);
             if(document.getElementById("fileProfileBtn").value.length>0){
                 var userPic = document.getElementById("fileProfileBtn");
                 formData.append('UserPicture',userPic.files[0]);

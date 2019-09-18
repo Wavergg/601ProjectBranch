@@ -342,7 +342,7 @@
 
             <input type="checkbox" class="form-check-inline" v-model="conviction" name="conviction"> Having conviction against the law?<br>
             <label for="convictionDetailsID" class="mt-3">Details if <b>"yes"</b> </label>
-            <textarea class="form-control rounded-0" id="convictionDetailsID" @change="checkGeneral('convictionDetails')" rows="2"
+            <textarea class="form-control rounded-0" id="convictionDetailsID" @change="checkTextArea('convictionDetails')" rows="2"
             v-model="convictionDetails"  name="convictionDetails"></textarea>
             <div class="row mt-3 mx-3">
                 <p id="convictionDetailsIDError" class="text-danger"></p>

@@ -407,11 +407,21 @@ var app = new Vue({
             checkGeneral: function(general){
                 var generalID = general+'IDError'
                 var generalValue = document.getElementById(general+'ID').value
-                var re = /^[a-zA-Z0-9/\.\'\-\"\, \n]+$/
+                var re = /^[a-zA-Z0-9/\.\'\-\"\, \(\)]+$/
                 if(re.test(generalValue) || generalValue.length<1){
                     document.getElementById(generalID).innerHTML = "";
                 } else {
                     document.getElementById(generalID).innerHTML = "Input contains bad characters";
+                }
+            },
+            checkTextArea: function(textArea){
+                var textAreaID = textArea+'IDError'
+                var textAreaValue = document.getElementById(textArea+'ID').value
+                var re = /^[a-zA-Z0-9/\.\'\-\"\, \n\r\(\)]+$/
+                if(re.test(textAreaValue) || textAreaValue.length<1){
+                    document.getElementById(textAreaID).innerHTML = "";
+                } else {
+                    document.getElementById(textAreaID).innerHTML = "Input contains bad characters, this data may not be send to the server";
                 }
             },
             checkZip: function(){

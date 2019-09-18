@@ -188,13 +188,13 @@ class Jobs extends CI_Controller {
 			$data['title'] = "Job Order Details";
 			$errMessage = array();
 			//content
-			$publishTitle = xss_clean(stripslashes(trim($this->input->post('publishTitle'))));
+			$publishTitle = xss_clean(strip_tags(stripslashes(trim($this->input->post('publishTitle')))));
 			//if the published post info is empty change it to this default value
 			//DEFAULT VALUE START
 			if($publishTitle == NULL) {
 				$publishTitle = $job['JobType'] . ' ' . $job['JobTitle'] . ' worker needed in ' . $job['City'];
 			}
-			$thumbnailText = xss_clean(stripslashes(trim($this->input->post('thumbnailText'))));
+			$thumbnailText = xss_clean(strip_tags(stripslashes(trim($this->input->post('thumbnailText')))));
 			if($thumbnailText == NULL || strcasecmp($thumbnailText,'Enter text for thumbnail')==0){
 				$thumbnailText = "";
 			}
