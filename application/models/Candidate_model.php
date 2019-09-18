@@ -465,13 +465,6 @@ class Candidate_model extends CI_Model {
         $this->db->update('Candidate',$data);
     }
 
-    public function updateCVLink($CandidateID,$CVfile){
-        $this->db->where('CandidateID',$CandidateID);
-        $data['JobCV'] = $CVfile;
-        $this->db->set('ApplyDate', 'NOW()', FALSE);
-        $this->db->update('Candidate',$data);
-    }
-
     //called from: Controller->CandidateMission->updateCVfile()
     //updating CV file for specific candidate
     public function updateCVLink($candidateID,$CVfile){
