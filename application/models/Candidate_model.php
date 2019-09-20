@@ -478,4 +478,14 @@ class Candidate_model extends CI_Model {
         $this->db->where('CandidateID',$candidateID);
         $this->db->delete('Candidate');
     }
+
+    public function undoCandidateJobDetailsData($candidateID,$candidateHoursWorked,$jobRate,$candidateEarnings){
+        $this->db->where('CandidateID',$candidateID);
+        $data = array(
+            'CandidateHoursWorked' => $candidateHoursWorked,
+            'JobRate' => $jobRate,
+            'CandidateEarnings' => $candidateEarnings,
+        );
+        $this->db->update('Candidate',$data);
+    }
 }

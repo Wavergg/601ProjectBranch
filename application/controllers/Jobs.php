@@ -444,6 +444,30 @@ class Jobs extends CI_Controller {
 		}
 	}
 
+	//Called from: view->pages->JobDetails
+	//AJAX Method
+	//set the value of jobRates, hoursworked and candidateEarnings to previous state
+	public function undoCandidateData(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			$candidateID = $_POST['candidateID'];
+			$jobID = $_POST['jobID'];
+			$candidateHoursWorked = $_POST['hoursWorked'];
+			$jobRate = $_POST['jobRate'];
+			$candidateEarnings = $_POST['candidateEarnings'];
+			
+			$this->candidate_model->undoCandidateJobDetailsData($candidateID,$candidateHoursWorked,$jobRate,$candidateEarnings);
+			
+			//update time
+			$this->job_model->updateTimeChanged($jobID);
+
+			$candidatesData = $this->candidate_model->getCandidatesJobDetails($jobID);
+			echo json_encode($candidatesData);
+
+		} else {
+			redirect('/');
+		}
+	}
+
 	//called from: view->pages->jobs
 	//get detailed information that is accessible by everyone , when the job is published
 	public function jobInfo($jobID){

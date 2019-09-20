@@ -1,7 +1,8 @@
 
 <div id="app">
     <div style="height: 50px;"></div>
-    <div class="container mb-2 p-md-3">
+    <div class="mb-2 p-md-3">
+        <div class="container">
         <h2 class="text-center"><?php echo $title; ?></h2>
         <hr />
         <div class="d-flex">
@@ -18,12 +19,12 @@
                     aria-controls="attachment" aria-selected="false">Attachment</a>
             </li>
         </ul>
-        
+        </div>
         <!-- Tab content -->
         <div class="tab-content mt-4" id="myTabContent">
             <!-- Order Brief Tab -->
             <div class="tab-pane fade  show active" id="orderBrief" role="tabpanel" aria-labelledby="orderBrief-tab">
-            
+            <div class="container">
                 <!-- Client Breief and Job Description -->
                 <div class="row justify-content-center">
                     <!-- Client Brief -->
@@ -128,6 +129,7 @@
                         </div>
                     </form>
                 </div>
+            </div>
                 <!-- EndHere -->
                 <hr class="border border-dark"/>
                 <div class="dragscroll" style="overflow: scroll; cursor: grab; cursor : -o-grab; cursor : -moz-grab; cursor : -webkit-grab;">
@@ -137,16 +139,17 @@
                                 <tr>
                                     <th scope="col"></th>
                                     <th scope="col"></th>
+                                    <th scope="col"></th>
                                     <!-- <th scope="col">UndoSession</th> -->
                                     <th scope="col">Applicant_Name</th>
                                     <th scope="col">Contact_Number</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Applicant_Address</th>
-                                    <th scope="col">Job_Type</th>
+                                    
                                     <th scope="col">Hours_worked</th>
                                     <th scope="col">Job_Rates</th>
                                     <th scope="col">Total_Earned</th>
-                                    <th scope="col">Employee Notes</th>
+                                    <th scope="col">Notes</th>
                                 </tr>
                             </thead>
                             <tbody class="align-items-center">
@@ -154,14 +157,14 @@
                                 <tr v-for="candidate in candidates" :key="candidate.CandidateID">
                                 <th scope="row"><div class="textInfoPos"><span class="textInfo">Remove Candidate</span><i v-on:click="removeAssignedCandidate(candidate.CandidateID)" style="font-size:25px" class="text-danger button icon ion-md-close-circle"></i></div></th>
                                 <td><div class="textInfoPos"><span class="textInfo font-weight-bold" style="left:-50px;">Reset Data to 0</span><i v-on:click="resetCandidateData(candidate.CandidateID)" style="font-size:25px" class="text-secondary button icon ion-md-trash"></i></a></div></td>
+                                <td><div class="textInfoPos"><span class="textInfo font-weight-bold" style="left:-50px;">Undo data</span><i v-on:click="undoData(candidate.CandidateID)" style="font-size:25px" class="text-info button icon ion-md-undo"></i></a></div></td>
                                 <td v-text="candidate.FirstName +' '+ candidate.LastName"></td>
                                 <td v-text="candidate.PhoneNumber"></td>
                                 <td v-text="candidate.Email"></td>
                                 <td v-text="candidate.Address"></td>
-                                <td v-text="candidate.JobType"></td>
-                                <td><input v-on:click="targetThisBox('hoursWorked'+candidate.CandidateID)" type="text" v-on:change="updateHoursWorked(candidate.CandidateID)" :id="'hoursWorked'+candidate.CandidateID" :placeholder="candidate.CandidateHoursWorked"></td>
-                                <td><input v-on:click="targetThisBox('jobRate'+candidate.CandidateID)" type="text" v-on:change="updateJobRate(candidate.CandidateID)" :id="'jobRate'+candidate.CandidateID" :placeholder="candidate.JobRate"></td>
-                                <td><input type="text" class="border-0" :id="'candidateEarnings'+candidate.CandidateID" :value="Number(candidate.CandidateEarnings).toFixed(2)"> </td>
+                                <td><input v-on:click="targetThisBox('hoursWorked'+candidate.CandidateID)" style="width:100px;" type="text" v-on:change="updateHoursWorked(candidate.CandidateID)" :id="'hoursWorked'+candidate.CandidateID" :placeholder="candidate.CandidateHoursWorked"></td>
+                                <td><input v-on:click="targetThisBox('jobRate'+candidate.CandidateID)" type="text" style="width:100px;" v-on:change="updateJobRate(candidate.CandidateID)" :id="'jobRate'+candidate.CandidateID" :placeholder="candidate.JobRate"></td>
+                                <td><input type="text" class="border-0" :id="'candidateEarnings'+candidate.CandidateID" style="width:100px;" :value="Number(candidate.CandidateEarnings).toFixed(2)"> </td>
                                 <td><input v-on:click="targetThisBox('candidateNotes'+candidate.CandidateID)" type="text" v-on:change="updateCandidateNotes(candidate.CandidateID)" :id="'candidateNotes'+candidate.CandidateID" :placeholder="candidate.CandidateNotes"></td>
                                 
                                 </tr>
@@ -177,7 +180,7 @@
             <!-- Order Brief Tab End -->
             <!-- Attachment Tab -->
             <div class="tab-pane fade pb-5" id="attachment" role="tabpanel" aria-labelledby="attachment-tab">
-            
+            <div class="container">
             <div class="custom-file mt-5">
                 <div class="text-center mb-3 font-weight-bold">Upload Attachment Here:</div>
                 <div class="row justify-content-center container pr-1">
@@ -215,6 +218,7 @@
                 <!-- List of the files end -->
             </div>
             <!-- Attachment Tab -->
+            </div>
         </div>
         <!-- Tab content End -->
 
@@ -419,7 +423,8 @@ var app = new Vue({
                     this.$http.post(urllink, formData).then(res => {
                         var result = res.body
                         this.candidates = result
-                        this.candidatesDataStack.push(result)
+                        
+                        this.candidatesDataStack[candidateID].push(this.candidates[index])
                         this.updatedTime = this.getCurrentDateTime()
                     }, res => {
                         // this.message = "Failure in updating the notes"
@@ -434,6 +439,11 @@ var app = new Vue({
             if(hoursWorked){
                 if(isNaN(hoursWorked)){ alert('You cant enter a text for this field, please enter a number')} else {
                     
+                    for(var i = 0 ; i < this.candidatesCopy.length; i++){
+                        if(this.candidatesCopy[i]['CandidateID']== candidateID){
+                            index = i;
+                        }
+                    }
 
                     var formData = new FormData();
                     formData.append('candidateID', candidateID);
@@ -444,7 +454,7 @@ var app = new Vue({
                     this.$http.post(urllink, formData).then(res => {
                         var result = res.body
                         this.candidates = result
-                        this.candidatesDataStack.push(result)
+                        this.candidatesDataStack[candidateID].push(this.candidates[index])
                         this.updatedTime = this.getCurrentDateTime()
                     }, res => {
                         // this.message = "Failure in updating the notes"
@@ -454,6 +464,13 @@ var app = new Vue({
         },
         resetCandidateData: function(candidateID){
             
+            var index = -1;
+            for(var i = 0 ; i < this.candidatesCopy.length; i++){
+                    if(this.candidatesCopy[i]['CandidateID']== candidateID){
+                    index = i;
+                }
+            }
+
             var formData = new FormData();
             formData.append('candidateID', candidateID);
             formData.append('jobID', this.jobID);
@@ -463,7 +480,9 @@ var app = new Vue({
                 this.candidates = result
                 document.getElementById('hoursWorked'+candidateID).value = 0;
                 document.getElementById('jobRate'+candidateID).value = 0;
-                this.candidatesDataStack.push(result)
+
+                
+                this.candidatesDataStack[candidateID].push(this.candidates[index])
             }, res => {
                 // this.message = "Failure in removing applicant, Server Error"
             })
@@ -476,10 +495,60 @@ var app = new Vue({
             const input = document.getElementById(elementID);
             input.focus();
             input.select();
+        },
+        undoData: function(candidateID){
+            
+            var index = -1;
+            //get index
+            for(var i = 0 ; i < this.candidatesCopy.length; i++){
+                    if(this.candidatesCopy[i]['CandidateID']== candidateID){
+                    index = i;
+                }
+            }
+           
+            //check if it;s not empty
+            if(this.candidatesDataStack[candidateID].length>0){
+                //pop once
+                var candidateData = this.candidatesDataStack[candidateID].pop()
+                //there is a glitch with jobrate that prevent the user to undo the data because of 2 floating point conversion
+                //and have to click twice
+                while(candidateData['CandidateHoursWorked'] == this.candidates[index]['CandidateHoursWorked'] && candidateData['JobRate'] == this.candidates[index]['JobRate']){
+                    candidateData = this.candidatesDataStack[candidateID].pop()
+                }
+            } else {
+                var candidateData = this.candidatesCopy[index];
+            }
+                //update the data in document
+                document.getElementById('hoursWorked'+candidateID).value = candidateData['CandidateHoursWorked'];
+                
+                document.getElementById('jobRate'+candidateID).value = candidateData['JobRate'];
+        
+                document.getElementById('candidateEarnings'+candidateID).value = candidateData['CandidateEarnings'];
+                //update the database
+                var formData = new FormData();
+                formData.append('candidateID', candidateID);
+                formData.append('jobID', this.jobID);
+                formData.append('hoursWorked',document.getElementById('hoursWorked'+candidateID).value);
+                formData.append('jobRate',document.getElementById('jobRate'+candidateID).value);
+                formData.append('candidateEarnings',document.getElementById('candidateEarnings'+candidateID).value);
+                var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/undoCandidateData/'
+                this.$http.post(urllink, formData).then(res => {
+                    var result = res.body
+                    this.candidates = result
+                    
+                }, res => {
+                    // this.message = "Failure in removing applicant, Server Error"
+                })
+                this.updatedTime = this.getCurrentDateTime()
+            
         }
     },
     mounted: function(){
-        this.candidatesDataStack.push(this.candidatesCopy)
+        this.candidatesDataStack = [];
+        for(var i = 0; i<this.candidatesCopy.length; i++){
+            this.candidatesDataStack[this.candidatesCopy[i]['CandidateID']] = []
+            this.candidatesDataStack[this.candidatesCopy[i]['CandidateID']].push(this.candidatesCopy[i])
+        }
     }
 });
 </script>
