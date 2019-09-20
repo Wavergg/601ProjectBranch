@@ -2,6 +2,7 @@
 class Job_model extends CI_Model {
     public function __construct() {
         $this->load->database();
+        date_default_timezone_set('NZ');
     }
 
     /**
@@ -122,7 +123,7 @@ class Job_model extends CI_Model {
             'Suburb' => $suburb,
             'JobSubmittedDate' => $dateJobSubmitted,
         );
-        $this->db->set('UpdateDate', 'NOW()', FALSE);
+        $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->insert('Job', $data);
     }
 
@@ -141,7 +142,7 @@ class Job_model extends CI_Model {
         if(!empty($fileDestination)){
             $data['JobImage'] = $fileDestination;
         }
-        $this->db->set('UpdateDate', 'NOW()', FALSE);
+        $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->where('JobID',$jobID);
         $this->db->update('Job',$data);
     }
@@ -149,7 +150,7 @@ class Job_model extends CI_Model {
     public function updateVisitedManageClient($userID){
         $this->db->where('UserID',$userID);
         $data = array();
-        $this->db->set('VisitedClient', 'NOW()', FALSE);
+        $this->db->set('VisitedClient', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->update('User',$data);
     }
 
@@ -161,7 +162,7 @@ class Job_model extends CI_Model {
             'JobStatus' => $status,
         );
         $this->db->where('JobID',$jobID);
-        $this->db->set('UpdateDate', 'NOW()', FALSE);
+        $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->update('Job',$data);
     }
 
@@ -173,7 +174,7 @@ class Job_model extends CI_Model {
             'JobStatus' => 'completed',
             'Checked' => 'true',
         );
-        $this->db->set('UpdateDate', 'NOW()', FALSE);
+        $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->update('Job',$data);
     }
 
@@ -184,7 +185,7 @@ class Job_model extends CI_Model {
         $data = array(
             'JobStatus' => 'active',
         );
-        $this->db->set('UpdateDate', 'NOW()', FALSE);
+        $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->update('Job',$data);
     }
 
@@ -196,7 +197,7 @@ class Job_model extends CI_Model {
         $data = array(
             'JobStatus' => '',
         );
-        $this->db->set('UpdateDate', 'NOW()', FALSE);
+        $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->update('Job',$data);
     }
 
@@ -396,7 +397,7 @@ class Job_model extends CI_Model {
     public function updateTOBLink($jobID,$TOBfile){
         $this->db->where('JobID',$jobID);
         $data['TOB'] = $TOBfile;
-        $this->db->set('UpdateDate', 'NOW()', FALSE);
+        $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->update('Job',$data);
     }
 }

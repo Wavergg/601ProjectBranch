@@ -2,6 +2,7 @@
 class Candidate_model extends CI_Model {
     public function __construct() {
         $this->load->database();
+        date_default_timezone_set('NZ');
     }
 
     /**
@@ -116,7 +117,7 @@ class Candidate_model extends CI_Model {
     public function updateVisitedManageCandidate($userID){
         $this->db->where('UserID',$userID);
         $data = array();
-        $this->db->set('VisitedCandidate', 'NOW()', FALSE);
+        $this->db->set('VisitedCandidate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->update('User',$data);
     }
 
@@ -380,7 +381,7 @@ class Candidate_model extends CI_Model {
     // called from: Controller->CandidateMission->applyJob()
     //insert the candidate data to database
     public function applyJob($data) {
-        $this->db->set('ApplyDate', 'NOW()', FALSE);
+        $this->db->set('ApplyDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->insert('Candidate', $data);
     }
 
@@ -452,7 +453,7 @@ class Candidate_model extends CI_Model {
         $data = array(
         );
         
-        $this->db->set('ApplyDate', 'NOW()', FALSE);
+        $this->db->set('ApplyDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
        
         $this->db->update('Candidate',$data);
     }
@@ -472,7 +473,7 @@ class Candidate_model extends CI_Model {
         $data = array(
             'JobCV' => $CVfile,
         );
-        $this->db->set('ApplyDate', 'NOW()', FALSE);
+        $this->db->set('ApplyDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->update('Candidate',$data);
     }
 
