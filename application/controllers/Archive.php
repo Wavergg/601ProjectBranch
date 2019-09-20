@@ -11,7 +11,8 @@ class Archive extends CI_Controller{
 		$this->load->helper('url');
 		$this->load->helper('security');
 
-		$this->load->library('session');
+        $this->load->library('session');
+        //load model
         $this->load->model('city_model');
         $this->load->model('candidate_model');
 		$this->load->model('job_model');
@@ -27,16 +28,11 @@ class Archive extends CI_Controller{
             $data['title'] = "Archive";
             $data['message'] ="";
             $data['jobs'] = $this->job_model->get_jobs('archive');
-            // $bookmarkStat= "";
-            //adding 3 more key value pair of ref ,bookmarkStat and bookmarkUrl
+            
+            //adding 1 more key value pair of ref that store the location of jobdetails for specific job
             for($i=0;$i<sizeof($data['jobs']);$i++){
                 $ref = base_url() . 'index.php/Jobs/jobDetails/' . $data['jobs'][$i]['JobID'];
-                // if($data['jobs'][$i]['Bookmark']=="true"){ $bookmarkStat=true;} else {$bookmarkStat=false;};
-                // $bookmarkUrl= "Bookmark". $data['jobs'][$i]['JobID'];
-                
                 $data['jobs'][$i]['ref'] = $ref;
-                // $data['jobs'][$i]['bookmarkStat'] = $bookmarkStat;
-                // $data['jobs'][$i]['bookmarkUrl'] = $bookmarkUrl;
             }
             //return the number of job so it could be used as paging
             $limitNum = 10;
@@ -71,20 +67,14 @@ class Archive extends CI_Controller{
             $page="archive";
             //return filtered job based on criteria as array of results
             $data['jobs'] = $this->job_model->applyFilterJob($page,$company,$city,$jobTitle="",$contactNumber="",$contactPerson,$jobStatus);
-            // $bookmarkStat= "";
-            //adding 3 more key value pair of ref ,bookmarkStat and bookmarkUrl
+            
+            //adding 1 more key value pair of ref that store the location of jobdetails for specific job
             for($i=0;$i<sizeof($data['jobs']);$i++){
                 $ref = base_url() . 'index.php/Jobs/jobDetails/' . $data['jobs'][$i]['JobID'];
-                // if($data['jobs'][$i]['Bookmark']=="true"){ $bookmarkStat=true;} else {$bookmarkStat=false;};
-                // $bookmarkUrl= "Bookmark". $data['jobs'][$i]['JobID'];
-                
                 $data['jobs'][$i]['ref'] = $ref;
-                // $data['jobs'][$i]['bookmarkStat'] = $bookmarkStat;
-                // $data['jobs'][$i]['bookmarkUrl'] = $bookmarkUrl;
             }
 
             echo json_encode($data['jobs']);
-            
         } else {
             redirect('/');
         }
@@ -100,16 +90,11 @@ class Archive extends CI_Controller{
             $page="archive";
             //get the next records
             $jobsResult = $this->job_model->get_jobs($page,$offset);
-            // $bookmarkStat= "";
-            //adding 3 more key value pair of ref ,bookmarkStat and bookmarkUrl
+
+            //adding 1 more key value pair of ref that store the location of jobdetails for specific job
             for($i=0;$i<sizeof($jobsResult);$i++){
                 $ref = base_url() . 'index.php/Jobs/jobDetails/' . $jobsResult[$i]['JobID'];
-                // if($jobsResult[$i]['Bookmark']=="true"){ $bookmarkStat=true;} else {$bookmarkStat=false;};
-                // $bookmarkUrl= "Bookmark". $jobsResult[$i]['JobID'];
-                
                 $jobsResult[$i]['ref'] = $ref;
-                // $jobsResult[$i]['bookmarkStat'] = $bookmarkStat;
-                // $jobsResult[$i]['bookmarkUrl'] = $bookmarkUrl;
             }
 
             echo json_encode($jobsResult);

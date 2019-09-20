@@ -11,7 +11,8 @@ class AboutUS extends CI_Controller {
 
 		$this->load->library('session');
 	}
-	//loading a aboutus page
+
+	//loading the aboutus page
 	public function index()
 	{	
 		$userdata['userType'] = 'anyone';

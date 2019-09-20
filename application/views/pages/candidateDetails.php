@@ -435,23 +435,25 @@
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- check if the user did save the page or not after doing changes -->
 <script>
-var unsaved = false;
-function trackChanges(){
-    this.unsaved = true
-   // alert(this.unsaved)
-}
-function updateChange(){
-    this.unsaved = false
-  //  alert(this.unsaved)
-}
-window.addEventListener("beforeunload", function(event) {
-    if(this.unsaved){
-        //just return something so the popup window will show
-    event.returnValue = "Write something clever here..";
+    var unsaved = false;
+    function trackChanges(){
+        this.unsaved = true
+    // alert(this.unsaved)
     }
-});
+    function updateChange(){
+        this.unsaved = false
+    //  alert(this.unsaved)
+    }
+    window.addEventListener("beforeunload", function(event) {
+        if(this.unsaved){
+            //just return something so the popup window will show
+        event.returnValue = "Write something clever here..";
+        }
+    });
 </script>
+
 <script>
 var app = new Vue({
     el: '#app',
@@ -600,18 +602,15 @@ var app = new Vue({
         
         youtubeLink: "",
         CVselected: "<?php if(empty($candidate['JobCV'])){ echo 'Open this select menu';} else { echo $candidate['JobCV'];}?>",
-        // unsaved: false,
+        
     },
     methods: {
-        trackChanges: function(){
-            alert('changes made')
-            this.unsaved = true
-        },
         uploadFiles: function() {
             console.log(this.candidateID);
             this.message = "";
             var userFiles = document.getElementById("userFiles");
             var len = userFiles.files.length;
+            //for each file selected send it into the controller that handle file upload
             for (var i = 0; i < len; i++) {
                 console.log(userFiles.files[i].name)
                 var formData = new FormData();
@@ -623,6 +622,7 @@ var app = new Vue({
                     if(result.length>this.userFiles.length){
                     this.message = "Successful in uploading files"
                     this.userFiles = result
+                    
                     this.updatedTime = this.getCurrentDateTime()
                     } else {
                         this.message = "Failure in uploading files"
@@ -633,12 +633,14 @@ var app = new Vue({
             }
               $('#myModal').modal('show')
         },
+        //set the labelFile variable to show the name of the file without the full pathname
         uploadFileName: function(){
             if(this.chosenFile.length>0){
             var chosenFileSplit = this.chosenFile.split('\\')
             this.labelFile = chosenFileSplit[chosenFileSplit.length-1];
             }
         },
+        //removing file after the X button that are next to the file in attachment page is pressed
         removingFile: function(userFileX){
                 this.message = "";
               
@@ -661,11 +663,15 @@ var app = new Vue({
             
             $('#myModal').modal('show')
         },
+        //toggle readonly and some other hidden element, so user can edit the input
         editButton: function(){
             this.toggleEdit = !this.toggleEdit
+            //get how many input tag in page
             var x =  document.getElementsByTagName("input").length;
+            //get how many textarea tag in page
             var y =  document.getElementsByTagName("textarea").length;
             if(this.toggleEdit){
+                //look for specific index of input and textarea tag
                 for (i = 0; i < x; i++) {
                     document.getElementsByTagName("input")[i].removeAttribute("readonly");
                 }
@@ -674,6 +680,7 @@ var app = new Vue({
                 }
                 document.getElementById("fileProfileBtn").removeAttribute("hidden");
             } else {
+                //look for specific index of input and textarea tag
                 for (i = 0; i < x; i++) {
                     document.getElementsByTagName("input")[i].setAttribute("readonly", "readonly"); 
                 }
@@ -684,7 +691,7 @@ var app = new Vue({
             }
         },
         submitButton: function(candidateID, userID) {
-            this.unsaved = false;
+            
             var formData = new FormData()
             formData.append('UserID',userID);
             formData.append('FirstName',this.firstName);
@@ -738,23 +745,25 @@ var app = new Vue({
             }
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateCandidateDetails/'+candidateID
             this.$http.post(urllink, formData).then(res => {
-                this.updatedTime = this.getCurrentDateTime()
-                
+               
+                //let the changes saved text appear with animation fade in fade out
                 document.getElementById("savedMessage").removeAttribute("hidden");
                 document.getElementById("changeSavedBtn").classList
                 document.getElementById("savedMessage").style.opacity = 0;
                 document.getElementById('savedMessage').innerHTML = 'Changes Saved . . .'
-                //transition animation from css file
+                //add class transition animation from css file to savedMessage div
                 document.getElementById("savedMessage").classList.add("fadeOutIn");
                 //remove it after using it
                 setTimeout(function(){document.getElementById("savedMessage").classList.remove("fadeOutIn");}, 1100);
+                this.updatedTime = this.getCurrentDateTime()
             }, res => {
                 // error callback
             });
         },
+        //called from select option box in attachment page, the file that are selected will become the user CV
         updateCV: function(){
             this.message = "";
-            this.updatedTime = this.getCurrentDateTime()
+            
                 var formData = new FormData();
                 formData.append('candidateID', this.candidateID);
                 formData.append('CVfile', this.CVselected);
@@ -765,17 +774,20 @@ var app = new Vue({
                 }, res => {
                     // this.message = "Failure in removing files, Server Error"
                 })
-            
+            this.updatedTime = this.getCurrentDateTime()
             // $('#myModal').modal('show')
         },
+        //load the video in youtubeURL tab
         loadVideo: function(){
-            this.updatedTime = this.getCurrentDateTime()
+           
             var videoUrl = document.getElementById('youtubeLinksID').value
             if(videoUrl.length < 1){
-          
+                //if the input box is empty remove the video
                 document.getElementById('video-preview').style.display = "none";
             } else {
+                //split by = and & chars with regex
                 var urlID = this.youtubeLink.split(/[\=&]/)
+                //add the id of the video and display it
                 document.getElementById("video-preview").src = 'https://youtube.com/embed/'+urlID[1];
                 document.getElementById('video-preview').style.display = "block";
             }
@@ -788,8 +800,9 @@ var app = new Vue({
                 }, res => {
 
             })
+            this.updatedTime = this.getCurrentDateTime()
         },
-
+        //get the current time
         getCurrentDateTime: function() {
         var now     = new Date(); 
         var year    = now.getFullYear();
@@ -834,6 +847,7 @@ var app = new Vue({
             // $('#myModal').modal('show')
         }
     },
+    //during the page load get the youtube url
     mounted: function() {
         this.youtubeLink = '<?php if(!empty($candidate['YoutubeURL'])){echo $candidate['YoutubeURL'];}?>';
         if(this.youtubeLink.length>0){

@@ -11,7 +11,7 @@ class CandidateMission extends CI_Controller{
         $this->load->helper('directory');
 
         $this->load->library('session');
-        // Load Modesl
+        // Load Model
         $this->load->model('candidate_model');
         $this->load->model('city_model');
         $this->load->model('register_model');
@@ -21,6 +21,7 @@ class CandidateMission extends CI_Controller{
     
     //loading the page of candidateMission together with the form for candidate to register their application into lee recruitment
     public function index($param = ''){
+        //get active tabs
         if($param == 'active'){ $active1='';$active2='active';}
         else {$active1='active';$active2='';}
         $data['active1'] = $active1;
@@ -207,9 +208,9 @@ class CandidateMission extends CI_Controller{
             'UserID' => $userID,
             'CandidateNotes' => $candidateNotes,
             );
-            
+            //send the array into the model, this model will insert the data into candidate table
             $this->candidate_model->applyJob($data);
-            
+            //empty the array
             $data = array();
             $candidate = $this->candidate_model->getMaxIDByUserID($userID);
             
@@ -258,6 +259,7 @@ class CandidateMission extends CI_Controller{
                         }
                     }
                 } else {
+                    //remove the user and candidate if there is a failure
                     echo 'Failure in uploading CV Please retry it';
                     $this->candidate_model->removeCandidateData($candidate['MaxID']);
                     $this->user_model->removeUserData($userID);
@@ -272,18 +274,8 @@ class CandidateMission extends CI_Controller{
     //candidate_model->updateLinkByID($maxID, $downloadName); calling this model to update the CV link
     public function uploadCV($candidateID){
       
-       
         $uploadErrorStatus = true;
-        // $firstName = $this->input->post('firstName');
-        // $lastName = $this->input->post('lastName');
-        // //get the last ID for database with firstname and lastname criteria
-        // $userData = $this->candidate_model->getUserByData($firstName,$lastName);
-        // $userID = $userData['UserID'];
-        
-        // // get max candidate ID
-        // $candidate = $this->candidate_model->getMaxIDByUserID($userID);
-        // $maxID=$candidate['MaxID'];
-
+       
         $maxID = $candidateID;
 
         $config['upload_path'] = constant('CV_PATH').$maxID.'/';
@@ -371,8 +363,9 @@ class CandidateMission extends CI_Controller{
 			$candidateID = $_POST['candidateID'];
 			$fileName = $_POST['userFile'];
 			$path = constant('CV_PATH').$candidateID.'/';
-			//let's not use this. it's dangerous as heck
-			//unlink($path.$fileName);
+			//let's not use this. it's dangerous as heck,
+            //unlink($path.$fileName);
+            //move the file into del folder inside of the CV_PATH constant
 			rename($path.$fileName,constant('CV_PATH').'del/'.$candidateID.$fileName);
             $data['userFiles'] = directory_map($path);
             $this->candidate_model->updateTimeChanged($candidateID);
@@ -426,21 +419,21 @@ class CandidateMission extends CI_Controller{
             $data = array();
             //
             $data = array(
-                'JobInterest' => $this->filterGeneral($this->input->post('JobInterest')),
-                'JobType' => $this->filterJobType($this->input->post('JobType')),
-                'Transportation' => $this->filterGeneral($this->input->post('Transportation')),
-                'LicenseNumber' => $this->filterGeneral($this->input->post('LicenseNumber')),
-                'ClassLicense' => $this->filterGeneral($this->input->post('ClassLicense')),
-                'Endorsement' => $this->filterGeneral($this->input->post('Endorsement')),
-                'Citizenship' => $this->filterGeneral($this->input->post('Citizenship')),
-                'Nationality' => $this->filterGeneral($this->input->post('Nationality')),
-                'PassportCountry' => $this->filterGeneral($this->input->post('PassportCountry')),
-                'PassportNumber' => $this->filterGeneral($this->filterPassportNumber($this->input->post('PassportNumber'))),
-                'WorkPermitNumber' => $this->filterGeneral($this->input->post('WorkPermitNumber')),
-                'WorkPermitExpiry' => $this->filterDate($this->input->post('WorkPermitExpiry')),
-                'CompensationInjury' => $this->filterCompensationInjury($this->input->post('CompensationInjury')),
-                'CompensationDateFrom' => $this->filterDate($this->input->post('CompensationDateFrom')),
-                'CompensationDateTo' => $this->filterDate($this->input->post('CompensationDateTo')),
+                'JobInterest' => xss_clean(stripslashes(trim($this->input->post('JobInterest')))),
+                'JobType' => xss_clean(stripslashes(trim($this->input->post('JobType')))),
+                'Transportation' => xss_clean(stripslashes(trim($this->input->post('Transportation')))),
+                'LicenseNumber' => xss_clean(stripslashes(trim($this->input->post('LicenseNumber')))),
+                'ClassLicense' => xss_clean(stripslashes(trim($this->input->post('ClassLicense')))),
+                'Endorsement' => xss_clean(stripslashes(trim($this->input->post('Endorsement')))),
+                'Citizenship' => xss_clean(stripslashes(trim($this->input->post('Citizenship')))),
+                'Nationality' => xss_clean(stripslashes(trim($this->input->post('Nationality')))),
+                'PassportCountry' => xss_clean(stripslashes(trim($this->input->post('PassportCountry')))),
+                'PassportNumber' => xss_clean(stripslashes(trim($this->input->post('PassportNumber')))),
+                'WorkPermitNumber' => xss_clean(stripslashes(trim($this->input->post('WorkPermitNumber')))),
+                'WorkPermitExpiry' => xss_clean(stripslashes(trim($this->input->post('WorkPermitExpiry')))),
+                'CompensationInjury' => xss_clean(stripslashes(trim($this->input->post('CompensationInjury')))),
+                'CompensationDateFrom' => xss_clean(stripslashes(trim($this->input->post('CompensationDateFrom')))),
+                'CompensationDateTo' => xss_clean(stripslashes(trim($this->input->post('CompensationDateTo')))),
                
                 'Asthma' => $this->checkBoxFilter($this->input->post('Asthma')),
                 'BlackOut' => $this->checkBoxFilter($this->input->post('BlackOut')),
@@ -460,8 +453,8 @@ class CandidateMission extends CI_Controller{
                 'Dependants' => $this->checkBoxFilter($this->input->post('Dependants')),
                 'Smoke' => $this->checkBoxFilter($this->input->post('Smoke')),
                 'Conviction' => $this->checkBoxFilter($this->input->post('Conviction')),
-                'ConvictionDetails' => $this->filterTextArea($this->input->post('ConvictionDetails')),
-                'CandidateNotes' => $this->filterTextArea($this->input->post('CandidateNotes')),
+                'ConvictionDetails' => xss_clean(stripslashes(trim($this->input->post('ConvictionDetails')))),
+                'CandidateNotes' => xss_clean(stripslashes(trim($this->input->post('CandidateNotes')))),
                 // 'ApplyDate' => date("Y-m-d H:i:s"),
                 );
 

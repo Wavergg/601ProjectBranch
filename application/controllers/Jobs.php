@@ -289,11 +289,16 @@ class Jobs extends CI_Controller {
 	 */
 	//called from: View->pages->jobdetails
 	//update hours worked for specific candidate
-	public function updateHoursWorked($candidateID){
+	public function updateHoursWorked(){
 		
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-			$candidateData = $this->candidate_model->getCandidateByID($candidateID);
+			
+			$candidateID = $_POST['candidateID'];
 			$hoursWorked = $_POST['hoursWorked'];
+			$jobID = $_POST['jobID'];
+
+			$candidateData = $this->candidate_model->getCandidateByID($candidateID);
+			
 			//get difference in hours worked
 			$diffhoursWorked = $hoursWorked - $candidateData['CandidateHoursWorked'];
 			$currentEarnings = $candidateData['CandidateEarnings'];
@@ -301,59 +306,17 @@ class Jobs extends CI_Controller {
 			//calculation
 			$currentEarnings = $diffhoursWorked * $jobRate + $currentEarnings; 
 			$this->candidate_model->updateCandidateHoursWorking($candidateID,$hoursWorked,$currentEarnings);
-			$candidateData = $this->candidate_model->getCandidateByID($candidateID);
-			$workingHoursSaved = $_POST['workingHoursSaved'];
-			$this->loadJobDetailsRow($candidateData,$workingHoursSaved);
+			
+			//update time
+			$this->job_model->updateTimeChanged($jobID);
+
+			$candidatesData = $this->candidate_model->getCandidatesJobDetails($jobID);
+
+			echo json_encode($candidatesData);
+			
 		} else {
 			redirect('/');
 		}
-	}
-
-	//called from: this->removeAssignedCandidate()
-	//AJAX
-	//entire candidate table in View->pages->jobDetails page
-	//only refreshed if the candidate is removed from the table
-	public function loadJobDetailsTable($candidatesData){
-		echo '<table class="table border-bottom border-dark"><thead>
-        <tr>
-		<th scope="col"></th>
-		<th scope="col"></th>
-        <th scope="col">Applicant_Name</th>
-        <th scope="col">Contact_Number</th>
-		<th scope="col">Email</th>
-        <th scope="col">Applicant_Address</th>
-        <th scope="col">Job_Type</th>
-        <th scope="col">Hours_worked</th>
-        <th scope="col">JobRates</th>
-		<th scope="col">Total_Earned</th>
-        <th scope="col">Employee Notes</th>
-        </tr>
-		</thead><tbody class="align-items-center">';
-		foreach ($candidatesData as $candidateData){
-		$savedHoursWorked[$candidateData['CandidateID']] = $candidateData['CandidateHoursWorked'];
-		echo '<form>';
-		$this->loadJobDetailsRow($candidateData,$savedHoursWorked[$candidateData['CandidateID']]);
-        echo '</form>';
-		}
-		echo '</tbody>
-		</table>';
-	}
-
-	//AJAX
-	//called from: this->updateHoursWorked(), this->updateJobRate(), this->updateCandidateNotes(), this->resetCandidateData()
-	//the row in View->Pages->jobDetails refreshed if there is an update in hoursworked,jobRate or candidateNotes
-	public function loadJobDetailsRow($candidateData,$savedHoursWorked){
-		echo '<th><div class="textInfoPos"><span class="textInfo">Remove Candidate</span><a onclick="removeAssignedCandidate(' .  $candidateData['CandidateID'] . ')" class="text-danger"><i style="font-size:25px" class="icon ion-md-close-circle"></i> </a></div></th>';
-		echo '<td><div class="textInfoPos"><span class="textInfo font-weight-bold" style="left:-50px;">Reset Data to 0</span><a onclick="resetCandidateData(' . $candidateData['CandidateID'] .',' . $savedHoursWorked . ')" class="text-secondary" ><i style="font-size:25px" class="icon ion-md-trash"></i></a></div></td>';
-		echo '<td>' . $candidateData['FirstName'] . ' ' . $candidateData['LastName'] . '</td>';
-        echo '<td>' . $candidateData['PhoneNumber'] . '</td>';
-        echo '<td>' . $candidateData['Email'] . '</td>';
-		echo '<td>' . $candidateData['Address'] . '</td>';
-        echo '<td>' . $candidateData['JobType'] . '</td>';
-		echo '<td><input onclick="targetThisBox(\'hoursWorked' .  $candidateData['CandidateID'] . '\')" type="text" id="hoursWorked' . $candidateData['CandidateID'] . '" onchange="updateHoursWorked(' . $candidateData['CandidateID'] .',' . $savedHoursWorked . ')" placeholder="' . $candidateData['CandidateHoursWorked'] . '"></td>';
-		echo '<td><input onclick="targetThisBox(\'jobRate' .  $candidateData['CandidateID'] . '\')" type="text" id="jobRate' . $candidateData['CandidateID'] . '" onchange="updateJobRate(' . $candidateData['CandidateID'] .',' . $savedHoursWorked . ')" placeholder="' . $candidateData['JobRate'] .'"></td>';
-		echo '<td><input type="text" class="border-0" id="candidateEarnings' . $candidateData['CandidateID'] . '" value="' . $candidateData['CandidateEarnings'] . '"></td>';
-		echo '<td><input onclick="targetThisBox(\'candidateNotes' .  $candidateData['CandidateID'] . '\')" type="text" id="candidateNotes' . $candidateData['CandidateID'] . '" onchange="updateCandidateNotes(' . $candidateData['CandidateID'] . ',' . $savedHoursWorked . ')" placeholder="' . $candidateData['CandidateNotes'] . '"></td></tr>';
 	}
 
 	//called from view->pages->manageCandidate, view->pages->candidateDetails
@@ -384,18 +347,23 @@ class Jobs extends CI_Controller {
 	//Called from: View->Pages->jobDetails
 	//AJAX method
 	//removing the JobID from the candidate so it wont appear in the table in job details anymore
-	public function removeAssignedCandidate($candidateID,$jobID){
+	public function removeAssignedCandidate(){
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-
+			$candidateID = $_POST['candidateID'];
+			$jobID = $_POST['jobID'];
 			$this->candidate_model->removeAssignedCandidate($candidateID);
 			//refresh it
 			$candidatesData = $this->candidate_model->getCandidatesJobDetails($jobID);
 			
+			//update time
+			$this->job_model->updateTimeChanged($jobID);
+
 			//if there are no more candidate in the jobDetails table after the removal of candidate set jobStatus of the job to null/NoAction
 			if(sizeof($candidatesData)==0){
 				$this->job_model->updateJobDetailsStatusNull($jobID);
 			}
-			$this->loadJobDetailsTable($candidatesData);
+			// $this->loadJobDetailsTable($candidatesData);
+			echo json_encode($candidatesData);
 		} else {
 			redirect('/');
 		}
@@ -404,22 +372,28 @@ class Jobs extends CI_Controller {
 	//called from: view->pages->jobDetails
 	//AJAX method
 	//update the jobRate of the candidate
-	public function updateJobRate($candidateID){
+	public function updateJobRate(){
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-			//get the previous value
-			$candidateData = $this->candidate_model->getCandidateByID($candidateID);
-
+			$candidateID = $_POST['candidateID'];
 			$jobRate = $_POST['jobRate'];
+			$jobID = $_POST['jobID'];
 			$workingHoursSaved = $_POST['workingHoursSaved'];
+
+			//get the current value
+			$candidateData = $this->candidate_model->getCandidateByID($candidateID);
+			
 			//calculate it normally if it starts from 0, after that keep the data
 			if(empty($workingHoursSaved) || $candidateData['JobRate'] == 0){
 				$candidateEarnings = $jobRate * $candidateData['CandidateHoursWorked'];
 				$this->candidate_model->updateCandidateHoursWorking($candidateID,$candidateData['CandidateHoursWorked'],$candidateEarnings);
 			}
 			$this->candidate_model->updateJobRate($candidateID,$jobRate);
-			$candidateData = $this->candidate_model->getCandidateByID($candidateID);
-			$workingHoursSaved = $_POST['workingHoursSaved'];
-			$this->loadJobDetailsRow($candidateData,$workingHoursSaved);
+			
+			//update time
+			$this->job_model->updateTimeChanged($jobID);
+
+			$candidatesData = $this->candidate_model->getCandidatesJobDetails($jobID);
+			echo json_encode($candidatesData);
 		} else {
 			redirect('/');
 		}
@@ -428,18 +402,23 @@ class Jobs extends CI_Controller {
 	//AJAX method
 	//called from: view->pages->jobDetails
 	//update the notes for specific candidate
-	public function updateCandidateNotes($candidateID,$page){
+	public function updateCandidateNotes(){
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			$candidateID = $_POST['candidateID'];
 			$candidateNotes = $_POST['candidateNotes'];
+			$jobID = $_POST['jobID'];
 			$this->candidate_model->updateCandidateNotes($candidateID,$candidateNotes);
+			
+			
+			//update time
+			$this->job_model->updateTimeChanged($jobID);
 			$this->candidate_model->updateTimeChanged($candidateID);
-			if($page=="jobDetails"){
-			$candidateData = $this->candidate_model->getCandidateByID($candidateID);
-			$workingHoursSaved = $_POST['workingHoursSaved'];
-			$this->loadJobDetailsRow($candidateData,$workingHoursSaved);
-			} else {
-				echo 'Wrong Answer!';
-			}
+
+			//get the updated field from database
+			$candidatesData = $this->candidate_model->getCandidatesJobDetails($jobID);
+			
+			echo json_encode($candidatesData);
+			
 		} else {
 			redirect('/');
 		}
@@ -448,14 +427,18 @@ class Jobs extends CI_Controller {
 	//Called from: view->pages->JobDetails
 	//AJAX Method
 	//set the value of jobRates, hoursworked and candidateEarnings to 0
-	public function resetCandidateData($candidateID){
+	public function resetCandidateData(){
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-			
+			$candidateID = $_POST['candidateID'];
+			$jobID = $_POST['jobID'];
 			$this->candidate_model->resetCandidateJobDetailsData($candidateID);
-			$candidateData = $this->candidate_model->getCandidateByID($candidateID);
-			$workingHoursSaved = $_POST['workingHoursSaved'];
-		
-			$this->loadJobDetailsRow($candidateData,$workingHoursSaved);
+			
+			//update time
+			$this->job_model->updateTimeChanged($jobID);
+
+			$candidatesData = $this->candidate_model->getCandidatesJobDetails($jobID);
+			echo json_encode($candidatesData);
+
 		} else {
 			redirect('/');
 		}
@@ -564,6 +547,7 @@ class Jobs extends CI_Controller {
 		}
 	}
 	
+	//called from: view->jobDetails
 	// upload other files by Admin or Staff
     public function uploadFiles(){
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){

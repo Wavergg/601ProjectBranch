@@ -400,4 +400,16 @@ class Job_model extends CI_Model {
         $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->update('Job',$data);
     }
+
+    //update the time everytime there is an update
+    public function updateTimeChanged($jobID){
+        $this->db->where('JobID',$jobID);
+        
+        $data = array(
+        );
+        
+        $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
+       
+        $this->db->update('Job',$data);
+    }
 }

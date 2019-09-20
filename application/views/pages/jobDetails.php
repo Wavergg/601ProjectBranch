@@ -54,9 +54,7 @@
                         <div class="container">
                             <h2 class="text-center font-weight-bold pb-2">Job Description</h2>
                             <hr/>
-                            <textarea readonly class="form-control-plaintext ml-3" id="exampleFormControlTextarea1" rows="5">
-                                <?php echo $job['Description'] ;?>
-                            </textarea>
+                            <textarea readonly class="form-control-plaintext ml-3" id="exampleFormControlTextarea1" rows="5"><?php echo $job['Description'] ;?></textarea>
                         </div>
                     </div>
                     <!-- Job Description End -->
@@ -152,31 +150,21 @@
                                 </tr>
                             </thead>
                             <tbody class="align-items-center">
-                                <?php foreach ($candidatesData as $candidateData):?>
-                                <?php $savedCandidateEarnings[$candidateData['CandidateID']] = $candidateData['CandidateEarnings'];?>
-                                <?php $savedWorkRate[$candidateData['CandidateID']] = $candidateData['JobRate'];?>
-                                <?php $savedHoursWorked[$candidateData['CandidateID']] = $candidateData['CandidateHoursWorked'];?>
-                                <form>
-                                <tr id="targetRow<?php echo $candidateData['CandidateID'];?>"><th scope="row">
-                                
-                                <div class="textInfoPos"><span class="textInfo">Remove Candidate</span><a onclick="removeAssignedCandidate(<?php echo $candidateData['CandidateID']?>)" class="text-danger"><i style="font-size:25px" class="icon ion-md-close-circle"></i> </a></div></th>
-                                <td><div class="textInfoPos"><span class="textInfo font-weight-bold" style="left:-50px;">Reset Data to 0</span><a onclick="resetCandidateData(<?php echo $candidateData['CandidateID']?>)" class="text-secondary" ><i style="font-size:25px" class="icon ion-md-trash"></i></a></div></td>
-                                <td><?php echo $candidateData['FirstName'] . ' ' . $candidateData['LastName'];?></td>
-                                <td><?php echo $candidateData['PhoneNumber'];?></td>
-                                <td><?php echo $candidateData['Email'];?></td>
-                                <td><?php echo $candidateData['Address'];?></td>
-                                <td><?php echo $candidateData['JobType'];?></td>
-                                
-                                <td><input onclick="targetThisBox('hoursWorked<?php echo $candidateData['CandidateID']?>')" type="text" id="hoursWorked<?php echo $candidateData['CandidateID']?>" onchange="updateHoursWorked(<?php echo $candidateData['CandidateID']?>,<?php echo $savedHoursWorked[$candidateData['CandidateID']] ;?>)" placeholder="<?php echo $candidateData['CandidateHoursWorked'];?>"></td>
-                                <td><input onclick="targetThisBox('jobRate<?php echo $candidateData['CandidateID']?>')" type="text" id="jobRate<?php echo $candidateData['CandidateID']?>" onchange="updateJobRate(<?php echo $candidateData['CandidateID']?>,<?php echo $savedHoursWorked[$candidateData['CandidateID']] ;?>)" placeholder="<?php echo $candidateData['JobRate'];?>"></td>
-                                <td><input type="text" class="border-0" id="candidateEarnings<?php echo $candidateData['CandidateID']?>" value="<?php printf('%.2f',$candidateData['CandidateEarnings']);?>"> </td>
-                                <td><input onclick="targetThisBox('candidateNotes<?php echo $candidateData['CandidateID']?>')" type="text" id="candidateNotes<?php echo $candidateData['CandidateID']?>" onchange="updateCandidateNotes(<?php echo $candidateData['CandidateID']?>,<?php echo $savedHoursWorked[$candidateData['CandidateID']] ;?>)" placeholder="<?php echo $candidateData['CandidateNotes'];?>"></td>
+                               
+                                <tr v-for="candidate in candidates" :key="candidate.CandidateID">
+                                <th scope="row"><div class="textInfoPos"><span class="textInfo">Remove Candidate</span><i v-on:click="removeAssignedCandidate(candidate.CandidateID)" style="font-size:25px" class="text-danger button icon ion-md-close-circle"></i></div></th>
+                                <td><div class="textInfoPos"><span class="textInfo font-weight-bold" style="left:-50px;">Reset Data to 0</span><i v-on:click="resetCandidateData(candidate.CandidateID)" style="font-size:25px" class="text-secondary button icon ion-md-trash"></i></a></div></td>
+                                <td v-text="candidate.FirstName +' '+ candidate.LastName"></td>
+                                <td v-text="candidate.PhoneNumber"></td>
+                                <td v-text="candidate.Email"></td>
+                                <td v-text="candidate.Address"></td>
+                                <td v-text="candidate.JobType"></td>
+                                <td><input v-on:click="targetThisBox('hoursWorked'+candidate.CandidateID)" type="text" v-on:change="updateHoursWorked(candidate.CandidateID)" :id="'hoursWorked'+candidate.CandidateID" :placeholder="candidate.CandidateHoursWorked"></td>
+                                <td><input v-on:click="targetThisBox('jobRate'+candidate.CandidateID)" type="text" v-on:change="updateJobRate(candidate.CandidateID)" :id="'jobRate'+candidate.CandidateID" :placeholder="candidate.JobRate"></td>
+                                <td><input type="text" class="border-0" :id="'candidateEarnings'+candidate.CandidateID" :value="Number(candidate.CandidateEarnings).toFixed(2)"> </td>
+                                <td><input v-on:click="targetThisBox('candidateNotes'+candidate.CandidateID)" type="text" v-on:change="updateCandidateNotes(candidate.CandidateID)" :id="'candidateNotes'+candidate.CandidateID" :placeholder="candidate.CandidateNotes"></td>
                                 
                                 </tr>
-                                
-                                </form>
-                                
-                                <?php endforeach;?>
                             </tbody>
                         </table>
                     </div> <!--ajaxContentEnd-->
@@ -272,6 +260,9 @@ var app = new Vue({
         labelFile: "",
         TOBselected: "<?php if(empty($job['TOB'])){ echo 'Open this select menu';} else { echo $job['TOB'];}?>",
         updatedTime: "<?php echo $job['UpdateDate'];?>",
+        candidates: <?php echo json_encode($candidatesData); ?>,
+        candidatesCopy: <?php echo json_encode($candidatesData); ?>,
+        candidatesDataStack: [],
     },
     methods: {
         uploadFiles: function() {
@@ -373,6 +364,122 @@ var app = new Vue({
         var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
          return dateTime;
         },
+        removeAssignedCandidate: function(candidateID){
+            
+            var formData = new FormData();
+            formData.append('candidateID', candidateID);
+            formData.append('jobID', this.jobID);
+            var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/removeAssignedCandidate/'
+            this.$http.post(urllink, formData).then(res => {
+                var result = res.body
+                this.candidates = result
+            }, res => {
+                // this.message = "Failure in removing applicant, Server Error"
+            })
+            this.updatedTime = this.getCurrentDateTime()
+        },
+        updateCandidateNotes: function(candidateID){
+            
+            var formData = new FormData();
+            formData.append('candidateID', candidateID);
+            formData.append('candidateNotes', document.getElementById('candidateNotes'+candidateID).value);
+            formData.append('jobID',this.jobID);
+            var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/updateCandidateNotes/'
+            this.$http.post(urllink, formData).then(res => {
+                var result = res.body
+                this.candidates = result
+                
+                // this.message = res.body
+                // $('#myModal').modal('show')
+            }, res => {
+                // this.message = "Failure in updating the notes"
+            })
+            this.updatedTime = this.getCurrentDateTime()
+            
+        },
+        updateJobRate: function(candidateID){
+            
+            var jobRate = document.getElementById('jobRate'+candidateID).value;
+            var index = -1;
+            if(jobRate){
+                if(isNaN(jobRate)){ alert('You cant enter a text for this field, please enter a number')} else {
+                    
+                    for(var i = 0 ; i < this.candidatesCopy.length; i++){
+                        if(this.candidatesCopy[i]['CandidateID']== candidateID){
+                            index = i;
+                        }
+                    }
+
+                    var formData = new FormData();
+                    formData.append('candidateID', candidateID);
+                    formData.append('workingHoursSaved',this.candidatesCopy[index]['CandidateHoursWorked'])
+                    formData.append('jobRate', jobRate);
+                    formData.append('jobID',this.jobID);
+                    var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/updateJobRate/'
+                    this.$http.post(urllink, formData).then(res => {
+                        var result = res.body
+                        this.candidates = result
+                        this.candidatesDataStack.push(result)
+                        this.updatedTime = this.getCurrentDateTime()
+                    }, res => {
+                        // this.message = "Failure in updating the notes"
+                    })
+                }
+            }
+        },
+        updateHoursWorked: function(candidateID){
+            
+            var hoursWorked = document.getElementById('hoursWorked'+candidateID).value;
+            var index = -1;
+            if(hoursWorked){
+                if(isNaN(hoursWorked)){ alert('You cant enter a text for this field, please enter a number')} else {
+                    
+
+                    var formData = new FormData();
+                    formData.append('candidateID', candidateID);
+                    
+                    formData.append('hoursWorked', hoursWorked);
+                    formData.append('jobID',this.jobID);
+                    var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/updateHoursWorked/'
+                    this.$http.post(urllink, formData).then(res => {
+                        var result = res.body
+                        this.candidates = result
+                        this.candidatesDataStack.push(result)
+                        this.updatedTime = this.getCurrentDateTime()
+                    }, res => {
+                        // this.message = "Failure in updating the notes"
+                    })
+                }
+            }
+        },
+        resetCandidateData: function(candidateID){
+            
+            var formData = new FormData();
+            formData.append('candidateID', candidateID);
+            formData.append('jobID', this.jobID);
+            var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/resetCandidateData/'
+            this.$http.post(urllink, formData).then(res => {
+                var result = res.body
+                this.candidates = result
+                document.getElementById('hoursWorked'+candidateID).value = 0;
+                document.getElementById('jobRate'+candidateID).value = 0;
+                this.candidatesDataStack.push(result)
+            }, res => {
+                // this.message = "Failure in removing applicant, Server Error"
+            })
+            this.updatedTime = this.getCurrentDateTime()
+            
+        },
+        // to be able to select the input box inside the table and edit it
+        // without this it wont work because we implement special scrollable
+        targetThisBox: function(elementID){
+            const input = document.getElementById(elementID);
+            input.focus();
+            input.select();
+        }
+    },
+    mounted: function(){
+        this.candidatesDataStack.push(this.candidatesCopy)
     }
 });
 </script>
@@ -380,79 +487,4 @@ var app = new Vue({
 <script>
     CKEDITOR.replace( 'editor1' );
 </script>
-<script>
-    //to be able to select the input box inside the table and edit it
-    // without this it wont work because we implement scrollable
-        function targetThisBox(elementID){
-            const input = document.getElementById(elementID);
-            input.focus();
-            input.select();
-        }
-var xRequest = new XMLHttpRequest();
-function updateHoursWorked($candidateID,$workingHoursSaved) {
-        var hoursWorked = document.getElementById('hoursWorked'+$candidateID).value;
-        if(hoursWorked){
-            if(isNaN(hoursWorked)){ alert('You cant enter a text for this field, please enter a number')} else {
-            var the_data = 'candidateID='+$candidateID+'&hoursWorked='+hoursWorked+'&workingHoursSaved='+$workingHoursSaved;
-            xRequest.open("POST",'<?php echo base_url()?>index.php/Jobs/updateHoursWorked/'+$candidateID,true)
-            xRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            
-                xRequest.send(the_data);
-                xRequest.onload = function(){
-                        document.getElementById('targetRow'+$candidateID).innerHTML = xRequest.responseText;
-                };
-            };
-        }
-    }
 
-function updateJobRate($candidateID,$workingHoursSaved) {
-    var jobRate = document.getElementById('jobRate'+$candidateID).value;
-    if(jobRate){
-        if(isNaN(jobRate)){ alert('You cant enter a text for this field, please enter a number')} else {
-        var the_data = 'jobRate='+jobRate+'&workingHoursSaved='+$workingHoursSaved;
-        
-        xRequest.open("POST",'<?php echo base_url()?>index.php/Jobs/updateJobRate/'+$candidateID,true)
-        xRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        
-            xRequest.send(the_data);
-            xRequest.onload = function(){
-                document.getElementById('targetRow'+$candidateID).innerHTML = xRequest.responseText;
-            };
-        };
-    }
-}
-
-function updateCandidateNotes($candidateID,$workingHoursSaved){
-    var the_data = 'candidateNotes='+document.getElementById('candidateNotes'+$candidateID).value+'&workingHoursSaved='+$workingHoursSaved;
-
-    xRequest.open("POST",'<?php echo base_url()?>index.php/Jobs/updateCandidateNotes/'+$candidateID+'/'+'jobDetails',true)
-    xRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    
-    xRequest.send(the_data);
-    xRequest.onload = function(){
-        document.getElementById('targetRow'+$candidateID).innerHTML = xRequest.responseText;
-    };
-}
-
-function removeAssignedCandidate($candidateID){
-    var the_data = 'candidateID='+$candidateID;
-    xRequest.open("POST","<?php echo base_url()?>index.php/Jobs/removeAssignedCandidate/"+$candidateID+"/<?php echo $job['JobID'];?>",true)
-    
-    xRequest.send(the_data);
-    xRequest.onload = function(){
-        document.getElementById('ajax-content').innerHTML = xRequest.responseText;
-    };
-}
-
-function resetCandidateData($candidateID){
-    
-    var the_data = 'workingHoursSaved='+0;
-    xRequest.open("POST","<?php echo base_url()?>index.php/Jobs/resetCandidateData/"+$candidateID,true)
-    xRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xRequest.send(the_data);
-    xRequest.onload = function(){
-        document.getElementById('targetRow'+$candidateID).innerHTML = xRequest.responseText;
-    };
-}
-
-</script>

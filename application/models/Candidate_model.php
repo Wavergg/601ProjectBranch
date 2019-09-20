@@ -350,9 +350,9 @@ class Candidate_model extends CI_Model {
         if(!empty($city)){
             $this->db->where('User.City',$city);
         }
-        if(!empty($jobType)){
-        $this->db->where('Candidate.JobType',$jobType);
-        }
+        // if(!empty($jobType)){
+        // $this->db->where('Candidate.JobType',$jobType);
+        // }
         if(!empty($jobInterest)){
             $this->db->like('Candidate.JobInterest',$jobInterest);
         }
@@ -362,15 +362,15 @@ class Candidate_model extends CI_Model {
         if(!empty($lastName)){
             $this->db->like('User.LastName',$lastName);
         }
-        if(!empty($suburb)){
-            $this->db->where('User.Suburb',$suburb);
-        }
-        if(!empty($phoneNumber)){
-            $this->db->like('User.PhoneNumber',$phoneNumber);
-        }
-        if(!empty($email)){
-            $this->db->where('User.Email',$email);
-        }
+        // if(!empty($suburb)){
+        //     $this->db->where('User.Suburb',$suburb);
+        // }
+        // if(!empty($phoneNumber)){
+        //     $this->db->like('User.PhoneNumber',$phoneNumber);
+        // }
+        // if(!empty($email)){
+        //     $this->db->where('User.Email',$email);
+        // }
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -443,13 +443,10 @@ class Candidate_model extends CI_Model {
         $this->db->update('Candidate',$data);
     }
 
+    //update the time everytime there is an update
     public function updateTimeChanged($candidateID){
         $this->db->where('CandidateID',$candidateID);
         
-        // $dt = new DateTime('now', new DateTimezone('NZ'));
-        // $dt->format('Y-m-d H:i:s');
-        // date_default_timezone_set('NZ');
-        // $dateTimeStamp = date('Y-m-d H:i:s');
         $data = array(
         );
         
@@ -477,7 +474,7 @@ class Candidate_model extends CI_Model {
         $this->db->update('Candidate',$data);
     }
 
-    public function removeCandidateData($candidateID,$userID){
+    public function removeCandidateData($candidateID){
         $this->db->where('CandidateID',$candidateID);
         $this->db->delete('Candidate');
     }
