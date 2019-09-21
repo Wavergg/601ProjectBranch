@@ -516,6 +516,7 @@ var app = new Vue({
                     candidateData = this.candidatesDataStack[candidateID].pop()
                 }
             } else {
+                //get the default value if it's empty
                 var candidateData = this.candidatesCopy[index];
             }
                 //update the data in document

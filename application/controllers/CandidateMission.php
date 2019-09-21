@@ -20,7 +20,7 @@ class CandidateMission extends CI_Controller{
     }
     
     //loading the page of candidateMission together with the form for candidate to register their application into lee recruitment
-    public function index($param = ''){
+    public function index($param = '',$jobID=''){
         //get active tabs
         if($param == 'active'){ $active1='';$active2='active';}
         else {$active1='active';$active2='';}
@@ -32,9 +32,14 @@ class CandidateMission extends CI_Controller{
             $userdata['userEmail'] = $_SESSION['userEmail'];
 			$userdata['userType'] = $_SESSION['userType'];
         }
+        $data['job'] = array();
+        if(!empty($jobID)){
+           $data['job'] = $this->job_model->get_specificJobInfo($jobID);
+        }
         //load the list of citizenship from database, to fill into the select option in form
         $data['citizenships'] = $this->candidate_model->get_citizenships();
         $data['cities'] = $this->city_model->get_cities();
+        
         $this->load->view('templates/header', $userdata);
         $this->load->view('pages/candidatesMission', $data, $userdata);
         $this->load->view('templates/footer');

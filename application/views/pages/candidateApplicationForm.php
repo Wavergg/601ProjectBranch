@@ -1,7 +1,8 @@
+
 <div class="container mt-2">
     <!-- CandidateMission/applyJob/ -->
     <b style="font-size:18px;" class="mb-5">All applications are treated in the strictest confidence.</b><br>
-
+   
     <h3 class="text-warning ml-0 my-3">Personal Information</h3>
     <hr />
     <div class="col-12">
@@ -122,7 +123,7 @@
             </div>
             <div class="col-md-3 px-3 mt-2 mt-md-0">
                 <label for="jobTypeID" class="font-weight-bold">Job Type:</label>
-                <select class="form-control p-2" type="text"  v-model="jobType" name="jobType" id="jobTypeID">
+                <select class="form-control p-2" type="text" v-model="jobType" name="jobType" id="jobTypeID">
                     <option selected></option>
                     <option value="FullTime">Full Time</option>
                     <option value="PartTime">Part Time</option>

@@ -471,17 +471,17 @@ class Jobs extends CI_Controller {
 	//called from: view->pages->jobs
 	//get detailed information that is accessible by everyone , when the job is published
 	public function jobInfo($jobID){
-		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+		
 
 			$data['job'] = $this->job_model->get_specificJobInfo($jobID);
-			
+			if(!isset($_SESSION['userType'])) { 
+				$userdata['userType'] = 'anyone';
+			} else {
 			$userdata['userType'] = $_SESSION['userType'];
+			}
 			$this->load->view('templates/header',$userdata);
 			$this->load->view('pages/jobInfo',$data);
 			$this->load->view('templates/footer');
-		} else {
-			redirect('/');
-		}
 	}
 
 	//called from: view->pages->manageClient

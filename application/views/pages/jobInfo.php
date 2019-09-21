@@ -39,6 +39,6 @@
             <p class="mt-3"><?php echo $job['Editor1'];?></p>  
         </div>
         <div class="text-right pt-3">
-            <h4><u><a href="<?php echo base_url()?>index.php/Jobs" class="font-weight-bold text-dark">Back To Jobs</a></u></h4>
+            <h4><u><a href="<?php echo base_url()?>index.php/CandidateMission/index/active/<?php echo $job['JobID'];?>" class="font-weight-bold text-dark">Apply Jobs</a></u></h4>
         </div>
 </div>  
