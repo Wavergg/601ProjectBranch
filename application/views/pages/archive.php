@@ -307,10 +307,10 @@ var app = new Vue({
             var formData = new FormData()
             formData.append('offset', offset);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/Archive/getJobsArchive'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 this.jobs = result
-            }, res => {
+            }, function(res) {
                 // error callback
                 
             })
@@ -324,7 +324,7 @@ var app = new Vue({
             // formData.append('contactNumberName',this.filterContactNumber);
             formData.append('contactPersonName',this.jobFilterContactPerson);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/Archive/applyFilterArchive'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 this.jobs = result
                 //initialize new pagenum
@@ -334,7 +334,7 @@ var app = new Vue({
                 }
                 this.jobPageNums[0].isActive = true;
                 
-            }, res => {
+            }, function(res) {
                 // error callback
                 
             })
@@ -347,7 +347,7 @@ var app = new Vue({
             formData.append('firstName',this.filterCandidateFirstName);
             formData.append('lastName',this.filterCandidateLastName);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/applyFilterCandidate/<?php echo $fromPage;?>'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
 
                 this.candidatesCopy = result
@@ -358,7 +358,7 @@ var app = new Vue({
                 }
                 this.candidatePageNums[0].isActive = true;
                 
-            }, res => {
+            }, function(res) {
             })
         },
         clearFilters: function(){
@@ -406,10 +406,10 @@ var app = new Vue({
             formData.append('firstName',this.filterCandidateFirstName);
             formData.append('lastName',this.filterCandidateLastName);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/getCandidates/<?php echo $fromPage;?>'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 this.candidatesCopy = result
-            }, res => {
+            }, function(res) {
             })
         },
         updateNotes: function(candidateID){
@@ -417,7 +417,7 @@ var app = new Vue({
             var formData = new FormData()
             formData.append('candidateNotes', document.getElementById(candidateID).value);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/updateCandidateNotes/'+candidateID+'/'+'manageCandidate'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body;
                 //update the changes into the data in current page.
                 for(var i=0; i<this.candidates.length; i++){
@@ -428,7 +428,7 @@ var app = new Vue({
                 }
                 
                 $('#'+candidateID).html(result);
-            }, res => {
+            }, function(res) {
                 // error callback
                 
             })

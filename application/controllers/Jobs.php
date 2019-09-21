@@ -406,16 +406,24 @@ class Jobs extends CI_Controller {
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 			$candidateID = $_POST['candidateID'];
 			$candidateNotes = $_POST['candidateNotes'];
-			$jobID = $_POST['jobID'];
+			if(isset($_POST['jobID'])){
+
+				$jobID = $_POST['jobID'];
+				//update time
+				$this->job_model->updateTimeChanged($jobID);
+				//get the updated field from database
+				$candidatesData = $this->candidate_model->getCandidatesJobDetails($jobID);
+			} else {
+				$offset = $_POST['offset'];
+				$candidatesData = $this->candidate_model->getCandidatesWithName(10, $offset);
+			}
 			$this->candidate_model->updateCandidateNotes($candidateID,$candidateNotes);
 			
 			
-			//update time
-			$this->job_model->updateTimeChanged($jobID);
+			
 			$this->candidate_model->updateTimeChanged($candidateID);
 
-			//get the updated field from database
-			$candidatesData = $this->candidate_model->getCandidatesJobDetails($jobID);
+			
 			
 			echo json_encode($candidatesData);
 			

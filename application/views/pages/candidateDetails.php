@@ -617,7 +617,7 @@ var app = new Vue({
                 formData.append('candidateID', this.candidateID);
                 formData.append('userFile', userFiles.files[i]);
                 var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/uploadFiles/'
-                this.$http.post(urllink, formData).then(res => {
+                this.$http.post(urllink, formData).then(function(res) {
                     var result = res.body
                     if(result.length>this.userFiles.length){
                     this.message = "Successful in uploading files"
@@ -627,7 +627,7 @@ var app = new Vue({
                     } else {
                         this.message = "Failure in uploading files"
                     }
-                }, res => {
+                }, function(res) {
                     this.message = "Failure in uploading files"
                 })
             }
@@ -648,7 +648,7 @@ var app = new Vue({
                 formData.append('candidateID', this.candidateID);
                 formData.append('userFile', userFileX);
                 var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/removeFile/'
-                this.$http.post(urllink, formData).then(res => {
+                this.$http.post(urllink, formData).then(function(res) {
                     var result = res.body
                     if(result.length<this.userFiles.length){
                         this.message = "Successful in removing files"
@@ -657,7 +657,7 @@ var app = new Vue({
                     } else {
                         this.message = "Failure in removing files"
                     }
-                }, res => {
+                }, function(res) {
                     this.message = "Failure in removing files, Server Error"
                 })
             
@@ -744,7 +744,7 @@ var app = new Vue({
                 formData.append('UserPicture',userPic.files[0]);
             }
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateCandidateDetails/'+candidateID
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                
                 //let the changes saved text appear with animation fade in fade out
                 document.getElementById("savedMessage").removeAttribute("hidden");
@@ -756,7 +756,7 @@ var app = new Vue({
                 //remove it after using it
                 setTimeout(function(){document.getElementById("savedMessage").classList.remove("fadeOutIn");}, 1100);
                 this.updatedTime = this.getCurrentDateTime()
-            }, res => {
+            }, function(res) {
                 // error callback
             });
         },
@@ -768,10 +768,10 @@ var app = new Vue({
                 formData.append('candidateID', this.candidateID);
                 formData.append('CVfile', this.CVselected);
                 var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateCVfile/'
-                this.$http.post(urllink, formData).then(res => {
+                this.$http.post(urllink, formData).then(function(res) {
                     var result = res.body
                     
-                }, res => {
+                }, function(res) {
                     // this.message = "Failure in removing files, Server Error"
                 })
             this.updatedTime = this.getCurrentDateTime()
@@ -795,9 +795,9 @@ var app = new Vue({
                 formData.append('candidateID', this.candidateID);
                 formData.append('youtubeURL', this.youtubeLink);
                 var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateYoutubeURL/'
-                this.$http.post(urllink, formData).then(res => {
+                this.$http.post(urllink, formData).then(function(res) {
                     
-                }, res => {
+                }, function(res) {
 
             })
             this.updatedTime = this.getCurrentDateTime()
@@ -836,10 +836,10 @@ var app = new Vue({
                 formData.append('candidateID', this.candidateID);
                 formData.append('CVfile', this.CVselected);
                 var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateCVFile/'
-                this.$http.post(urllink, formData).then(res => {
+                this.$http.post(urllink, formData).then(function(res) {
                     var result = res.body
                     console.log('Good')
-                }, res => {
+                }, function(res) {
                     console.log('Bad')
                     // this.message = "Failure in removing files, Server Error"
                 })

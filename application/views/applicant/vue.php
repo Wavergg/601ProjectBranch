@@ -181,7 +181,7 @@ var app = new Vue({
 
             formData.append('jobID', jobID);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/applicant/checkClient/'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 // remove it from the jobs array
                 for(var i=0; i<this.jobs.length; i++){
@@ -191,7 +191,7 @@ var app = new Vue({
                 }
                 this.jobsCopy = this.jobs;
                 this.uncheckedJobsCount = this.uncheckedJobsCount-1;
-            }, res => {
+            }, function(res) {
                 // error callback
                 this.message = 'Post was failed, please try it later.';
                 $('#myModal').modal('show');
@@ -202,7 +202,7 @@ var app = new Vue({
 
             formData.append('candidateID', candidateID);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/applicant/checkCandidate/'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 // remove it from the candidatesCopy array
                 for(var i=0; i<this.candidatesCopy.length; i++){
@@ -212,7 +212,7 @@ var app = new Vue({
                 }
                 this.candidates = this.candidatesCopy;
                 this.uncheckedCandidateCount = this.uncheckedCandidateCount-1;
-            }, res => {
+            }, function(res) {
                 // error callback
                 this.message = 'Post was failed, please try it later.';
                 $('#myModal').modal('show');

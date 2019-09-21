@@ -125,11 +125,11 @@ var app = new Vue({
             formData.append('userContact', this.userContact)
             formData.append('userMessage', this.userMessage)
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/contactUs/sendMessage'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 this.messages = result
                 $('#myModal').modal('show')
-            }, res => {
+            }, function(res) {
                 // error callback
                 this.message = "Failed, please try again later.";
                 $('#myModal').modal('show')

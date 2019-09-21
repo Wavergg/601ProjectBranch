@@ -205,7 +205,7 @@ var app = new Vue({
             formData.append('contactPersonName',this.filterContactPerson);
             // formData.append('jobStatus',this.filterJobStatus);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/applyFilterActiveJob'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 this.jobs = result
                 this.pageNums = [];
@@ -213,7 +213,7 @@ var app = new Vue({
                     this.pageNums.push({id: i, isActive: false});
                 }
                 this.pageNums[0].isActive = true;
-            }, res => {
+            }, function(res) {
             })
         },
         clearFilters: function(){
@@ -233,9 +233,9 @@ var app = new Vue({
             var formData = new FormData()
             formData.append('jobID',elementID)
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/removeJobApplication/'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 
-            }, res => {
+            }, function(res) {
                 
             })
             $('#row'+elementID).addClass('text-muted');
@@ -249,7 +249,7 @@ var app = new Vue({
         //         var formData = new FormData()
         //         formData.append('bookmark',"true");
         //         var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/applyFilterBookmark'
-        //         this.$http.post(urllink, formData).then(res => {
+        //         this.$http.post(urllink, formData).then(function(res) {
         //             var result = res.body
         //             this.jobs = result
         //             this.pageNums = [];
@@ -257,7 +257,7 @@ var app = new Vue({
         //                 this.pageNums.push({id: i, isActive: false});
         //             }
         //             this.pageNums[0].isActive = true;
-        //         }, res => {
+        //         }, function(res) {
         //         })
         //     } else {
         //         document.getElementById('clearBtn').click();
@@ -274,10 +274,10 @@ var app = new Vue({
             var formData = new FormData()
             formData.append('offset', offset);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/getActiveJob'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 this.jobs = result
-            }, res => {
+            }, function(res) {
                 // error callback
                 
             })

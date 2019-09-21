@@ -459,10 +459,10 @@ var app = new Vue ({
             formData.append('userEmail', this.userEmail);
             formData.append('gender', this.gender);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/addUserByStaff/'
-            await this.$http.post(urllink, formData).then(res => {
+            await this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 this.message = result
-            }, res => {
+            }, function(res) {
                 // error callback
                 this.message="Cannot add a user, please try it later.";
                 $('#myModal').modal('show');
@@ -524,11 +524,11 @@ var app = new Vue ({
                     formData.append('JobCV', candidateCV.files[0]);
                 }
                 var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/applyJob/'
-                await this.$http.post(urllink, formData).then(res => {
+                await this.$http.post(urllink, formData).then(function(res) {
                     var result = res.body
                     this.message = res.body
                     $('#myModal').modal('show');
-                }, res => {
+                }, function(res) {
                     // error callback
                     this.message = 'Failure in submitting your application'
                     $('#myModal').modal('show');
@@ -546,12 +546,12 @@ var app = new Vue ({
                 //     formData.append('lastName', this.lastName);
                 //     formData.append('JobCV', candidateCV.files[0]);
                 //     var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/uploadCV/'
-                //     this.$http.post(urllink, formData).then(res => {
+                //     this.$http.post(urllink, formData).then(function(res) {
                 //         var result = res.body
                 //         this.message=result;
                 //         $('#myModal').modal('show');
                         
-                //     }, res => {
+                //     }, function(res) {
                 //         // error callback
                 //         this.message="CV upload was failed, please try again.";
                 //         $('#myModal').modal('show');

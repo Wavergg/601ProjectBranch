@@ -280,7 +280,7 @@ var app = new Vue({
                 formData.append('jobID', this.jobID);
                 formData.append('userFile', userFiles.files[i]);
                 var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/uploadFiles/'
-                this.$http.post(urllink, formData).then(res => {
+                this.$http.post(urllink, formData).then(function(res) {
                     var result = res.body
                     if(result.length>this.userFiles.length){
                     this.message = "Successful in uploading files"
@@ -289,7 +289,7 @@ var app = new Vue({
                     } else {
                         this.message = 'Failure in uploading file, unallowed extensions or file is too big';
                     }
-                }, res => {
+                }, function(res) {
                     this.message = res.body
                 })
             }
@@ -310,7 +310,7 @@ var app = new Vue({
                 formData.append('jobID', this.jobID);
                 formData.append('userFile', userFileX);
                 var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/removeFile/'
-                this.$http.post(urllink, formData).then(res => {
+                this.$http.post(urllink, formData).then(function(res) {
                     var result = res.body
                     if(result.length<this.userFiles.length){
                         this.message = "Successful in removing files"
@@ -319,7 +319,7 @@ var app = new Vue({
                     } else {
                         this.message = "Failure in removing files"
                     }
-                }, res => {
+                }, function(res) {
                     this.message = "Failure in removing files, Server Error"
                 })
             
@@ -333,10 +333,10 @@ var app = new Vue({
                 formData.append('jobID', this.jobID);
                 formData.append('TOBfile', this.TOBselected);
                 var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/updateTOBfile/'
-                this.$http.post(urllink, formData).then(res => {
+                this.$http.post(urllink, formData).then(function(res) {
                     var result = res.body
                     
-                }, res => {
+                }, function(res) {
                     // this.message = "Failure in removing files, Server Error"
                 })
             
@@ -374,10 +374,10 @@ var app = new Vue({
             formData.append('candidateID', candidateID);
             formData.append('jobID', this.jobID);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/removeAssignedCandidate/'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 this.candidates = result
-            }, res => {
+            }, function(res) {
                 // this.message = "Failure in removing applicant, Server Error"
             })
             this.updatedTime = this.getCurrentDateTime()
@@ -389,13 +389,13 @@ var app = new Vue({
             formData.append('candidateNotes', document.getElementById('candidateNotes'+candidateID).value);
             formData.append('jobID',this.jobID);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/updateCandidateNotes/'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 this.candidates = result
                 
                 // this.message = res.body
                 // $('#myModal').modal('show')
-            }, res => {
+            }, function(res) {
                 // this.message = "Failure in updating the notes"
             })
             this.updatedTime = this.getCurrentDateTime()
@@ -420,13 +420,13 @@ var app = new Vue({
                     formData.append('jobRate', jobRate);
                     formData.append('jobID',this.jobID);
                     var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/updateJobRate/'
-                    this.$http.post(urllink, formData).then(res => {
+                    this.$http.post(urllink, formData).then(function(res) {
                         var result = res.body
                         this.candidates = result
                         
                         this.candidatesDataStack[candidateID].push(this.candidates[index])
                         this.updatedTime = this.getCurrentDateTime()
-                    }, res => {
+                    }, function(res) {
                         // this.message = "Failure in updating the notes"
                     })
                 }
@@ -451,12 +451,12 @@ var app = new Vue({
                     formData.append('hoursWorked', hoursWorked);
                     formData.append('jobID',this.jobID);
                     var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/updateHoursWorked/'
-                    this.$http.post(urllink, formData).then(res => {
+                    this.$http.post(urllink, formData).then(function(res) {
                         var result = res.body
                         this.candidates = result
                         this.candidatesDataStack[candidateID].push(this.candidates[index])
                         this.updatedTime = this.getCurrentDateTime()
-                    }, res => {
+                    }, function(res) {
                         // this.message = "Failure in updating the notes"
                     })
                 }
@@ -475,7 +475,7 @@ var app = new Vue({
             formData.append('candidateID', candidateID);
             formData.append('jobID', this.jobID);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/resetCandidateData/'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 this.candidates = result
                 document.getElementById('hoursWorked'+candidateID).value = 0;
@@ -483,7 +483,7 @@ var app = new Vue({
 
                 
                 this.candidatesDataStack[candidateID].push(this.candidates[index])
-            }, res => {
+            }, function(res) {
                 // this.message = "Failure in removing applicant, Server Error"
             })
             this.updatedTime = this.getCurrentDateTime()
@@ -533,11 +533,11 @@ var app = new Vue({
                 formData.append('jobRate',document.getElementById('jobRate'+candidateID).value);
                 formData.append('candidateEarnings',document.getElementById('candidateEarnings'+candidateID).value);
                 var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/undoCandidateData/'
-                this.$http.post(urllink, formData).then(res => {
+                this.$http.post(urllink, formData).then(function(res) {
                     var result = res.body
                     this.candidates = result
                     
-                }, res => {
+                }, function(res) {
                     // this.message = "Failure in removing applicant, Server Error"
                 })
                 this.updatedTime = this.getCurrentDateTime()

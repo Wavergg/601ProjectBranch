@@ -101,7 +101,7 @@
                         <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeCandidateApp(candidate.CandidateID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
                         <th class="textInfoPos"><span class="textInfo text-center" style="left: 0px;width:190px;">See Candidate's Details</span><a v-on:click="getUrl(candidate.CandidateID)" role="button" class="text-primary"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></th>
                         <th class="textInfoPos" ><span class="textInfo text-center" style="left: -45px;width:160px;">Download <br>Candidate's CV</span><a class="btn btn-outline-dark px-2" :href="'<?php echo base_Url(); ?>index.php/candidateMission/downloadFile/'+ candidate.CandidateID + '/' + candidate.JobCV">CV</a></th>
-                        <th v-text="candidate.ApplyDate"></th>
+                        <th :id="'applyDate'+candidate.CandidateID" v-text="candidate.ApplyDate"></th>
                         <th v-text="candidate.FirstName" ></th>
                         <th v-text="candidate.LastName" ></th>
                         <th v-text="candidate.JobInterest" ></th>
@@ -214,7 +214,7 @@ var app = new Vue({
             formData.append('firstName',this.filterFirstName);
             formData.append('lastName',this.filterLastName);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/applyFilterCandidate/<?php echo $fromPage;?>'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 this.candidatesCopy = result
             
@@ -224,7 +224,7 @@ var app = new Vue({
                 }
                 this.pageNums[0].isActive = true;
                 
-            }, res => {
+            }, function(res) {
             })
         },
         clearFilters: function(){
@@ -266,9 +266,9 @@ var app = new Vue({
             var formData = new FormData()
             formData.append('candidateID',elementID)
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/removeCandidateApplication/'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 
-            }, res => {
+            }, function(res) {
                 
             })
             $('#row'+elementID).addClass('text-muted');
@@ -289,19 +289,30 @@ var app = new Vue({
             formData.append('firstName',this.filterFirstName);
             formData.append('lastName',this.filterLastName);
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/getCandidates/<?php echo $fromPage;?>'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
                 this.candidatesCopy = result
                 
-            }, res => {
+            }, function(res) {
             })
         },
         updateNotes: function(candidateID){
-            
+            var offset = 0;
+            for(var i=0; i<this.pageNums.length; i++){
+                if(this.pageNums[i].isActive == true){
+                    offset = this.pageNums[i].id
+                }
+            }
+
+            $('#row'+candidateID).addClass('text-danger');
+            document.getElementById('applyDate'+candidateID).innerHTML = this.getDateTime()
+
             var formData = new FormData()
             formData.append('candidateNotes', document.getElementById(candidateID).value);
-            var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/updateCandidateNotes/'+candidateID+'/'+'manageCandidate'
-            this.$http.post(urllink, formData).then(res => {
+            formData.append('candidateID',candidateID)
+            formData.append('offset',offset)
+            var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/updateCandidateNotes/'
+            this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body;
                 //update the changes into the data in current page.
                 for(var i=0; i<this.candidates.length; i++){
@@ -313,7 +324,7 @@ var app = new Vue({
                 }
                 
                 $('#'+candidateID).html(result);
-            }, res => {
+            }, function(res) {
                 // error callback
                 
             })
