@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-md-4">
                 <label for="JobTitleID" class="font-weight-bold">Job Title:</label>
-                <input class="form-control" name="jobTitle" type="text" placeholder="Keywords" id="JobTitle" aria-label="JobTitle">
+                <input class="form-control" name="jobTitle" type="text" placeholder="Keywords" id="JobTitleID" aria-label="JobTitle">
             </div>
                 <div class="col-md-3 ">
                 <label for="JobType" class="font-weight-bold">Job Type:</label>
