@@ -175,6 +175,7 @@ class CandidateMission extends CI_Controller{
            
             $data = array(
             'JobInterest' => $this->filterGeneral($this->input->post('JobInterest')),
+            'JobInterest2' => $this->filterGeneral($this->input->post('JobInterest2')),
             'JobType' => $this->filterJobType($this->input->post('JobType')),
             'Transportation' => $this->filterGeneral($this->input->post('Transportation')),
             'LicenseNumber' => $this->filterGeneral($this->input->post('LicenseNumber')),
@@ -330,7 +331,7 @@ class CandidateMission extends CI_Controller{
         $path = constant('CV_PATH').$candidateID.'/';
         $config['upload_path'] = $path;
 
-        $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx|zip|7z';
+        $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx|zip|7z|txt';
         $config['max_size'] = 30000;
         $config['max_width'] = 0;
         $config['max_height'] = 0;
@@ -425,6 +426,7 @@ class CandidateMission extends CI_Controller{
             //
             $data = array(
                 'JobInterest' => xss_clean(stripslashes(trim($this->input->post('JobInterest')))),
+                'JobInterest2' => xss_clean(stripslashes(trim($this->input->post('JobInterest2')))),
                 'JobType' => xss_clean(stripslashes(trim($this->input->post('JobType')))),
                 'Transportation' => xss_clean(stripslashes(trim($this->input->post('Transportation')))),
                 'LicenseNumber' => xss_clean(stripslashes(trim($this->input->post('LicenseNumber')))),

@@ -7,7 +7,7 @@
 <?php endif;?>
     <div style="height: 50px;"></div>
 
-    <h2 class="text-center">Manage Orders</h2>
+    <h2 class="text-center">Manage Clients</h2>
     <hr />
     
     
@@ -73,7 +73,7 @@
         
     </div>
     <!-- Table -->
-    <div class=" mb-5 px-2">
+    <div class=" mb-5 ">
     <div class="dragscroll" style=" overflow: scroll; cursor: grab; cursor : -o-grab; cursor : -moz-grab; cursor : -webkit-grab;" >
         
             <table class="table table-hover mt-5 mr-5">
@@ -109,17 +109,17 @@
                         <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeJobApp(job.JobID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
                         <td class="textInfoPos" ><span class="textInfo text-center" style="left: 0px;width:100px;">See Order<br/> Details</span><a :href="job.ref" role="button"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></td>
                         <th class="textInfoPos" ><span class="textInfo text-center" style="left: -45px;width:160px;">Download TOB</span><a class="btn btn-outline-dark px-2" :href="'<?php echo base_Url(); ?>index.php/Jobs/downloadTOB/'+ job.JobID +'/'+job.TOB">TOB</a></th>
-                        <td v-text="job.UpdateDate"></td>
-                        <td v-text="job.JobStatus" ></td>
-                        <!-- <td v-text="job.ClientTitle" ></td> -->
-                        <td v-text="job.ClientName" ></td>
-                        <td v-text="job.Company" ></td>
-                        <td v-text="job.Email" ></td>
-                        <td v-text="job.ContactNumber" ></td>
-                        <td v-text="job.JobTitle" ></td>
-                        <!-- <td v-text="job.JobType" ></td>
-                        <td v-text="job.Address" ></td> -->
-                        <td v-text="job.City" ></td>
+                        <td class="font-weight-normal" v-text="job.UpdateDate"></td>
+                        <td class="font-weight-normal" v-text="job.JobStatus" ></td>
+                        <!-- <td class="font-weight-normal" v-text="job.ClientTitle" ></td> -->
+                        <td class="font-weight-normal" v-text="job.ClientName" ></td>
+                        <td class="font-weight-normal" v-text="job.Company" ></td>
+                        <td class="font-weight-normal" v-text="job.Email" ></td>
+                        <td class="font-weight-normal" v-text="job.ContactNumber" ></td>
+                        <td class="font-weight-normal" v-text="job.JobTitle" ></td>
+                        <!-- <td class="font-weight-normal" v-text="job.JobType" ></td>
+                        <td class="font-weight-normal" v-text="job.Address" ></td> -->
+                        <td class="font-weight-normal" v-text="job.City" ></td>
                         <!-- <td v-text="job.Description" ></td> -->
                         <!-- <td v-text="job.JobSubmittedDate" ></td> -->
                     </tr>
@@ -200,6 +200,7 @@ var app = new Vue({
             var formData = new FormData()
             formData.append('companyName',this.filterCompany);
             formData.append('cityName', this.filterCity);
+            formData.append('candidateID',this.candidateID);
             // formData.append('jobTitleName',this.filterJobTitle);
             // formData.append('contactNumberName',this.filterContactNumber);
             formData.append('contactPersonName',this.filterContactPerson);
@@ -241,28 +242,6 @@ var app = new Vue({
             $('#row'+elementID).addClass('text-muted');
             $('#row'+elementID).css('background-color',"#F0F0F0");
         },
-        // filterByBookmark: function(){
-        //     let jobsTemp = this.jobs
-        //     this.jobs = [];
-        //     if(this.filterBookmark){
-             
-        //         var formData = new FormData()
-        //         formData.append('bookmark',"true");
-        //         var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/applyFilterBookmark'
-        //         this.$http.post(urllink, formData).then(function(res) {
-        //             var result = res.body
-        //             this.jobs = result
-        //             this.pageNums = [];
-        //             for(var i=0; i<this.jobs.length; i=i+10){
-        //                 this.pageNums.push({id: i, isActive: false});
-        //             }
-        //             this.pageNums[0].isActive = true;
-        //         }, function(res) {
-        //         })
-        //     } else {
-        //         document.getElementById('clearBtn').click();
-        //     }
-        // },
         getJobs: function(offset){
             for(var i=0; i<this.pageNums.length; i++){
                 if(this.pageNums[i].id == offset){
@@ -273,6 +252,9 @@ var app = new Vue({
             }
             var formData = new FormData()
             formData.append('offset', offset);
+            if(this.fromPage == "candidatePage"){
+                formData.append('candidateID',candidateID)
+            }
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/getActiveJob'
             this.$http.post(urllink, formData).then(function(res) {
                 var result = res.body
@@ -302,7 +284,6 @@ var app = new Vue({
             }
         },
         AssignIDURL: function(jobID){
-          //  var issetJob = "<?php if(isset($job['JobID'])){ echo $job['JobID'];}?>"
             var goToUrl = "<?php echo base_url() . 'index.php/Jobs/assignCandidate/';?>"+this.candidateID +"/"+jobID;
             document.location.href = goToUrl;
         },

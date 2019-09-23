@@ -169,6 +169,7 @@ class Candidate_model extends CI_Model {
             $this->db->group_start();
            
                 $this->db->like('Candidate.JobInterest',$jobInterest,'both');
+                $this->db->like('Candidate.JobInterest2',$jobInterest,'both');
                 //if it contains space split them up and compare each words with the jobInterest request from job
                 if(strpos($jobInterest,' ')!==false){
                     $parts = explode(' ',$jobInterest);
@@ -177,24 +178,32 @@ class Candidate_model extends CI_Model {
                             //remove suffix -er -or -ers -ing -man -person and compare again
                             if(substr($jobPart,-2)=='er' || substr($jobPart,-2)=='or'){
                                 $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobPart)-2),'both');
+                                $this->db->or_like('JobInterest2',substr($jobPart,0,strlen($jobPart)-2),'both');
                             } else if(substr($jobPart,-3)=='ers' || substr($jobPart,-3)=='ing' || substr($jobPart,-3)=='man'){
                                 $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobPart)-3),'both');
+                                $this->db->or_like('JobInterest2',substr($jobPart,0,strlen($jobPart)-3),'both');
                             } else if(substr($jobPart,-6)=='person'){
                                 $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobPart)-6),'both');
+                                $this->db->or_like('JobInterest2',substr($jobPart,0,strlen($jobPart)-6),'both');
                             }
                             $this->db->or_like('JobInterest',$jobPart,'both');
+                            $this->db->or_like('JobInterest2',$jobPart,'both');
                         }
                     }
                 } else {
                     //remove suffix -er -or -ers -ing -man -person and compare again
                     if(substr($jobInterest,-6)=='person'){
                         $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobInterest)-6),'both');
+                        $this->db->or_like('JobInterest2',substr($jobPart,0,strlen($jobInterest)-6),'both');
                     } else if(substr($jobInterest,-3)=='ers' || substr($jobInterest,-3)=='ing' || substr($jobInterest,-3)=='man'){
                         $this->db->or_like('JobInterest',substr($jobInterest,0,strlen($jobInterest)-3),'both');
+                        $this->db->or_like('JobInterest2',substr($jobInterest,0,strlen($jobInterest)-3),'both');
                     } else if(substr($jobInterest,-2)=='er' || substr($jobInterest,-2)=='or'){
                         $this->db->or_like('JobInterest',substr($jobInterest,0,strlen($jobInterest)-2),'both');
+                        $this->db->or_like('JobInterest2',substr($jobInterest,0,strlen($jobInterest)-2),'both');
                     } else if(substr($jobInterest,-1)=='s'){
                         $this->db->or_like('JobInterest',$jobInterest,'both');
+                        $this->db->or_like('JobInterest2',$jobInterest,'both');
                     } 
                 }
             $this->db->group_end();
@@ -213,6 +222,7 @@ class Candidate_model extends CI_Model {
         }
         if(!empty($email)){
             $this->db->where('User.Email',$email);
+
         }
         $this->db->limit($limitNum, $offsetNum * $limitNum);
         $this->db->order_by('ApplyDate', 'DESC');
@@ -273,6 +283,7 @@ class Candidate_model extends CI_Model {
                  //get the closest match by jobInterest
                 $this->db->group_start();
                 $this->db->like('Candidate.JobInterest',$jobInterest);
+                $this->db->like('Candidate.JobInterest2',$jobInterest);
                  //if it contains space split them up and compare each words with the jobInterest request from job
                 if(strpos($jobInterest,' ')!==false){
                     $parts = explode(' ',$jobInterest);
@@ -282,24 +293,32 @@ class Candidate_model extends CI_Model {
                             //remove suffix -er -or -ers -ing -man -person and compare again
                             if(substr($jobPart,-2)=='er' || substr($jobPart,-2)=='or'){
                                 $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobPart)-2));
+                                $this->db->or_like('JobInterest2',substr($jobPart,0,strlen($jobPart)-2));
                             } else if(substr($jobPart,-3)=='ers' || substr($jobPart,-3)=='ing' || substr($jobPart,-3)=='man'){
                                 $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobPart)-3));
+                                $this->db->or_like('JobInterest2',substr($jobPart,0,strlen($jobPart)-3));
                             } else if(substr($jobPart,-6)=='person'){
                                 $this->db->or_like('JobInterest',substr($jobPart,0,strlen($jobPart)-6));
+                                $this->db->or_like('JobInterest2',substr($jobPart,0,strlen($jobPart)-6));
                             }
                             $this->db->or_like('JobInterest',$jobPart);
+                            $this->db->or_like('JobInterest2',$jobPart);
                         }
                     }
                 } else {
                     if(substr($jobInterest,-6)=='person'){
                         //remove suffix -er -or -ers -ing -man -person
                         $this->db->or_like('JobInterest',substr($jobInterest,0,strlen($jobInterest)-6));
+                        $this->db->or_like('JobInterest2',substr($jobInterest,0,strlen($jobInterest)-6));
                     } else if(substr($jobInterest,-3)=='ers' || substr($jobInterest,-3)=='ing'|| substr($jobInterest,-3)=='man'){
                         $this->db->or_like('JobInterest',substr($jobInterest,0,strlen($jobInterest)-3));
+                        $this->db->or_like('JobInterest2',substr($jobInterest,0,strlen($jobInterest)-3));
                     } else if(substr($jobInterest,-2)=='er' || substr($jobInterest,-2)=='or'){
                         $this->db->or_like('JobInterest',substr($jobInterest,0,strlen($jobInterest)-2));
+                        $this->db->or_like('JobInterest2',substr($jobInterest,0,strlen($jobInterest)-2));
                     } else if(substr($jobInterest,-1)=='s'){
                         $this->db->or_like('JobInterest',$jobInterest);
+                        $this->db->or_like('JobInterest2',$jobInterest);
                     }  
                 }
             $this->db->group_end();
@@ -353,9 +372,16 @@ class Candidate_model extends CI_Model {
         // if(!empty($jobType)){
         // $this->db->where('Candidate.JobType',$jobType);
         // }
+        $this->db->group_start();
         if(!empty($jobInterest)){
             $this->db->like('Candidate.JobInterest',$jobInterest);
         }
+
+        if(!empty($jobInterest)){
+            $this->db->or_like('Candidate.JobInterest2',$jobInterest);
+        }
+        $this->db->group_end();
+
         if(!empty($firstName)){
             $this->db->like('User.FirstName',$firstName);
         }

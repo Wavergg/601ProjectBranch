@@ -10,7 +10,11 @@
                 
             <div class="col-md-4">
                 <label for="jobInterestID" class="font-weight-bold">Job interested in:</label>
-                <input type="text" class="form-control" v-model="jobInterest" name="jobInterest" placeholder="interest" id="jobInterestID" />
+                <input type="text" class="form-control" v-model="jobInterest" name="jobInterest" placeholder="Job title" id="jobInterestID" />
+            </div>
+            <div class="col-md-4">
+                <label for="jobInterest2ID" class="font-weight-bold">Other job interest:</label>
+                <input type="text" class="form-control" v-model="jobInterest2" name="jobInterest2" placeholder="Job title" id="jobInterest2ID" />
             </div>
             <div class="col-md-4">
                 <label for="jobTypeID" class="font-weight-bold">Job Type:</label>
@@ -20,7 +24,7 @@
                     <option value="PartTime">Part Time</option>
                 </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 mt-3">
                 <label class="font-weight-bold">Drop your CV here:</label>
                 <input type="file" id="JobCVID" @change="checkJobCV" name="jobCV">
                 <div class="mt-3" v-if="jobCVError.length">
@@ -385,7 +389,8 @@ var app = new Vue ({
         emptyRequiredError: "",
 
         // condidate
-        jobInterest : "",
+        jobInterest: "",
+        jobInterest2: "",
         jobType : "",
         jobCV: "",
         jobCVError: "",
@@ -479,6 +484,7 @@ var app = new Vue ({
                 formData.append('candidateNotes', this.candidateNotes);
                 // Below are the same as apply job form
                 formData.append('JobInterest', this.jobInterest);
+                formData.append('JobInterest2', this.jobInterest2);
                 formData.append('JobType', this.jobType);
                 formData.append('Transportation', this.transportation);
                 formData.append('LicenseNumber', this.licenseNumber);

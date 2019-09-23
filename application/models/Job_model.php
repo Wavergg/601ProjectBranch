@@ -201,16 +201,14 @@ class Job_model extends CI_Model {
         $this->db->update('Job',$data);
     }
 
-    //called from: Controller->Jobs->updateBookmark()
-    //update the status of bookmark
-    public function updateBookmarkStatus($jobID,$bookmarkValue){
-
+    //called from: Controller->Jobs->updateJobData()
+    //update the details of the jobs
+    public function updateJobData($jobID,$data){
         $this->db->where('JobID',$jobID);
-        $data = array(
-            'Bookmark' => $bookmarkValue,
-        );
         $this->db->update('Job',$data);
     }
+
+
 
     // return the records of jobs that meets the criteria
     // called from: Controller->Archive->applyFilterArchive(), Controller->Jobs->applyFilterActiveJob()
@@ -254,8 +252,8 @@ class Job_model extends CI_Model {
 
     
     //get similar location and city to get matched with candidate
-    //called from: Controller->Jobs->manageClient()
-    public function get_filterjobs($city,$jobTitle,$offset=0){
+    //called from: Controller->Jobs->manageClient() , Controller->Jobs->getActiveJob()
+    public function get_filterjobs($city,$jobTitle="",$offset=0,$jobTitle2=""){
         
         $data = array('JobStatus','completed');
         $this->db->where_not_in('JobStatus',$data);
@@ -264,6 +262,7 @@ class Job_model extends CI_Model {
             $this->db->like('City',$city);
         }
         
+        $this->db->group_start();
         if(!empty($jobTitle)){
             //get the closest match by jobInterest
             $this->db->group_start();
@@ -298,6 +297,43 @@ class Job_model extends CI_Model {
                 }
             $this->db->group_end();
         }
+
+        if(!empty($jobTitle2)){
+            //get the closest match by jobInterest
+            $this->db->group_start();
+                //$this->db->like('JobTitle',$jobTitle2);
+                //if it contains space split them up and compare each words with the jobInterest request from job
+                if(strpos($jobTitle2,' ')!==false){
+                    $parts = explode(' ',$jobTitle2);
+                    foreach($parts as $jobPart){
+                        if(strlen($jobPart)>2){
+                            //remove suffix -er -or -ers -ing -man -person and compare again
+                            if(substr($jobPart,-2)=='er' || substr($jobPart,-2)=='or'){
+                                $this->db->or_like('JobTitle2',substr($jobPart,0,strlen($jobPart)-2),'both');
+                            } else if(substr($jobPart,-3)=='ers' || substr($jobPart,-3)=='ing' || substr($jobPart,-3)=='man'){
+                                $this->db->or_like('JobTitle2',substr($jobPart,0,strlen($jobPart)-3),'both');
+                            } else if(substr($jobPart,-6)=='person'){
+                                $this->db->or_like('JobTitle2',substr($jobPart,0,strlen($jobPart)-6),'both');
+                            }
+                            $this->db->or_like('JobTitle2',$jobPart,'both');
+                        }
+                    }
+                } else {
+                    //remove suffix -er -or -ers -ing -man -person and compare again
+                    if(substr($jobTitle2,-6)=='person'){
+                        $this->db->or_like('JobTitle2',substr($jobPart,0,strlen($jobTitle2)-6),'both');
+                    } else if(substr($jobTitle2,-3)=='ers' || substr($jobTitle2,-3)=='ing' || substr($jobTitle2,-3)=='man'){
+                        $this->db->or_like('JobTitle2',substr($jobTitle2,0,strlen($jobTitle2)-3),'both');
+                    } else if(substr($jobTitle2,-2)=='er' || substr($jobTitle2,-2)=='or'){
+                        $this->db->or_like('JobTitle2',substr($jobTitle2,0,strlen($jobTitle2)-2),'both');
+                    } else if(substr($jobTitle2,-1)=='s'){
+                        $this->db->or_like('JobTitle2',$jobTitle2,'both');
+                    } 
+                }
+            $this->db->group_end();
+        }
+
+        $this->db->group_end();
 
         $this->db->order_by('UpdateDate', 'DESC');
         $query = $this->db->get('Job');
@@ -386,14 +422,8 @@ class Job_model extends CI_Model {
         return $query->num_rows();
     }
 
-    //called from: Controller->Jobs->applyFilterBookmark()
-    //return bookmarked job
-    public function applyFilterBookmark($bookmark){
-        $this->db->where('Bookmark',$bookmark);
-        $query = $this->db->get('Job');
-        return $query->result_array();
-    }
-
+    //called from: Controller->Jobs->updateTOBfile()
+    //update the TOB file
     public function updateTOBLink($jobID,$TOBfile){
         $this->db->where('JobID',$jobID);
         $data['TOB'] = $TOBfile;

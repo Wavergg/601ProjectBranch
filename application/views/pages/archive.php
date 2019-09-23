@@ -54,7 +54,7 @@
 
         </div>
         <!-- Table -->
-        <div class=" mb-5 px-5">
+        <div class=" mb-5 ">
         <div class="dragscroll" style=" overflow: scroll; cursor: grab; cursor : -o-grab; cursor : -moz-grab; cursor : -webkit-grab;" >
 
             <table class="table table-hover mt-5 mr-5">
@@ -158,7 +158,7 @@
         
     </div>
     <!-- Table -->
-    <div class=" mb-5 px-5">
+    <div class=" mb-5 ">
     <div class="dragscroll" style="overflow: scroll; cursor: grab; cursor : -o-grab; cursor : -moz-grab; cursor : -webkit-grab;" >
         
             <table class="table table-hover mt-5 mr-5" id="candidateTable">
@@ -167,31 +167,31 @@
                     <tr>
                         <th scope="col"><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
                         <th scope="col" >CV</th>
-                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="candidateSortBy('ApplyDate')">Updated_Date</a></th>
+                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="candidateSortBy('ApplyDate')">Updated Date</a></th>
                         <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="candidateSortBy('FirstName')">First_Name</a></th>
                         <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="candidateSortBy('LastName')">Last_Name</a></th>
-                        <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="candidateSortBy('JobInterest')">Profession</a></th>
-                        
+                        <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="candidateSortBy('JobInterest')">Profession_1</a></th>
+                        <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="candidateSortBy('JobInterest2')">Profession_2</a></th>
                         <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Phone_Number</a></th>
                         <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="candidateSortBy('City')">City</a></th>
                         
                         <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Email</a></th>
                       
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Notes</a></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="candidate in candidatesCopy" :key="candidate.CandidateID" :id="'row'+candidate.CandidateID">
                         <th class="textInfoPos"><span class="textInfo text-center" style="left: -35px;width:190px;">See Candidate's Details</span><a v-on:click="getUrl(candidate.CandidateID)" role="button" class="text-primary"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></th>
                         <th class="textInfoPos" ><span class="textInfo text-center" style="left: -45px;width:160px;">Download <br>Candidate's CV</span><a class="btn btn-outline-dark px-2" :href="'<?php echo base_Url(); ?>index.php/candidateMission/downloadCV/' + candidate.JobCV">CV</a></th>
-                        <th v-text="candidate.ApplyDate"></th>
-                        <th v-text="candidate.FirstName" ></th>
-                        <th v-text="candidate.LastName" ></th>
-                        <th v-text="candidate.JobInterest" ></th>
-                        <th v-text="candidate.PhoneNumber" ></th>
-                        <th v-text="candidate.City" ></th>
-                        <th v-text="candidate.Email" ></th>
-                        <th ><input type="text" @click="targetThisBox(candidate.CandidateID)" v-on:keyup.enter="clearSelection()" :id="candidate.CandidateID" v-on:change="updateNotes(candidate.CandidateID)" :value="candidate.CandidateNotes"></th>
+                        <th class="font-weight-normal" v-text="candidate.ApplyDate"></th>
+                        <th class="font-weight-normal" v-text="candidate.FirstName" ></th>
+                        <th class="font-weight-normal" v-text="candidate.LastName" ></th>
+                        <th class="font-weight-normal" v-text="candidate.JobInterest" ></th>
+                        <th class="font-weight-normal" v-text="candidate.JobInterest2" ></th>
+                        <th class="font-weight-normal" v-text="candidate.PhoneNumber" ></th>
+                        <th class="font-weight-normal" v-text="candidate.City" ></th>
+                        <th class="font-weight-normal" v-text="candidate.Email" ></th>
+                        
 
                     </tr>
                 </tbody>

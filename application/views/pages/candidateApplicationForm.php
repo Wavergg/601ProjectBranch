@@ -116,13 +116,20 @@
             
             <div class="col-md-4">
                 <label for="jobInterestID" class="font-weight-bold">Job interested in:</label>
-                <input type="text" class="form-control" v-model="jobInterest" @change="checkGeneral('jobInterest')" name="jobInterest" placeholder="interest" id="jobInterestID" />
+                <input type="text" class="form-control" v-model="jobInterest" @change="checkGeneral('jobInterest')" name="jobInterest" placeholder="Job Title" id="jobInterestID" />
                 <div class="row mt-3 mx-3">
                     <p id="jobInterestIDError" class="text-danger"></p>
                 </div>
             </div>
+            <div class="col-md-4">
+                <label for="jobInterest2ID" class="font-weight-bold">Other job interest:</label>
+                <input type="text" class="form-control" v-model="jobInterest2" @change="checkGeneral('jobInterest2')" name="jobInterest2" placeholder="Job Title" id="jobInterest2ID" />
+                <div class="row mt-3 mx-3">
+                    <p id="jobInterest2IDError" class="text-danger"></p>
+                </div>
+            </div>
             <div class="col-md-3 px-3 mt-2 mt-md-0">
-                <label for="jobTypeID" class="font-weight-bold">Job Type:</label>
+                <label for="jobTypeID" class="font-weight-bold">Job type:</label>
                 <select class="form-control p-2" type="text" v-model="jobType" name="jobType" id="jobTypeID">
                     <option selected></option>
                     <option value="FullTime">Full Time</option>
@@ -140,6 +147,7 @@
                 </div>
                 </div>
             </div>
+            
         </div>
         <h3 class="text-warning mt-3"> Transportation </h3>
         <hr />
@@ -199,7 +207,7 @@
                 </select>
             </div>
 
-            <div class="col-lg-3 col-md-5 pr-md-0">
+            <div class="col-lg-3 col-md-5 pr-md-0 mt-3">
                 <label for="nationalityID" class="font-weight-bold"> Nationality:</label>
                 <input type="text" class="form-control" @change="checkGeneral('nationality')" v-model="nationality" placeholder="Enter Nationality" name="nationality"
                     id="nationalityID" />

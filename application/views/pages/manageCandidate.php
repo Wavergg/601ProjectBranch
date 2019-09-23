@@ -56,7 +56,7 @@
         
     </div>
     <!-- Table -->
-    <div class=" mb-5 px-2">
+    <div class=" mb-5 ">
     <div class="dragscroll" style="overflow: scroll; cursor: grab; cursor : -o-grab; cursor : -moz-grab; cursor : -webkit-grab;" >
         
             <table class="table table-hover mt-5 mr-5" id="candidateTable">
@@ -67,11 +67,12 @@
                         <th scope="col" v-bind:class="{ 'd-none': ! showRemoveStatus }"><a href="#" class="text-dark">Remove</a></th>
                         <th scope="col"><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
                         <th scope="col" >CV</th>
-                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="sortBy('ApplyDate')">Last_Updated</a></th>
+                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="sortBy('ApplyDate')">Last Updated</a></th>
                         <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="sortBy('FirstName')">First_Name</a></th>
                         <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="sortBy('LastName')">Last_Name</a></th>
-                        <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="sortBy('JobInterest')">Profession</a></th>
-                        
+                        <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="sortBy('JobInterest')">Profession_1</a></th>
+                        <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="sortBy('JobInterest2')">Profession_2</a></th>
+
                         <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Phone_Number</a></th>
                         <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="sortBy('City')">City</a></th>
                         
@@ -92,22 +93,25 @@
                         <th scope="col" v-bind:class="{ 'd-none': ! showSmoke }"><a href="#" class="text-dark" @click.stop.prevent="sortBy('Smoke')">Smoke</a></th>
                         <th scope="col" v-bind:class="{ 'd-none': ! showConviction }"><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="sortBy('Conviction')">Conviction</a></th>
                         <th scope="col" v-bind:class="{ 'd-none': ! showConvictionDetails }"><a href="#" class="text-dark" @click.stop.prevent="sortBy('ConvictionDetails')">Conviction Detail</a></th> -->
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Notes</a></th>
+                        <!-- <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Notes</a></th> -->
                     </tr>
                 </thead>
                 <tbody>
+                    
                     <tr v-for="candidate in candidatesCopy" v-bind:class="{ 'font-italic text-danger': compareDate(candidate.ApplyDate) }" :key="candidate.CandidateID" :id="'row'+candidate.CandidateID">
-                        <th class="textInfoPos text-center" v-bind:class="{ 'd-none': ! showAssignCandidate }"><span class="textInfo text-center" style="left: 0px;overflow:initial;">Assign job <br>to this Applicant</span><a v-on:click="AssignIDURL(candidate.CandidateID)" role="button" class="text-info"><i style="font-size:30px;" class="ml-1 icon ion-md-contacts mx-3"></i></a></th>
+                        
+                    <th class="textInfoPos text-center" v-bind:class="{ 'd-none': ! showAssignCandidate }"><span class="textInfo text-center" style="left: 0px;overflow:initial;">Assign job <br>to this Applicant</span><a v-on:click="AssignIDURL(candidate.CandidateID)" role="button" class="text-info"><i style="font-size:30px;" class="ml-1 icon ion-md-contacts mx-3"></i></a></th>
                         <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeCandidateApp(candidate.CandidateID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
                         <th class="textInfoPos"><span class="textInfo text-center" style="left: 0px;width:190px;">See Candidate's Details</span><a v-on:click="getUrl(candidate.CandidateID)" role="button" class="text-primary"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></th>
                         <th class="textInfoPos" ><span class="textInfo text-center" style="left: -45px;width:160px;">Download <br>Candidate's CV</span><a class="btn btn-outline-dark px-2" :href="'<?php echo base_Url(); ?>index.php/candidateMission/downloadFile/'+ candidate.CandidateID + '/' + candidate.JobCV">CV</a></th>
-                        <th :id="'applyDate'+candidate.CandidateID" v-text="candidate.ApplyDate"></th>
-                        <th v-text="candidate.FirstName" ></th>
-                        <th v-text="candidate.LastName" ></th>
-                        <th v-text="candidate.JobInterest" ></th>
-                        <th v-text="candidate.PhoneNumber" ></th>
-                        <th v-text="candidate.City" ></th>
-                        <th v-text="candidate.Email" ></th>
+                        <th class="font-weight-normal" :id="'applyDate'+candidate.CandidateID" v-text="candidate.ApplyDate"></th>
+                        <th class="font-weight-normal" v-text="candidate.FirstName" ></th>
+                        <th class="font-weight-normal" v-text="candidate.LastName" ></th>
+                        <th class="font-weight-normal" v-text="candidate.JobInterest" ></th>
+                        <th class="font-weight-normal" v-text="candidate.JobInterest2" ></th>
+                        <th class="font-weight-normal" v-text="candidate.PhoneNumber" ></th>
+                        <th class="font-weight-normal" v-text="candidate.City" ></th>
+                        <th class="font-weight-normal" v-text="candidate.Email" ></th>
                         <!-- <th v-text="candidate.DOB" v-bind:class="{ 'd-none': ! showDOB }"></th>
                         
                         <th v-text="candidate.Address" v-bind:class="{ 'd-none': ! showAddress }"></th>
@@ -124,7 +128,7 @@
                         <th v-text="candidate.Smoke" v-bind:class="{ 'd-none': ! showSmoke }"></th>
                         <th v-text="candidate.Conviction" v-bind:class="{ 'd-none': ! showConviction }"></th>
                         <th v-text="candidate.ConvictionDetails" v-bind:class="{ 'd-none': ! showConvictionDetails }"></th> -->
-                        <th ><input type="text" @click="targetThisBox(candidate.CandidateID)" v-on:keyup.enter="clearSelection()" :id="candidate.CandidateID" v-on:change="updateNotes(candidate.CandidateID)" :value="candidate.CandidateNotes"></th>
+                        <!-- <th ><input type="text" @click="targetThisBox(candidate.CandidateID)" v-on:keyup.enter="clearSelection()" :id="candidate.CandidateID" v-on:change="updateNotes(candidate.CandidateID)" :value="candidate.CandidateNotes"></th> -->
                     
                         
                     </tr>
@@ -296,39 +300,39 @@ var app = new Vue({
             }, function(res) {
             })
         },
-        updateNotes: function(candidateID){
-            var offset = 0;
-            for(var i=0; i<this.pageNums.length; i++){
-                if(this.pageNums[i].isActive == true){
-                    offset = this.pageNums[i].id
-                }
-            }
+        // updateNotes: function(candidateID){
+        //     var offset = 0;
+        //     for(var i=0; i<this.pageNums.length; i++){
+        //         if(this.pageNums[i].isActive == true){
+        //             offset = this.pageNums[i].id
+        //         }
+        //     }
 
-            $('#row'+candidateID).addClass('text-danger');
-            document.getElementById('applyDate'+candidateID).innerHTML = this.getDateTime()
+        //     $('#row'+candidateID).addClass('text-danger');
+        //     document.getElementById('applyDate'+candidateID).innerHTML = this.getDateTime()
 
-            var formData = new FormData()
-            formData.append('candidateNotes', document.getElementById(candidateID).value);
-            formData.append('candidateID',candidateID)
-            formData.append('offset',offset)
-            var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/updateCandidateNotes/'
-            this.$http.post(urllink, formData).then(function(res) {
-                var result = res.body;
-                //update the changes into the data in current page.
-                for(var i=0; i<this.candidates.length; i++){
-                    if(this.candidates[i].CandidateID == candidateID){
-                        this.candidates[i].CandidateNotes = document.getElementById(candidateID).value;
-                        this.candidatesCopy[i].CandidateNotes = this.candidates[i].CandidateNotes;
-                        this.candidatesCopy[i].ApplyDate = this.getDateTime()
-                    }
-                }
+        //     var formData = new FormData()
+        //     formData.append('candidateNotes', document.getElementById(candidateID).value);
+        //     formData.append('candidateID',candidateID)
+        //     formData.append('offset',offset)
+        //     var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/updateCandidateNotes/'
+        //     this.$http.post(urllink, formData).then(function(res) {
+        //         var result = res.body;
+        //         //update the changes into the data in current page.
+        //         for(var i=0; i<this.candidates.length; i++){
+        //             if(this.candidates[i].CandidateID == candidateID){
+        //                 this.candidates[i].CandidateNotes = document.getElementById(candidateID).value;
+        //                 this.candidatesCopy[i].CandidateNotes = this.candidates[i].CandidateNotes;
+        //                 this.candidatesCopy[i].ApplyDate = this.getDateTime()
+        //             }
+        //         }
                 
-                $('#'+candidateID).html(result);
-            }, function(res) {
-                // error callback
+        //         $('#'+candidateID).html(result);
+        //     }, function(res) {
+        //         // error callback
                 
-            })
-        },
+        //     })
+        // },
         getUrl: function(candidateID){
             var issetJob = "<?php if(isset($job['JobID'])){ echo $job['JobID'];}?>"
             var goToUrl = "<?php echo base_url() . 'index.php/CandidateMission/candidateDetails/';?>"+candidateID +"/"+issetJob;

@@ -143,6 +143,7 @@ var app = new Vue({
         emailError: "",
         gender: "",
         jobInterest : "<?php if(!empty($job)) { echo $job['JobTitle'];}?>",
+        jobInterest2: "",
         jobType : "<?php if(!empty($job)) { echo $job['JobType'];}?>",
         jobCV: "",
         jobCVError: "",
@@ -237,6 +238,7 @@ var app = new Vue({
             formData.append('firstName', this.firstName);
             formData.append('lastName', this.lastName);
             formData.append('JobInterest', this.jobInterest);
+            formData.append('JobInterest2',this.jobInterest2);
             formData.append('JobType', this.jobType);
             formData.append('Transportation', this.transportation);
             formData.append('LicenseNumber', this.licenseNumber);

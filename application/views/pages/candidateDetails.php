@@ -60,12 +60,17 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="jobInterestID" class="font-weight-bold mt-2">Job Interested In:</label>
                         <input type="text" v-model="jobInterest" class="form-control" readonly
                             v-bind:class="{ 'border-0': !toggleEdit}" id="jobInterestID">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
+                        <label for="jobInterest2ID" class="font-weight-bold mt-2">Other job interest:</label>
+                        <input type="text" v-model="jobInterest2" class="form-control" readonly
+                            v-bind:class="{ 'border-0': !toggleEdit}" id="jobInterest2ID">
+                    </div>
+                    <div class="col-md-2">
                         <label for="jobTypeID" class="font-weight-bold mt-2">Job Type:</label>
                         <input type="text" v-model="jobType" class="form-control" readonly
                             v-bind:class="{ 'border-0': !toggleEdit}" id="jobTypeID">
@@ -481,6 +486,7 @@ var app = new Vue({
         zipCode: "<?php echo $candidate['ZipCode'];?>",
         address: "<?php echo $candidate['Address'];?>",
         jobInterest: "<?php echo $candidate['JobInterest'];?>",
+        jobInterest2: "<?php echo $candidate['JobInterest2'];?>",
         jobType: "<?php echo $candidate['JobType'];?>",
        
         transportation: "<?php echo $candidate['Transportation'];?>",
@@ -711,6 +717,7 @@ var app = new Vue({
             formData.append('ZipCode',this.zipCode);
             formData.append('Address',this.address);
             formData.append('JobInterest',this.jobInterest);
+            formData.append('JobInterest2',this.jobInterest2);
             formData.append('JobType',this.jobType);
             formData.append('CandidateNotes',document.getElementById('candidateNotesID').value);
             formData.append('Transportation',this.transportation);

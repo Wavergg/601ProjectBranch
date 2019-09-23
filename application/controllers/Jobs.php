@@ -63,11 +63,12 @@ class Jobs extends CI_Controller {
             date_default_timezone_set('NZ');
 			$_SESSION['visitedClient'] = date('Y-m-d H:i:s');
 			//end visit time
-
+			
 			//if it loads from candidatedetails page, get the candidate data and the job
 			if(!empty($candidateID)){
 				$data['candidateData'] = $this->candidate_model->getCandidateByID($candidateID);
-				$data['jobs'] = $this->job_model->get_filterjobs($data['candidateData']['City'],$data['candidateData']['JobInterest']);
+				
+				$data['jobs'] = $this->job_model->get_filterjobs($data['candidateData']['City'],$data['candidateData']['JobInterest'],0,$data['candidateData']['JobInterest2']);
 				$data['activeJobNum'] = $this->job_model->countAllActiveJob($data['candidateData']['City'],$data['candidateData']['JobInterest']);
 			} else {
 				$data['jobs'] = $this->job_model->get_jobs();
@@ -77,18 +78,16 @@ class Jobs extends CI_Controller {
 
 			$data['title'] = "Manage Client";
 			$data['message'] ="";
-			
-			$bookmarkStat= "";
-			//adding 3 more field into jobs ref,bookmarkStat,bookmarkUrl
+	
+			//adding 1 more field into jobs ref
             for($i=0;$i<sizeof($data['jobs']);$i++){
-                $ref = base_url() . 'index.php/Jobs/jobDetails/' . $data['jobs'][$i]['JobID'];
-                if($data['jobs'][$i]['Bookmark']=="true"){ $bookmarkStat=true;} else {$bookmarkStat=false;};
-				$bookmarkUrl= "Bookmark". $data['jobs'][$i]['JobID'];
+                $ref = base_url() . 'index.php/Jobs/jobDetails/' . $data['jobs'][$i]['JobID'] . '/' . $candidateID;
+
+				
 				//update the value of jobstatus if it's null "" or 0, to NoAction
                 if(empty($data['jobs'][$i]['JobStatus'])){ $data['jobs'][$i]['JobStatus']="NoAction"; }
                 $data['jobs'][$i]['ref'] = $ref;
-                $data['jobs'][$i]['bookmarkStat'] = $bookmarkStat;
-                $data['jobs'][$i]['bookmarkUrl'] = $bookmarkUrl;
+         
 			}
 			
 			$data['fromPage'] = $page; 
@@ -106,20 +105,25 @@ class Jobs extends CI_Controller {
 	public function getActiveJob(){
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 
-            $offset=$_POST['offset'];
-            $page="";
-            $jobsResult = $this->job_model->get_jobs($page,$offset);
-			$bookmarkStat= "";
-			//adding 3 more extra field ref,bookmarkStat,bookmarkUrl
+			$offset=$_POST['offset'];
+			$candidateID = "";
+			if(isset($_POST['candidateID'])){
+				$candidateID = $_POST['candidateID'];
+				$data['candidateData'] = $this->candidate_model->getCandidateByID($candidateID);
+				$jobsResult = $this->job_model->get_filterjobs($data['candidateData']['City'],$data['candidateData']['JobInterest'],$offset,$data['candidateData']['JobInterest2']);
+			} else {
+				$page="";
+				$jobsResult = $this->job_model->get_jobs($page,$offset);
+			}
+			//adding 1 more extra field ref
             for($i=0;$i<sizeof($jobsResult);$i++){
                 $ref = base_url() . 'index.php/Jobs/jobDetails/' . $jobsResult[$i]['JobID'];
-                if($jobsResult[$i]['Bookmark']=="true"){ $bookmarkStat=true;} else {$bookmarkStat=false;};
-				$bookmarkUrl= "Bookmark". $jobsResult[$i]['JobID'];
+         
+			
 				//if jobStatus is null, "" or 0 , return the string of NoAction as the value in jobstatus for specific job
                 if(empty($jobsResult[$i]['JobStatus'])){ $jobsResult[$i]['JobStatus']="NoAction"; }
                 $jobsResult[$i]['ref'] = $ref;
-                $jobsResult[$i]['bookmarkStat'] = $bookmarkStat;
-                $jobsResult[$i]['bookmarkUrl'] = $bookmarkUrl;
+              
             }
 
             echo json_encode($jobsResult);
@@ -130,7 +134,7 @@ class Jobs extends CI_Controller {
 
 	//called from: View->page->manageClient
 	//detailed information of the job
-	public function jobDetails($paramJobID){
+	public function jobDetails($paramJobID,$candidateDataID = ""){
 		
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 			
@@ -142,7 +146,7 @@ class Jobs extends CI_Controller {
 			// Find all the files under the job's folder
             $path = constant('JOB_FILES').$paramJobID.'/';
 			$data['userFiles'] = directory_map($path);
-
+			$data['candidateIDFromPage'] = $candidateDataID;
 			//if a candidate is assigned load it as well
 			$data['candidatesData'] = $this->candidate_model->getCandidatesJobDetails($paramJobID);
 			$data['message'] = "";
@@ -250,6 +254,33 @@ class Jobs extends CI_Controller {
 			$this->load->view('templates/header',$userdata);
 			$this->load->view('pages/jobDetails',$data);
 			$this->load->view('templates/footer');
+		} else {
+			redirect('/');
+		}
+	}
+
+	//called from: View->pages->jobDetails
+	//update the data of jobs
+	public function updateJobData(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			
+			$jobID = $_POST['jobID'];
+			$data['ClientTitle'] = $_POST['clientTitle'];
+			$data['ClientName'] = $_POST['clientName'];
+			$data['Company'] = $_POST['company'];
+			$data['Email'] = $_POST['email'];
+			$data['ContactNumber'] = $_POST['contactNumber'];
+			$data['JobTitle'] = $_POST['jobTitle'];
+			$data['JobType'] = $_POST['jobType'];
+			$data['Address'] = $_POST['address'];
+			$data['City'] = $_POST['city'];
+			$data['Suburb'] = $_POST['suburb'];
+			$data['Description'] = $_POST['description'];
+			
+			$this->job_model->updateJobData($jobID,$data);
+			//update time
+			$this->job_model->updateTimeChanged($jobID);
+			
 		} else {
 			redirect('/');
 		}
@@ -492,45 +523,30 @@ class Jobs extends CI_Controller {
 			$this->load->view('templates/footer');
 	}
 
-	//called from: view->pages->manageClient
-	//AJAX Method
-	//update the bookmark status so the USERS:staff and admin can either sort or filter and find the job easily
-	//for monitoring purposes
-	public function updateBookmark($jobID){
-		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-
-			$bookmarkValue = $_POST['bookmarkValue'];
-			
-			$this->job_model->updateBookmarkStatus($jobID,$bookmarkValue);
-		} else {
-			redirect('/');
-		}
-	}
-
+	
 	//called from: view->pages->manageClient
 	//filter function for the job that are not in archive(status is not completed)
 	public function applyFilterActiveJob(){
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-
+			
             $data['title'] = "Manage Client";
             $company = $_POST['companyName'];
             $city = $_POST['cityName'];
             // $jobTitle = $_POST['jobTitleName'];
-            // $contactNumber = $_POST['contactNumberName'];
+			// $contactNumber = $_POST['contactNumberName'];
+			$candidateID = "";
+			if(!empty($_POST['candidateID'])){
+				$candidateID = $_POST['candidateID'];
+			}
             $contactPerson = $_POST['contactPersonName'];
 			// $jobStatus = $_POST['jobStatus'];
 			$page = "manageClient";
             $data['jobs'] = $this->job_model->applyFilterJob($page,$company,$city,$jobTitle="",$contactNumber="",$contactPerson,$jobStatus="");
-			$bookmarkStat= "";
-			//add 3 more field ref,bookmarkStat,bookmarkUrl
+	
+			//add 1 more field ref
             for($i=0;$i<sizeof($data['jobs']);$i++){
-                $ref = base_url() . 'index.php/Jobs/jobDetails/' . $data['jobs'][$i]['JobID'];
-                if($data['jobs'][$i]['Bookmark']=="true"){ $bookmarkStat=true;} else {$bookmarkStat=false;};
-                $bookmarkUrl= "Bookmark". $data['jobs'][$i]['JobID'];
-                
+                $ref = base_url() . 'index.php/Jobs/jobDetails/' . $data['jobs'][$i]['JobID'] . '/' . $candidateID;
                 $data['jobs'][$i]['ref'] = $ref;
-                $data['jobs'][$i]['bookmarkStat'] = $bookmarkStat;
-                $data['jobs'][$i]['bookmarkUrl'] = $bookmarkUrl;
             }
 
             echo json_encode($data['jobs']);
@@ -540,33 +556,7 @@ class Jobs extends CI_Controller {
         }
 	}
 	
-	//called from: View->pages->manageClient
-	//look for bookmarked job;
-	public function applyFilterBookmark(){
-		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
-
-            $data['title'] = "Manage Client";
-            $bookmark = $_POST['bookmark'];
-			$page = "manageClient";
-            $data['jobs'] = $this->job_model->applyFilterBookmark($bookmark);
-			$bookmarkStat= "";
-			//add 3 more field ref,bookmarkStat,bookmarkUrl
-            for($i=0;$i<sizeof($data['jobs']);$i++){
-                $ref = base_url() . 'index.php/Jobs/jobDetails/' . $data['jobs'][$i]['JobID'];
-                if($data['jobs'][$i]['Bookmark']=="true"){ $bookmarkStat=true;} else {$bookmarkStat=false;};
-                $bookmarkUrl= "Bookmark". $data['jobs'][$i]['JobID'];
-                
-                $data['jobs'][$i]['ref'] = $ref;
-                $data['jobs'][$i]['bookmarkStat'] = $bookmarkStat;
-                $data['jobs'][$i]['bookmarkUrl'] = $bookmarkUrl;
-            }
-
-            echo json_encode($data['jobs']);
-            
-        } else {
-            redirect('/');
-        }
-	}
+	
 
 	//called from: view->manageClient
 	//change the status of job to completed, so it wont appear in manage order page
@@ -588,7 +578,7 @@ class Jobs extends CI_Controller {
 		$path = constant('JOB_FILES').$jobID.'/';
         $config['upload_path'] = $path;
 
-        $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx|zip|7z';
+        $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx|zip|7z|txt';
         $config['max_size'] = 30000;
         $config['max_width'] = 0;
 		$config['max_height'] = 0;
