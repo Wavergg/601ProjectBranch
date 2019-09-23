@@ -75,7 +75,7 @@ class Candidate_model extends CI_Model {
     //Controller->Jobs->resetCandidateData(),
     //get candidate based on ID return inner joined table between candidate and user, so far it has been only used on jobdetails table
     public function getCandidateByID($candidateID){
-        $mySql = "SELECT Candidate.CandidateID, User.City, User.FirstName, User.LastName, User.PhoneNumber, User.Email,User.Address, Candidate.JobType,Candidate.CandidateHoursWorked,Candidate.CandidateNotes,Candidate.CandidateEarnings,Candidate.JobRate,Candidate.CandidateNotes,Candidate.JobInterest FROM Candidate INNER JOIN User ON Candidate.UserID=User.UserID WHERE Candidate.CandidateID=" . $candidateID ;
+        $mySql = "SELECT Candidate.CandidateID, User.City, User.FirstName, User.LastName, User.PhoneNumber, User.Email,User.Address, Candidate.JobType,Candidate.CandidateHoursWorked,Candidate.CandidateNotes,Candidate.CandidateEarnings,Candidate.JobRate,Candidate.CandidateNotes,Candidate.JobInterest,Candidate.JobInterest2 FROM Candidate INNER JOIN User ON Candidate.UserID=User.UserID WHERE Candidate.CandidateID=" . $candidateID ;
         $query = $this->db->query($mySql);
         return $query->row_array();
     }
@@ -169,7 +169,7 @@ class Candidate_model extends CI_Model {
             $this->db->group_start();
            
                 $this->db->like('Candidate.JobInterest',$jobInterest,'both');
-                $this->db->like('Candidate.JobInterest2',$jobInterest,'both');
+                $this->db->or_like('Candidate.JobInterest2',$jobInterest,'both');
                 //if it contains space split them up and compare each words with the jobInterest request from job
                 if(strpos($jobInterest,' ')!==false){
                     $parts = explode(' ',$jobInterest);
@@ -372,15 +372,13 @@ class Candidate_model extends CI_Model {
         // if(!empty($jobType)){
         // $this->db->where('Candidate.JobType',$jobType);
         // }
-        $this->db->group_start();
+        
         if(!empty($jobInterest)){
+            // $this->db->group_start();
             $this->db->like('Candidate.JobInterest',$jobInterest);
-        }
-
-        if(!empty($jobInterest)){
             $this->db->or_like('Candidate.JobInterest2',$jobInterest);
+            // $this->db->ground_end();
         }
-        $this->db->group_end();
 
         if(!empty($firstName)){
             $this->db->like('User.FirstName',$firstName);

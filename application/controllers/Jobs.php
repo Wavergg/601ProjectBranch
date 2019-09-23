@@ -69,7 +69,7 @@ class Jobs extends CI_Controller {
 				$data['candidateData'] = $this->candidate_model->getCandidateByID($candidateID);
 				
 				$data['jobs'] = $this->job_model->get_filterjobs($data['candidateData']['City'],$data['candidateData']['JobInterest'],0,$data['candidateData']['JobInterest2']);
-				$data['activeJobNum'] = $this->job_model->countAllActiveJob($data['candidateData']['City'],$data['candidateData']['JobInterest']);
+				$data['activeJobNum'] = sizeof($data['jobs']);
 			} else {
 				$data['jobs'] = $this->job_model->get_jobs();
 				$data['candidateData'] = array();

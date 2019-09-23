@@ -266,7 +266,7 @@ class Job_model extends CI_Model {
         if(!empty($jobTitle)){
             //get the closest match by jobInterest
             $this->db->group_start();
-                //$this->db->like('JobTitle',$jobTitle);
+                $this->db->like('JobTitle',$jobTitle);
                 //if it contains space split them up and compare each words with the jobInterest request from job
                 if(strpos($jobTitle,' ')!==false){
                     $parts = explode(' ',$jobTitle);
@@ -297,11 +297,11 @@ class Job_model extends CI_Model {
                 }
             $this->db->group_end();
         }
-
+        
         if(!empty($jobTitle2)){
             //get the closest match by jobInterest
-            $this->db->group_start();
-                //$this->db->like('JobTitle',$jobTitle2);
+            $this->db->or_group_start();
+                
                 //if it contains space split them up and compare each words with the jobInterest request from job
                 if(strpos($jobTitle2,' ')!==false){
                     $parts = explode(' ',$jobTitle2);
@@ -309,26 +309,27 @@ class Job_model extends CI_Model {
                         if(strlen($jobPart)>2){
                             //remove suffix -er -or -ers -ing -man -person and compare again
                             if(substr($jobPart,-2)=='er' || substr($jobPart,-2)=='or'){
-                                $this->db->or_like('JobTitle2',substr($jobPart,0,strlen($jobPart)-2),'both');
+                                $this->db->or_like('JobTitle',substr($jobPart,0,strlen($jobPart)-2),'both');
                             } else if(substr($jobPart,-3)=='ers' || substr($jobPart,-3)=='ing' || substr($jobPart,-3)=='man'){
-                                $this->db->or_like('JobTitle2',substr($jobPart,0,strlen($jobPart)-3),'both');
+                                $this->db->or_like('JobTitle',substr($jobPart,0,strlen($jobPart)-3),'both');
                             } else if(substr($jobPart,-6)=='person'){
-                                $this->db->or_like('JobTitle2',substr($jobPart,0,strlen($jobPart)-6),'both');
+                                $this->db->or_like('JobTitle',substr($jobPart,0,strlen($jobPart)-6),'both');
                             }
-                            $this->db->or_like('JobTitle2',$jobPart,'both');
+                            $this->db->or_like('JobTitle',$jobPart,'both');
                         }
                     }
                 } else {
                     //remove suffix -er -or -ers -ing -man -person and compare again
                     if(substr($jobTitle2,-6)=='person'){
-                        $this->db->or_like('JobTitle2',substr($jobPart,0,strlen($jobTitle2)-6),'both');
+                        $this->db->or_like('JobTitle',substr($jobPart,0,strlen($jobTitle2)-6),'both');
                     } else if(substr($jobTitle2,-3)=='ers' || substr($jobTitle2,-3)=='ing' || substr($jobTitle2,-3)=='man'){
-                        $this->db->or_like('JobTitle2',substr($jobTitle2,0,strlen($jobTitle2)-3),'both');
+                        $this->db->or_like('JobTitle',substr($jobTitle2,0,strlen($jobTitle2)-3),'both');
                     } else if(substr($jobTitle2,-2)=='er' || substr($jobTitle2,-2)=='or'){
-                        $this->db->or_like('JobTitle2',substr($jobTitle2,0,strlen($jobTitle2)-2),'both');
+                        $this->db->or_like('JobTitle',substr($jobTitle2,0,strlen($jobTitle2)-2),'both');
                     } else if(substr($jobTitle2,-1)=='s'){
-                        $this->db->or_like('JobTitle2',$jobTitle2,'both');
+                        $this->db->or_like('JobTitle',$jobTitle2,'both');
                     } 
+                    $this->db->like('JobTitle',$jobTitle2);
                 }
             $this->db->group_end();
         }

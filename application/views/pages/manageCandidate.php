@@ -254,15 +254,15 @@ var app = new Vue({
                 })
             }
         },
-        targetThisBox: function(elementID){
-            const input = document.getElementById(elementID);
-            input.focus();
-            input.select();
-        },
-        clearSelection: function(){
-            if (window.getSelection) {window.getSelection().removeAllRanges();document.activeElement.blur();}
-            else if (document.selection) {document.selection.empty();}
-        },
+        // targetThisBox: function(elementID){
+        //     const input = document.getElementById(elementID);
+        //     input.focus();
+        //     input.select();
+        // },
+        // clearSelection: function(){
+        //     if (window.getSelection) {window.getSelection().removeAllRanges();document.activeElement.blur();}
+        //     else if (document.selection) {document.selection.empty();}
+        // },
         showRemoveTab: function(){
             this.showRemoveStatus = !this.showRemoveStatus
         },
