@@ -226,7 +226,8 @@ var app = new Vue({
                 for(var i=0; i<this.candidatesCopy.length; i=i+10){
                     this.pageNums.push({id: i, isActive: false});
                 }
-                this.pageNums[0].isActive = true;
+               
+                
                 
             }, function(res) {
             })

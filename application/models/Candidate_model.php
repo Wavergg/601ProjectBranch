@@ -354,18 +354,20 @@ class Candidate_model extends CI_Model {
         $this->db->join('User', 'Candidate.UserID = User.UserID');
         
         if($page == "jobDetails"){
+            //get the candidate that hasnt been assigned to anyjob
             $this->db->group_start();
                 $this->db->where('Candidate.JobID',NULL);
                 $this->db->or_where('Candidate.JobID',"");
                 $this->db->or_where('Candidate.JobID',0);
             $this->db->group_end();
             $this->db->where('CandidateStatus !=','removed');
-        } elseif($page == "archive"){
-            $this->db->where('Candidate.CandidateStatus','removed');
+        } else if($page == "archive"){
+            $this->db->where('CandidateStatus','removed');
         } else {
             $this->db->where('CandidateStatus !=','removed');
         }
-        
+     
+
         if(!empty($city)){
             $this->db->where('User.City',$city);
         }
@@ -374,11 +376,13 @@ class Candidate_model extends CI_Model {
         // }
         
         if(!empty($jobInterest)){
-            // $this->db->group_start();
+            $this->db->group_start();
             $this->db->like('Candidate.JobInterest',$jobInterest);
+           
             $this->db->or_like('Candidate.JobInterest2',$jobInterest);
-            // $this->db->ground_end();
+            $this->db->group_end();
         }
+        
 
         if(!empty($firstName)){
             $this->db->like('User.FirstName',$firstName);
@@ -395,6 +399,7 @@ class Candidate_model extends CI_Model {
         // if(!empty($email)){
         //     $this->db->where('User.Email',$email);
         // }
+        
         $query = $this->db->get();
         return $query->result_array();
     }
