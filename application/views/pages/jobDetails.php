@@ -88,9 +88,9 @@
                 <!-- Archive Button -->
                 <div class="row justify-content-center mt-4">
                     <?php if( sizeof($candidatesData)>0 && $job['JobStatus'] != "completed") :?>
-                        <a class="btn btn-outline-danger col-md-3 col-9 m-2" href="<?php echo base_url()?>index.php/Jobs/updateJobToArchive/<?php echo $job['JobID'];?>">Send order to Archive</a>
+                        <a class="btn btn-outline-danger col-md-3 col-9 m-2" href="<?php echo base_url()?>index.php/Jobs/updateJobToArchive/<?php echo $job['JobID'];?>">Send to Archive</a>
                     <?php elseif( $job['JobStatus'] == 'completed'):?>
-                    <a class="btn btn-outline-dark col-md-3 col-9 m-2" href="<?php echo base_url()?>index.php/Jobs/retrieveJob/<?php echo $job['JobID'];?>">Retrieve order from Archive</a>
+                    <a class="btn btn-outline-dark col-md-3 col-9 m-2" href="<?php echo base_url()?>index.php/Jobs/retrieveJob/<?php echo $job['JobID'];?>">Retrieve from Archive</a>
                     <?php elseif( $job['JobStatus'] == 'published') :?>
                         <a class="btn btn-outline-dark col-md-3 col-9 m-2" href="<?php echo base_url()?>index.php/Jobs/jobUnpublish/<?php echo $job['JobID'];?>">Unpublish</a>
                     <?php endif;?>

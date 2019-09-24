@@ -558,15 +558,28 @@ class Jobs extends CI_Controller {
 	
 	
 
-	//called from: view->manageClient
-	//change the status of job to completed, so it wont appear in manage order page
+	//called from: view->pages->manageClient
+	//move it into archive
 	public function removeJobApplication(){
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
         $jobID = $_POST['jobID'];
 		$this->job_model->updateJobStatusToComplete($jobID);
+		
 		} else {
 			redirect('/');
 		}
+	}
+
+	//called from: view->pages->archive
+	//remove it from every pages
+	public function deleteJobApplication(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			$jobID = $_POST['jobID'];
+			$this->job_model->deleteJobApplication($jobID);
+			
+			} else {
+				redirect('/');
+			}
 	}
 	
 	//called from: view->jobDetails

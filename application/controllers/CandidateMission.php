@@ -532,6 +532,7 @@ class CandidateMission extends CI_Controller{
 
     //called from: view->pages->manageCandidate , view->applicant->vue
     //calling the model of candidate and updating the candidateStatus of candidate to removed so it wont appear in the candidate table anymore
+    //move it to archive
     public function removeCandidateApplication(){
         if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
         $candidateID = $_POST['candidateID'];
@@ -542,6 +543,20 @@ class CandidateMission extends CI_Controller{
         else {
             redirect('/');
         }
+    }
+
+    //called from: view->pages->archive
+    //remove candidate application from everypages
+    public function deleteCandidateApplication(){
+        if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+            $candidateID = $_POST['candidateID'];
+            
+            $this->candidate_model->deleteCandidateApp($candidateID);
+            $this->candidate_model->updateTimeChanged($candidateID);
+            }
+            else {
+                redirect('/');
+            }
     }
 
     //function that are called from CandidateMission->applyJob
