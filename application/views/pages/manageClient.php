@@ -2,7 +2,7 @@
 
 <?php if(!empty($fromPage)&& sizeof($candidateData)>0):?>
 <div class="form-control bg-success text-center text-white font-weight-bold rounded-0" style="position:fixed; top:0px;z-index:1;opacity:0.9">
-    Assigning Order to <?php echo $candidateData['FirstName'];?>, Profession: <?php echo $candidateData['JobInterest'] . ' in ' . $candidateData['City'];?>
+    Assigning Order to <?php echo $candidateData['FirstName'];?>, Profession 1: <?php echo $candidateData['JobInterest'] . ', Profession 2: ' . $candidateData['JobInterest2'] . ' in ' . $candidateData['City'];?>
 </div>
 <?php endif;?>
     <div style="height: 50px;"></div>
