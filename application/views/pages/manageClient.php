@@ -85,17 +85,17 @@
                         <th scope="col" v-bind:class="{ 'd-none': ! showRemoveStatus }"><a href="#" class="text-dark">Remove</a></th>
                         <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
                         <th scope="col" >TOB</th>
-                        <th scope="col" ><a href="#" class="text-dark py-2" @click.stop.prevent="sortBy('UpdateDate')">Update_Date</a></th>
-                        <th scope="col" ><a href="#" class="text-dark " @click.stop.prevent="sortBy('JobStatus')">Order_Status</a></th>
+                        <th scope="col" ><a href="#" class="text-dark py-2" @click.stop.prevent="sortBy('UpdateDate')">Update_Date<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
+                        <th scope="col" ><a href="#" class="text-dark " @click.stop.prevent="sortBy('JobStatus')">Order_Status<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
                         <!-- <th scope="col" ><a href="#" class="text-dark p-2 pr-3" @click.stop.prevent="sortBy('ClientTitle')">Title</a></th> -->
-                        <th scope="col" ><a href="#" class="text-dark " @click.stop.prevent="sortBy('ClientName')">Contact_Person_Name</a></th>
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('Company')">Company</a></th>
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('Email')">Email</a></th>
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('ContactNumber')">Contact_Number</a></th>
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('JobTitle')">Job_Title</a></th>
+                        <th scope="col" ><a href="#" class="text-dark " @click.stop.prevent="sortBy('ClientName')">Contact_Person<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('Company')">Company<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
+                        <th scope="col" >Email</th>
+                        <th scope="col" >Contact_Number</th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('JobTitle')">Job_Title<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
                         <!-- <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('JobType')">Job Type</a></th> -->
                         <!-- <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('Address')">Address</a></th> -->
-                        <th scope="col" ><a href="#" class="text-dark  p-2 pr-3" @click.stop.prevent="sortBy('City')">City</a></th>
+                        <th scope="col" ><a href="#" class="text-dark  p-2 pr-3" @click.stop.prevent="sortBy('City')">City<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
                         <!-- <th scope="col" >Description</th> -->
                         <!-- <th scope="col" ><a href="#" class="text-dark py-2" @click.stop.prevent="sortBy('JobSubmittedDate')">DateSubmitted</a></th>
                         -->

@@ -135,7 +135,7 @@
                                         <img id="imgPreview" src="<?php echo base_url()?>lib/images/user-512.png" style="width:150px;height:150px;">
                                     <?php else :?>
                                         <?php $setImgPreviewID = "imgPreview1" ;?>
-                                        <img id="imgPreview1" src="<?php echo base_url() . 'lib/candidateProfile/' . $candidate['UserPicture']?>" style="width:150px;height:150px;">
+                                        <img id="imgPreview1" src="<?php echo base_url() . 'lib/candidateProfile/' . $candidate['UserPicture']?>" :style="'width:'+widthpic+'px;height:'+height+'px;'">
                                     <?php endif;?>
                                 </div>
                                 <div class="row justify-content-center">
@@ -488,7 +488,8 @@ var app = new Vue({
         jobInterest: "<?php echo $candidate['JobInterest'];?>",
         jobInterest2: "<?php echo $candidate['JobInterest2'];?>",
         jobType: "<?php echo $candidate['JobType'];?>",
-       
+        height: 200,
+        width: 200,
         transportation: "<?php echo $candidate['Transportation'];?>",
         licenseNumber: "<?php echo $candidate['LicenseNumber'];?>",
         classLicense: "<?php echo $candidate['ClassLicense'];?>",

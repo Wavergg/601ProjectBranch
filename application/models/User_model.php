@@ -86,8 +86,19 @@ class User_model extends CI_Model {
         $this->db->update('User',$data);
     }
 
+    //called from: Controller->CandidateMission->ApplyJob()
+    //remove the user data if the registration is unsuccessful
     public function removeUserData($userID){
         $this->db->where('UserID',$userID);
         $this->db->delete('User');
     }
+
+
+    //called from: Controller->Personcenter->updatePanelPreference()
+    //update the panel preference
+    public function updatePanelPreference($userID,$data){
+        $this->db->where('UserID',$userID);
+        $this->db->update('User',$data);
+    }
+
 }

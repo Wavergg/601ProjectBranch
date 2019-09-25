@@ -15,7 +15,7 @@
     <title>Lee Recruitment</title>
 </head>
 
-<body style="background-color: #FFFFFF">
+<body style="background-color: #FFFFFF" id="bodyID">
     <!-- start TopHeaderNav -->
     <nav>
         <div class="d-flex flex-column flex-sm-row align-items-center p-1 bg-light border-bottom shadow-sm">

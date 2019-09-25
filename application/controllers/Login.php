@@ -55,6 +55,7 @@ class Login extends CI_Controller {
                     'phoneNumber' => $data['user']['PhoneNumber'],
                     'visitedCandidate' => $data['user']['VisitedCandidate'],
                     'visitedClient' => $data['user']['VisitedClient'],
+                    'preferencePanel' => $data['user']['PreferencePanel'],
                 );
                 //set the session from array
                 $this->session->set_userdata($newdata);

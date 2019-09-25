@@ -67,16 +67,16 @@
                         <th scope="col" v-bind:class="{ 'd-none': ! showRemoveStatus }"><a href="#" class="text-dark">Remove</a></th>
                         <th scope="col"><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
                         <th scope="col" >CV</th>
-                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="sortBy('ApplyDate')">Last Updated</a></th>
-                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="sortBy('FirstName')">First_Name</a></th>
-                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="sortBy('LastName')">Last_Name</a></th>
-                        <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="sortBy('JobInterest')">Profession_1</a></th>
-                        <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="sortBy('JobInterest2')">Profession_2</a></th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('ApplyDate')">Last Updated<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('FirstName')">First_name<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('LastName')">Last_name<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('JobInterest')">Profession_1<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('JobInterest2')">Profession_2<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
 
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Phone_Number</a></th>
-                        <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="sortBy('City')">City</a></th>
+                        <th scope="col" >Phone_Number</th>
+                        <th scope="col"><a href="#" class="text-dark" @click.stop.prevent="sortBy('City')">City<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
                         
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Email</a></th>
+                        <th scope="col" >Email</th>
                        <!-- <th scope="col" v-bind:class="{ 'd-none': ! showDOB }"><a href="#" class="text-dark pr-5" @click.stop.prevent="sortBy('DOB')">Date Of Birth</a></th>
                         
                         <th scope="col" v-bind:class="{ 'd-none': ! showAddress }"><a href="#" class="text-dark" @click.stop.prevent="">Address</a></th>

@@ -15,9 +15,7 @@ class Personcenter extends CI_Controller {
 	
 	//the page where the user are redirected when they login
 	//inside personcenter/main it loads different view based on userType
-	//admin:view->personcenter->adminPanel
-	//staff:view->personcenter->staffPanel
-	//candidate:view->personcenter->personalPanel
+	
 	public function index()
 	{	
         // Check username and the passwd
@@ -209,6 +207,21 @@ class Personcenter extends CI_Controller {
 			$this->load->view('settings/manageStaff',$data);
 			$this->load->view('settings/vue');
 		$this->load->view('templates/footer');
+	}
+
+	//called from: view->personcenter->main
+	//update the preference panel for specific user
+	public function updatePanelPreference(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] == 'staff'){
+
+			$data['UserID'] = $_POST['userID'];
+			$data['PreferencePanel'] = $_POST['preferencePanel'];
+			$_SESSION['preferencePanel'] = $_POST['preferencePanel'];
+			$this->User_model->updatePanelPreference($data['UserID'],$data);
+		
+		} else {
+			redirect('/');
+		}
 	}
 	
 	

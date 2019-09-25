@@ -331,7 +331,7 @@ class CandidateMission extends CI_Controller{
         $path = constant('CV_PATH').$candidateID.'/';
         $config['upload_path'] = $path;
 
-        $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx|zip|7z|txt';
+        $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|txt|text|plain|docx|zip|7z';
         $config['max_size'] = 30000;
         $config['max_width'] = 0;
         $config['max_height'] = 0;
