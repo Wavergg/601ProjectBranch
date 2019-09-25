@@ -98,7 +98,7 @@ class CandidateMission extends CI_Controller{
             if(empty($fileName) || $fileName == 'null' || $fileName == 'Open%20this%20select%20menu'){
                 echo 'File doesn\'t exists';
             }
-            $path = constant('CV_PATH').$candidateID.'/'.$fileName;
+            $path = constant('CV_PATH').$candidateID.'\\'.$fileName;
             
             force_download($path, NULL);
         } else {
@@ -220,7 +220,7 @@ class CandidateMission extends CI_Controller{
             $data = array();
             $candidate = $this->candidate_model->getMaxIDByUserID($userID);
             
-            $path = constant('CV_PATH').$candidate['MaxID'].'/';
+            $path = constant('CV_PATH').$candidate['MaxID'].'\\';
             $uploadCVErrorStatus = false;
             // create the folder
             mkdir($path);
@@ -284,7 +284,7 @@ class CandidateMission extends CI_Controller{
        
         $maxID = $candidateID;
 
-        $config['upload_path'] = constant('CV_PATH').$maxID.'/';
+        $config['upload_path'] = constant('CV_PATH').$maxID.'\\';
         $config['allowed_types'] = 'pdf|png|doc|docx|jpg|jpeg';
         $config['max_size'] = 30000; //30MB
         $config['max_width'] = 0;
@@ -328,7 +328,7 @@ class CandidateMission extends CI_Controller{
         }
         $candidateID = $this->input->post('candidateID');
         
-        $path = constant('CV_PATH').$candidateID.'/';
+        $path = constant('CV_PATH').$candidateID.'\\';
         $config['upload_path'] = $path;
 
         $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|txt|text|plain|docx|zip|7z';
@@ -368,11 +368,11 @@ class CandidateMission extends CI_Controller{
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 			$candidateID = $_POST['candidateID'];
 			$fileName = $_POST['userFile'];
-			$path = constant('CV_PATH').$candidateID.'/';
+			$path = constant('CV_PATH').$candidateID.'\\';
 			//let's not use this. it's dangerous as heck,
             //unlink($path.$fileName);
             //move the file into del folder inside of the CV_PATH constant
-			rename($path.$fileName,constant('CV_PATH').'del/'.$candidateID.$fileName);
+			rename($path.$fileName,constant('CV_PATH').'del\\'.$candidateID.$fileName);
             $data['userFiles'] = directory_map($path);
             $this->candidate_model->updateTimeChanged($candidateID);
 			echo json_encode($data['userFiles']);
@@ -394,7 +394,7 @@ class CandidateMission extends CI_Controller{
             }
 
             // Find all the files under the candidate's folder
-            $path = constant('CV_PATH').$candidateID.'/';
+            $path = constant('CV_PATH').$candidateID.'\\';
             $data['userFiles'] = directory_map($path);
 
             $this->load->view('templates/header',$userdata);

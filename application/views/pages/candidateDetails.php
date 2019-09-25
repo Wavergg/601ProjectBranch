@@ -1,5 +1,5 @@
 
-<div id="app">
+<div id="app" hidden>
     <?php if(!empty($job)):?>
     <div class="form-control bg-success text-center text-white font-weight-bold rounded-0"
         style="position:fixed; top:0px; z-index:1;opacity:0.9">
@@ -126,26 +126,31 @@
                             <div class="row ml-3"><label for="candidateCVID" class="font-weight-bold mt-2">Candidate's CV:</label></div>
                             <div class="row ml-3"><a :href="'<?php echo base_url()?>index.php/CandidateMission/downloadFile/'+candidateID+'/'+CVselected" id="candidateCVID" class="btn btn-primary">CandidateCV</a></div>   
                 
-                            <div class="row mt-5 mb-0 ml-5">
+                                <div class="row mt-5 mb-0 ml-md-2 ml-2 justify-content-center justify-content-md-start">
                     
-                                <div class="row">
                                 <?php $setImgPreviewID = "" ;?>
                                     <?php if(empty($candidate['UserPicture'])):?>
                                         <?php $setImgPreviewID = "imgPreview" ;?>
-                                        <img id="imgPreview" src="<?php echo base_url()?>lib/images/user-512.png" style="width:150px;height:150px;">
+                                        <img id="imgPreview" src="<?php echo base_url()?>lib/images/user-512.png" :style="'width:' + pictureWidth + 'px; height:' + pictureHeight + 'px;'">
                                     <?php else :?>
                                         <?php $setImgPreviewID = "imgPreview1" ;?>
                                         <img id="imgPreview1" src="<?php echo base_url() . 'lib/candidateProfile/' . $candidate['UserPicture']?>" :style="'width:' + pictureWidth + 'px; height:' + pictureHeight + 'px;'">
                                     <?php endif;?>
-                                </div>
-                                <div class="row justify-content-center">
+                            
+                                
                                     <input type="file" id="fileProfileBtn" hidden style="width:240px;" onchange="document.getElementById('<?php echo $setImgPreviewID ; ?>').src = window.URL.createObjectURL(this.files[0])" name="candidateImage" class="offset-md-0">
-                                    <label for="pictureWidth" :class="{'d-none': notEdit}">Picture Width:</label>
-                                    <input type="text" class="form-control" name="pictureWidth" :class="{'d-none': notEdit}" @change="resizeProfile" v-model="pictureWidth">
-                                    <label for="pictureHeight" :class="{'d-none': notEdit}">Picture Height:</label>
-                                    <input type="text" class="form-control" name="pictureHeight" :class="{'d-none': notEdit}" @change="resizeProfile" v-model="pictureHeight">
                                 </div>
-                            </div>
+                                    <div class=" row mt-2 justify-content-center justify-content-md-start">
+                                        <div class="col-4 col-md-5 col-lg-4">
+                                        <label for="pictureWidth" class="font-weight-bold" :class="{'d-none': notEdit}">Width:</label>
+                                        <input type="text" class="form-control" name="pictureWidth" :class="{'d-none': notEdit}" @change="resizeProfile" v-model="pictureWidth">
+                                        </div>
+                                        <div class="col-4 col-md-5 col-lg-4">
+                                        <label for="pictureHeight"  class="font-weight-bold" :class="{'d-none': notEdit}">Height:</label>
+                                        <input type="text" class="form-control" name="pictureHeight" :class="{'d-none': notEdit}" @change="resizeProfile" v-model="pictureHeight">
+                                        </div>
+                                    </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -863,27 +868,36 @@ var app = new Vue({
             
             // $('#myModal').modal('show')
         },
-        resizeProfile: async function(){
-            
-            if(this.pictureHeight >= 100 && this.pictureHeight <= 300 && this.pictureWidth >= 100 && this.pictureWidth <= 300){
-                // update the size
-                var formData = new FormData();
-                formData.append('height', this.pictureHeight);
-                formData.append('width', this.pictureWidth);
-                formData.append('candidateID', this.candidateID);
-                var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateProfileSize/'
-                await this.$http.post(urllink, formData).then(res => {
-                    var result = res.body;
-                    this.message = result;
-                }, res => {
-                    this.message = "Failed";
-                });
-                $('#myModal').modal('show');
-            } else {
-                this.message = "Width and Height should be between 100 and 300.";
-                $('#myModal').modal('show');
+        resizeProfile: function(){
+            if(isNaN(this.pictureHeight) || isNaN(this.pictureWidth)){ 
+                alert('You cant enter a text for this field, please enter a number');
+                this.pictureHeight = 100;
+                this.pictureWidth = 100;
+                } else { 
+                if(this.pictureHeight<100){
+                    this.pictureHeight = 100;
+                } else if (this.pictureHeight >300){
+                    this.pictureHeight = 300;
+                }
+
+                if(this.pictureWidth <100){
+                    this.pictureWidth = 100;
+                } else if (this.pictureWidth > 300 ){
+                    this.pictureWidth = 300
+                }
+                    var formData = new FormData();
+                    formData.append('height', this.pictureHeight);
+                    formData.append('width', this.pictureWidth);
+                    formData.append('candidateID', this.candidateID);
+                    var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateProfileSize/'
+                    this.$http.post(urllink, formData).then(function(res) {
+                        var result = res.body;
+                        //this.message = result;
+                    }, function(res) {
+                        //this.message = "Failed";
+                    });
             }
-        }
+        },
     },
     //during the page load get the youtube url
     mounted: function() {
@@ -895,5 +909,8 @@ var app = new Vue({
             document.getElementById('video').style.display = "block";
         }
     },
+    created: function(){
+        document.getElementById("app").removeAttribute("hidden");
+    }
 })
 </script>
