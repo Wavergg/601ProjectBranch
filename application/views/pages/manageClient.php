@@ -12,7 +12,12 @@
     
     
     <div class="container ">
-        <button type="button" @click="showRemoveTab" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-outline-danger bg-danger">
+        <a href="<?php echo base_url()?>index.php/EmployerMission/index/3">
+            <button type="button" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-dark btn-lg border-white">
+            <i style="font-size:30px;" class="icon ion-md-add m-1 text-white"></i>
+            </button>
+        </a>
+        <button type="button" @click="showRemoveTab" style="position:fixed;right: 20px; bottom:95px;z-index:1" class="btn btn-outline-danger bg-danger">
             <img style="height:39px; width:35px;" src="<?php echo base_url()?>lib/images/papershreeder.png">
         </button>
         <!-- Collapse -->
