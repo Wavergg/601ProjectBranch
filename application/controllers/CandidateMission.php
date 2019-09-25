@@ -791,5 +791,16 @@ class CandidateMission extends CI_Controller{
         $alphabet = $alphabetArray[$randomNum];
         return $alphabet;
     }
+
+    // called from views/pages/condidateDetails.php
+    // change the width and height for the picture
+    public function updateProfileSize(){
+        $width = $_POST['width'];
+        $height = $_POST['height'];
+        $candidateID = $_POST['candidateID'];
+
+        $this->candidate_model->updateProfileSize($candidateID, $width, $height);
+        echo "Resized successfully!";
+    }
    
 }

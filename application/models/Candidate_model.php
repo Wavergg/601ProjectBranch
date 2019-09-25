@@ -530,4 +530,14 @@ class Candidate_model extends CI_Model {
         );
         $this->db->update('Candidate',$data);
     }
+
+    // called from: Controller->CandidateMission->
+    public function updateProfileSize($candidateID, $width, $height){
+        $this->db->where('CandidateID',$candidateID);
+        $data = array(
+            'PictureWidth' => $width,
+            'PictureHeight' => $height
+        );
+        $this->db->update('Candidate',$data);
+    }
 }
