@@ -156,7 +156,8 @@ class Candidate_model extends CI_Model {
         } else {
             $this->db->where('CandidateStatus !=','removed');
         }
-        
+            $this->db->where('CandidateStatus !=','deleted');
+            
         if(!empty($city)){
             $this->db->where('User.City',$city);
         }
@@ -272,6 +273,7 @@ class Candidate_model extends CI_Model {
         } else {
             $this->db->where('CandidateStatus !=','removed');
         }
+            $this->db->where('CandidateStatus !=','deleted');
         if(!empty($city)){
             $this->db->where('City',$city);
         }
@@ -366,7 +368,7 @@ class Candidate_model extends CI_Model {
         } else {
             $this->db->where('CandidateStatus !=','removed');
         }
-     
+        $this->db->where('CandidateStatus !=','deleted');
 
         if(!empty($city)){
             $this->db->where('User.City',$city);
@@ -454,10 +456,21 @@ class Candidate_model extends CI_Model {
     }
 
     //called from: Controller->CandidateMission->removeCandidateApplication()
-    //change the candidate status to removed so it wont appear in the application table anymore
+    //move it into archives page
     public function removeCandidateApp($candidateID){
         $data = array(
             'CandidateStatus' => 'removed',
+            'Checked' => 'true',
+        );
+        $this->db->where('CandidateID',$candidateID);
+        $this->db->update('Candidate',$data);
+    }
+
+    //called from: Controller->CandidateMission->deleteCandidateApp()
+    //remove it from every pages
+    public function deleteCandidateApp($candidateID){
+        $data = array(
+            'CandidateStatus' => 'deleted',
             'Checked' => 'true',
         );
         $this->db->where('CandidateID',$candidateID);
@@ -514,6 +527,16 @@ class Candidate_model extends CI_Model {
             'CandidateHoursWorked' => $candidateHoursWorked,
             'JobRate' => $jobRate,
             'CandidateEarnings' => $candidateEarnings,
+        );
+        $this->db->update('Candidate',$data);
+    }
+
+    // called from: Controller->CandidateMission->
+    public function updateProfileSize($candidateID, $width, $height){
+        $this->db->where('CandidateID',$candidateID);
+        $data = array(
+            'PictureWidth' => $width,
+            'PictureHeight' => $height
         );
         $this->db->update('Candidate',$data);
     }

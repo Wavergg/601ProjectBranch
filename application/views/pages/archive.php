@@ -16,7 +16,9 @@
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="OrdersArchives" role="tabpanel" aria-labelledby="OrdersArchives-tab">
         <div class="container mt-5">
-
+        <button type="button" @click="showRemoveTab" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-outline-danger bg-danger">
+            <img style="height:39px; width:35px;" src="<?php echo base_url()?>lib/images/papershreeder.png">
+        </button>
         <!-- Collapse -->
         <a class="btn btn-outline-dark border border-dark form-control" style="border-radius: 15px 15px 0px 0px;" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
         <span class="font-weight-bold">Order Filters</span><i class="ml-1 icon ion-md-barcode mx-3"></i></a>
@@ -62,6 +64,7 @@
                 <thead>
                     <tr>
                         <!-- <th scope="col" ><a href="#"  @click.stop.prevent="sortBy('Bookmark')" class="text-dark "><img src="<?php echo base_url();?>lib/images/Bookmark1.png" style="height: 16px; width:16px;"></a></th> -->
+                        <th scope="col" v-bind:class="{ 'd-none': ! showRemoveStatus }"><a href="#" class="text-dark">Remove</a></th>
                         <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
                         <th scope="col" >TOB</th>
                         <th scope="col" ><a href="#" class="text-dark py-2" @click.stop.prevent="sortBy('UpdateDate')">Update_Date</a></th>
@@ -80,9 +83,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="job in jobs" :key="job.JobID">
+                    <tr v-for="job in jobs" :key="job.JobID" :id="'rowJob'+job.JobID">
                         
                         <!-- <td ><input type="checkbox" :id="job.bookmarkUrl" v-on:click="updateBookmark(job.JobID)" :checked="job.bookmarkStat"></td> -->
+                        <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeJob(job.JobID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
                         <td class="textInfoPos"><span class="textInfo text-center" style="left: -35px;width:190px;">See Job's Details</span><a :href="job.ref" role="button"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></td>
                         <th class="textInfoPos" ><span class="textInfo text-center" style="left: -45px;width:160px;">Download TOB</span><a class="btn btn-outline-dark px-2" :href="'<?php echo base_Url(); ?>index.php/Jobs/downloadTOB/'+ job.JobID +'/'+job.TOB">TOB</a></th>
                         <td v-text="job.UpdateDate"></td>
@@ -118,6 +122,9 @@
   <!-- start applicant Tab -->
   <div class="tab-pane fade" id="applicantsArchives" role="tabpanel" aria-labelledby="applicantsArchives-tab">
   <div class="container mt-5">
+        <button type="button" @click="showRemoveTab" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-outline-danger bg-danger">
+            <img style="height:39px; width:35px;" src="<?php echo base_url()?>lib/images/papershreeder.png">
+        </button>
         <!-- <a href="<?php echo base_url()?>index.php/CandidateMission/addingNewCandidateStaffOnly">
             <button type="button" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-dark btn-lg border-white">
             <i style="font-size:30px;" class="icon ion-md-add m-1 text-white"></i>
@@ -165,6 +172,7 @@
            
                 <thead>
                     <tr>
+                        <th scope="col" v-bind:class="{ 'd-none': ! showRemoveStatus }"><a href="#" class="text-dark">Remove</a></th>
                         <th scope="col"><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
                         <th scope="col" >CV</th>
                         <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="candidateSortBy('ApplyDate')">Updated Date</a></th>
@@ -180,7 +188,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="candidate in candidatesCopy" :key="candidate.CandidateID" :id="'row'+candidate.CandidateID">
+                    <tr v-for="candidate in candidatesCopy" :key="candidate.CandidateID" :id="'rowCandidate'+candidate.CandidateID">
+                        <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeCandidate(candidate.CandidateID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
                         <th class="textInfoPos"><span class="textInfo text-center" style="left: -35px;width:190px;">See Candidate's Details</span><a v-on:click="getUrl(candidate.CandidateID)" role="button" class="text-primary"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></th>
                         <th class="textInfoPos" ><span class="textInfo text-center" style="left: -45px;width:160px;">Download <br>Candidate's CV</span><a class="btn btn-outline-dark px-2" :href="'<?php echo base_Url(); ?>index.php/candidateMission/downloadCV/' + candidate.JobCV">CV</a></th>
                         <th class="font-weight-normal" v-text="candidate.ApplyDate"></th>
@@ -251,6 +260,7 @@
 var app = new Vue({
     el: '#app',
     data: {
+        showRemoveStatus: false,
         errMessage: "",
         errors: "",
         bookmarkID: "",
@@ -382,15 +392,15 @@ var app = new Vue({
                 })
             }
         },
-        targetThisBox: function(elementID){
-            const input = document.getElementById(elementID);
-            input.focus();
-            input.select();
-        },
-        clearSelection: function(){
-            if (window.getSelection) {window.getSelection().removeAllRanges();document.activeElement.blur();}
-            else if (document.selection) {document.selection.empty();}
-        },
+        // targetThisBox: function(elementID){
+        //     const input = document.getElementById(elementID);
+        //     input.focus();
+        //     input.select();
+        // },
+        // clearSelection: function(){
+        //     if (window.getSelection) {window.getSelection().removeAllRanges();document.activeElement.blur();}
+        //     else if (document.selection) {document.selection.empty();}
+        // },
         getCandidates: function(offset){
             for(var i=0; i<this.candidatePageNums.length; i++){
                 if(this.candidatePageNums[i].id == offset){
@@ -412,27 +422,27 @@ var app = new Vue({
             }, function(res) {
             })
         },
-        updateNotes: function(candidateID){
+        // updateNotes: function(candidateID){
             
-            var formData = new FormData()
-            formData.append('candidateNotes', document.getElementById(candidateID).value);
-            var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/updateCandidateNotes/'+candidateID+'/'+'manageCandidate'
-            this.$http.post(urllink, formData).then(function(res) {
-                var result = res.body;
-                //update the changes into the data in current page.
-                for(var i=0; i<this.candidates.length; i++){
-                    if(this.candidates[i].CandidateID == candidateID){
-                        this.candidates[i].CandidateNotes = document.getElementById(candidateID).value;
-                        this.candidatesCopy[i].CandidateNotes = this.candidates[i].CandidateNotes;
-                    }
-                }
+        //     var formData = new FormData()
+        //     formData.append('candidateNotes', document.getElementById(candidateID).value);
+        //     var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/updateCandidateNotes/'+candidateID+'/'+'manageCandidate'
+        //     this.$http.post(urllink, formData).then(function(res) {
+        //         var result = res.body;
+        //         //update the changes into the data in current page.
+        //         for(var i=0; i<this.candidates.length; i++){
+        //             if(this.candidates[i].CandidateID == candidateID){
+        //                 this.candidates[i].CandidateNotes = document.getElementById(candidateID).value;
+        //                 this.candidatesCopy[i].CandidateNotes = this.candidates[i].CandidateNotes;
+        //             }
+        //         }
                 
-                $('#'+candidateID).html(result);
-            }, function(res) {
-                // error callback
+        //         $('#'+candidateID).html(result);
+        //     }, function(res) {
+        //         // error callback
                 
-            })
-        },
+        //     })
+        // },
         getUrl: function(candidateID){
             var issetJob = "<?php if(isset($job['JobID'])){ echo $job['JobID'];}?>"
             var goToUrl = "<?php echo base_url() . 'index.php/CandidateMission/candidateDetails/';?>"+candidateID +"/"+issetJob;
@@ -454,6 +464,33 @@ var app = new Vue({
     
         xRequest.send(the_data);
            
+        },
+        showRemoveTab: function(){
+            this.showRemoveStatus = !this.showRemoveStatus;
+        },
+        removeCandidate: function(candidateID){
+            var formData = new FormData()
+            formData.append('candidateID',candidateID)
+            var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/deleteCandidateApplication/'
+            this.$http.post(urllink, formData).then(res => {
+                
+            }, res => {
+                
+            });
+            $('#rowCandidate'+candidateID).addClass('text-muted');
+            $('#rowCandidate'+candidateID).css('background-color',"#F0F0F0");
+        },
+        removeJob: function(jobID){
+            var formData = new FormData()
+            formData.append('jobID',jobID)
+            var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/deleteJobApplication/'
+            this.$http.post(urllink, formData).then(res => {
+                
+            }, res => {
+                
+            });
+            $('#rowJob'+jobID).addClass('text-muted');
+            $('#rowJob'+jobID).css('background-color',"#F0F0F0");
         }
     },
     computed: {

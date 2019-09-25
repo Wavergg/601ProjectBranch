@@ -17,7 +17,7 @@ class Job_model extends CI_Model {
             $this->db->where('JobStatus','completed');
             $this->db->limit(10,$offset * 10);
         } else {
-            $data = array('completed');
+            $data = array('completed','deleted');
             $this->db->where_not_in('JobStatus',$data);
             $this->db->limit(10,$offset * 10);
         }
@@ -168,10 +168,23 @@ class Job_model extends CI_Model {
 
     //called from:Controller->Jobs->updateJobToArchive(), Controller->Job->removeJobApplication()
     //set the jobstatus for specific job to completed
+    //only available in archive page
     public function updateJobStatusToComplete($jobID){
         $this->db->where('JobID',$jobID);
         $data = array(
             'JobStatus' => 'completed',
+            'Checked' => 'true',
+        );
+        $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
+        $this->db->update('Job',$data);
+    }
+
+    //called from: Controller->Jobs->deleteJobApplication()
+    //delete it from every pages
+    public function deleteJobApplication($jobID){
+        $this->db->where('JobID',$jobID);
+        $data = array(
+            'JobStatus' => 'deleted',
             'Checked' => 'true',
         );
         $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
@@ -218,7 +231,7 @@ class Job_model extends CI_Model {
             $this->db->where('JobStatus',$jobStatus);
         }
         else {
-            $data = array('JobStatus','completed');
+            $data = array('JobStatus','completed','deleted');
             $this->db->where_not_in('JobStatus',$data);
         }
         if(!empty($company)){
@@ -255,7 +268,7 @@ class Job_model extends CI_Model {
     //called from: Controller->Jobs->manageClient() , Controller->Jobs->getActiveJob()
     public function get_filterjobs($city,$jobTitle="",$offset=0,$jobTitle2=""){
         
-        $data = array('JobStatus','completed');
+        $data = array('JobStatus','completed','deleted');
         $this->db->where_not_in('JobStatus',$data);
         $this->db->limit(10,$offset * 10);
         if(!empty($city)){
@@ -359,7 +372,7 @@ class Job_model extends CI_Model {
     //get the number of jobs where the status is not completed, for paging purposes
     public function countAllActiveJob($city="",$jobTitle=""){
         $data = array(
-            'JobStatus' => 'completed',
+            'completed','deleted'
         );
         $this->db->where_not_in('JobStatus',$data);
         
@@ -407,7 +420,7 @@ class Job_model extends CI_Model {
 
     public function getNextPageActiveJob($limitNum,$offsetNum){
         $data = array(
-            'JobStatus' => 'completed',
+            'completed','deleted'
         );
         $this->db->where_not_in('JobStatus',$data);
         $this->db->limit($limitNum, $offsetNum);

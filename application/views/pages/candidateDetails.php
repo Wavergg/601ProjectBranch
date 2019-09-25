@@ -135,11 +135,15 @@
                                         <img id="imgPreview" src="<?php echo base_url()?>lib/images/user-512.png" style="width:150px;height:150px;">
                                     <?php else :?>
                                         <?php $setImgPreviewID = "imgPreview1" ;?>
-                                        <img id="imgPreview1" src="<?php echo base_url() . 'lib/candidateProfile/' . $candidate['UserPicture']?>" :style="'width:'+widthpic+'px;height:'+height+'px;'">
+                                        <img id="imgPreview1" src="<?php echo base_url() . 'lib/candidateProfile/' . $candidate['UserPicture']?>" :style="'width:' + pictureWidth + 'px; height:' + pictureHeight + 'px;'">
                                     <?php endif;?>
                                 </div>
                                 <div class="row justify-content-center">
                                     <input type="file" id="fileProfileBtn" hidden style="width:240px;" onchange="document.getElementById('<?php echo $setImgPreviewID ; ?>').src = window.URL.createObjectURL(this.files[0])" name="candidateImage" class="offset-md-0">
+                                    <label for="pictureWidth" :class="{'d-none': notEdit}">Picture Width:</label>
+                                    <input type="text" class="form-control" name="pictureWidth" :class="{'d-none': notEdit}" @change="resizeProfile" v-model="pictureWidth">
+                                    <label for="pictureHeight" :class="{'d-none': notEdit}">Picture Height:</label>
+                                    <input type="text" class="form-control" name="pictureHeight" :class="{'d-none': notEdit}" @change="resizeProfile" v-model="pictureHeight">
                                 </div>
                             </div>
                         </div>
@@ -466,6 +470,9 @@ var app = new Vue({
         message: "",
         toggleEdit: false,
         userFiles: <?php echo json_encode($userFiles)?>,
+        pictureWidth: <?php echo $candidate['PictureWidth']; ?>,
+        pictureHeight: <?php echo $candidate['PictureHeight']; ?>,
+
         chosenFile: "",
         labelFile: "",
         candidateID: <?php echo $candidate['CandidateID']; ?> ,
@@ -488,8 +495,7 @@ var app = new Vue({
         jobInterest: "<?php echo $candidate['JobInterest'];?>",
         jobInterest2: "<?php echo $candidate['JobInterest2'];?>",
         jobType: "<?php echo $candidate['JobType'];?>",
-        height: 200,
-        width: 200,
+        notEdit: true, // true hide the inputs for picture sizes
         transportation: "<?php echo $candidate['Transportation'];?>",
         licenseNumber: "<?php echo $candidate['LicenseNumber'];?>",
         classLicense: "<?php echo $candidate['ClassLicense'];?>",
@@ -696,6 +702,9 @@ var app = new Vue({
                 }
                 document.getElementById("fileProfileBtn").setAttribute("hidden","true");
             }
+
+            // show inputs for picture sizes
+            this.notEdit = ! this.notEdit;
         },
         submitButton: function(candidateID, userID) {
             
@@ -853,6 +862,27 @@ var app = new Vue({
                 })
             
             // $('#myModal').modal('show')
+        },
+        resizeProfile: async function(){
+            
+            if(this.pictureHeight >= 100 && this.pictureHeight <= 300 && this.pictureWidth >= 100 && this.pictureWidth <= 300){
+                // update the size
+                var formData = new FormData();
+                formData.append('height', this.pictureHeight);
+                formData.append('width', this.pictureWidth);
+                formData.append('candidateID', this.candidateID);
+                var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/updateProfileSize/'
+                await this.$http.post(urllink, formData).then(res => {
+                    var result = res.body;
+                    this.message = result;
+                }, res => {
+                    this.message = "Failed";
+                });
+                $('#myModal').modal('show');
+            } else {
+                this.message = "Width and Height should be between 100 and 300.";
+                $('#myModal').modal('show');
+            }
         }
     },
     //during the page load get the youtube url

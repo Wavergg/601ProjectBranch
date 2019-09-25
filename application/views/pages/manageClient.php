@@ -2,7 +2,7 @@
 
 <?php if(!empty($fromPage)&& sizeof($candidateData)>0):?>
 <div class="form-control bg-success text-center text-white font-weight-bold rounded-0" style="position:fixed; top:0px;z-index:1;opacity:0.9">
-    Assigning Order to <?php echo $candidateData['FirstName'];?>, Profession: <?php echo $candidateData['JobInterest'] . ' in ' . $candidateData['City'];?>
+    Assigning Order to <?php echo $candidateData['FirstName'];?>, Profession 1: <?php echo $candidateData['JobInterest'] . ', Profession 2: ' . $candidateData['JobInterest2'] . ' in ' . $candidateData['City'];?>
 </div>
 <?php endif;?>
     <div style="height: 50px;"></div>
@@ -12,7 +12,12 @@
     
     
     <div class="container ">
-        <button type="button" @click="showRemoveTab" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-outline-danger bg-danger">
+        <a href="<?php echo base_url()?>index.php/EmployerMission/index/3">
+            <button type="button" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-dark btn-lg border-white">
+            <i style="font-size:30px;" class="icon ion-md-add m-1 text-white"></i>
+            </button>
+        </a>
+        <button type="button" @click="showRemoveTab" style="position:fixed;right: 20px; bottom:95px;z-index:1" class="btn btn-outline-danger bg-danger">
             <img style="height:39px; width:35px;" src="<?php echo base_url()?>lib/images/papershreeder.png">
         </button>
         <!-- Collapse -->
