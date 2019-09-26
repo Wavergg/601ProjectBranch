@@ -275,8 +275,8 @@
 var app = new Vue({
     el: '#app',
     data: {
-       paneWidth: "140",
-       paneHeight: "140",
+       paneWidth: "<?php if($_SESSION['preferencePanel']=="2by2Small"){ echo 67; } else if ($_SESSION['preferencePanel']=="1rowSmall"){echo 100;} else if ($_SESSION['preferencePanel']=="2by2Big"){echo 150;} else {echo 140;};?>",
+       paneHeight: "<?php if($_SESSION['preferencePanel']=="2by2Small"){ echo 67; } else if ($_SESSION['preferencePanel']=="1rowSmall"){echo 100;} else if ($_SESSION['preferencePanel']=="2by2Big"){echo 150;} else {echo 140;};?>",
        status: "<?php echo $_SESSION['preferencePanel'];?>",
        userID: "<?php echo $_SESSION['userID'];?>",
     },
@@ -345,6 +345,7 @@ var app = new Vue({
     },
     mount: function(){
       this.status = "<?php echo $_SESSION['preferencePanel'];?>"
+      
     },
     created: function(){
       document.getElementById("app").removeAttribute("hidden");
