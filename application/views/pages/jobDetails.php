@@ -1,9 +1,11 @@
 
 <div id="app">
     
-    <a href="<?php echo base_url()?>index.php/Jobs/manageClient/<?php if(!empty($candidateIDFromPage)){ echo 'candidatePage/' . $candidateIDFromPage;}?>" style="position:fixed;right: 15px; bottom:20px;z-index:1"
+    <a href="<?php echo base_url()?>index.php/Jobs/orders/<?php if(!empty($candidateIDFromPage)){ echo 'candidatePage/' . $candidateIDFromPage;}?>" style="position:fixed;right: 15px; bottom:20px;z-index:1"
         class=" btn-sm btn-dark border border-secondary">
-        <i style="font-size:30px;" class="icon ion-md-redo m-1"></i>
+       
+        <div class="textInfoPosLeft" ><span class="textInfoLeft text-center bg-dark text-light font-weight-bold border border-white" style="width:220px;">Go back to Manage Order page</span><i style="font-size:30px;" class="icon ion-md-redo m-1"></i></div>
+
     </a>
     <div style="height: 50px;"></div>
     
@@ -77,7 +79,7 @@
                     </div>
                     <!-- Job Description End -->
                     <div class="row justify-content-md-end justify-content-center mr-2 my-3">
-                        <button type="button" class="my-3 mx-3" id="changeSavedBtn" onclick="updateChange()"
+                        <button type="button" class="my-3 mx-3 btn-sm btn-success" id="changeSavedBtn" onclick="updateChange()"
                             @click="submitButton" style="right: 20px; bottom:82px;">
                             <i style="font-size:30px;" class="icon ion-md-save m-1"></i>
                         </button>
@@ -111,14 +113,14 @@
                                     <th scope="col"></th>
                                     <th scope="col"></th>
                                     <!-- <th scope="col">UndoSession</th> -->
-                                    <th scope="col">Applicant_Name</th>
-                                    <th scope="col">Contact_Number</th>
+                                    <th scope="col">Applicant&nbsp;Name</th>
+                                    <th scope="col">Contact&nbsp;Number</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Applicant_Address</th>
+                                    <th scope="col">Applicant&nbsp;Address</th>
                                     
-                                    <th scope="col">Hours_worked</th>
-                                    <th scope="col">Job_Rates</th>
-                                    <th scope="col">Total_Earned</th>
+                                    <th scope="col">Hours&nbsp;worked</th>
+                                    <th scope="col">Job&nbsp;Rates</th>
+                                    <th scope="col">Total&nbsp;Earned</th>
                                     <th scope="col">Notes</th>
                                 </tr>
                             </thead>
@@ -192,9 +194,16 @@
             <!-- Publish tab start -->
             <div class="tab-pane fade pb-5" id="publish" role="tabpanel" aria-labelledby="publish-tab">
                 <!-- Editable Page For Job -->
-               
+
                 <div class="container mb-5">
+                
                     <form action="<?php echo base_url()?>index.php/Jobs/jobPublish/<?php echo $job['JobID'];?>" method="post" enctype="multipart/form-data">
+                        <div class="form-check ml-2">
+                            <input class="form-check-input" @change="updateCheckedStatus" type="checkbox" v-model="checkedJob" id="defaultCheck1">
+                            <label class="form-check-label font-weight-bold" for="defaultCheck1">
+                                Show in front page
+                            </label>
+                        </div>
                         <div class="row justify-content-start">
                             <div class="col-12 mt-4">
                                 <input type="text" class="form-control border border-0" value="<?php echo $job['PublishTitle'] ;?>" style="height:80px;font-size:48px;" placeholder="Enter Title" name="publishTitle"/>
@@ -223,10 +232,10 @@
                                     <?php $setImgPreviewID = "" ;?>
                                     <?php if(empty($job['JobImage'])):?>
                                         <?php $setImgPreviewID = "imgPreview" ;?>
-                                        <img id="imgPreview" src="<?php echo base_url()?>lib/images/facebook.jpg" class="mx-md-2" style="width:275px;height:165px;">
+                                        <img id="imgPreview" src="<?php echo base_url()?>lib/images/facebook.jpg" class="mx-md-2" style="width:285px;height:165px;object-fit:contain">
                                     <?php else :?>
                                         <?php $setImgPreviewID = "imgPreview1" ;?>
-                                        <img id="imgPreview1" src="<?php echo base_url() . 'lib/jobImages/' . $job['JobImage']?>"  class="mx-md-2" style="width:275px;height:165px;">
+                                        <img id="imgPreview1" src="<?php echo base_url() . 'lib/jobImages/' . $job['JobImage']?>"  class="mx-md-2" style="width:285px;height:165px;object-fit:contain">
                                     <?php endif;?>
                                     </div>
                                     <div class="row justify-content-center">
@@ -239,7 +248,9 @@
                         <div class="mt-5">
                             <textarea name="editor1"><?php if($job['Editor1']==NULL){ echo 'Enter the text for job'; } else { echo $job['Editor1'] ;}?></textarea>
                         </div>
-                        <div class="row justify-content-center">
+                        <div class="row justify-content-center mt-3">
+                        
+                        
                         <?php if($job['JobStatus']!='published'):?>
                         <input type="submit" value="Publish" class="col-md-3 col-6 btn btn-outline-dark mt-3"/>
                         <?php else: ?>
@@ -319,7 +330,7 @@ var app = new Vue({
         address: "<?php echo $job['Address'];?>",
         city: "<?php echo $job['City'];?>",
         suburb: "<?php echo $job['Suburb'];?>",
-        
+        clientID: "<?php echo $job['ClientID'];?>",
         chosenFile: "",
         labelFile: "",
         TOBselected: "<?php if(empty($job['TOB'])){ echo 'Open this select menu';} else { echo $job['TOB'];}?>",
@@ -328,6 +339,7 @@ var app = new Vue({
         candidatesCopy: <?php echo json_encode($candidatesData); ?>,
         candidatesDataStack: [],
         toggleEdit: false,
+        checkedJob: "<?php echo $job['Checked'];?>",
     },
     methods: {
         uploadFiles: function() {
@@ -437,6 +449,7 @@ var app = new Vue({
             formData.append('company',this.company)
             formData.append('email',this.email)
             formData.append('contactNumber',this.contactNumber)
+            formData.append('clientID',this.clientID)
             formData.append('jobTitle',this.jobTitle)
             formData.append('jobType',this.jobType)
             formData.append('address',this.address)
@@ -456,6 +469,19 @@ var app = new Vue({
                 document.getElementById("savedMessage").classList.add("fadeOutIn");
                 //remove it after using it
                 setTimeout(function(){document.getElementById("savedMessage").classList.remove("fadeOutIn");}, 1100);
+                this.updatedTime = this.getCurrentDateTime()
+            }, function(res) {
+                // error callback
+            });
+        },
+        updateCheckedStatus: function(){
+            
+            var formData = new FormData()
+            formData.append('jobID',this.jobID);
+            formData.append('checked',this.checkedJob);
+            var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/updateCheckedStatus/'
+            this.$http.post(urllink, formData).then(function(res) {
+
                 this.updatedTime = this.getCurrentDateTime()
             }, function(res) {
                 // error callback

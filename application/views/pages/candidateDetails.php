@@ -9,25 +9,32 @@
     <a href="<?php echo base_url();?>index.php/Jobs/assignCandidate/<?php echo $candidate['CandidateID'];?>/<?php echo $job['JobID'];?>">
         <button type="button" style="position:fixed;right: 20px; bottom:20px;z-index:1" class=" btn-lg border-white">
             <span>Assign this candidate</span>
+                            <div class="textInfoPosLeft" ><span style="font-size:16px;width:150px;" class="textInfoLeft text-center bg-dark text-light font-weight-bold border border-white" >Add New Client</span> <i style="font-size:30px;" class="icon ion-md-add m-1"></i></div>
+
             <i style="font-size:30px;" class="icon ion-md-contacts m-1 text-dark"></i>
         </button>
     </a>
     <?php endif;?>
 
     <?php if(empty($job)):?>
+    <div class="btnNoGlow">
     <button type="button" @click="editButton()" style="position:fixed;right: 20px; bottom:146px;z-index:1"
-        class=" btn-sm btn-info">
-        <i style="font-size:30px;" class="icon ion-md-create m-1"></i>
+        class="btnEdit btn-sm btn-info">
+        <div class="textInfoPosLeft" ><span class="textInfoLeft text-center bg-info text-light font-weight-bold border border-white">Toggle Edit</span><i style="font-size:30px;" class="icon ion-md-create m-1"></i></div>
+        
     </button>
     <button type="button" id="changeSavedBtn" onclick="updateChange()"
         @click="submitButton(<?php echo $candidate['CandidateID'];?>,<?php echo $candidate['UserID'];?>)"
         style="position:fixed;right: 20px; bottom:82px;z-index:1" class=" btn-sm btn-success">
-        <i style="font-size:30px;" class="icon ion-md-save m-1"></i>
+        <div class="textInfoPosLeft" ><span class="textInfoLeft text-center bg-success text-light font-weight-bold border border-white">Save Data</span><i style="font-size:30px;" class="icon ion-md-save m-1"></i></div>
+        
     </button>
-    <a href="<?php echo base_url()?>index.php/Jobs/manageClient/candidatePage/<?php echo $candidate['CandidateID'];?>" style="position:fixed;right: 20px; bottom:20px;z-index:1"
+    <a href="<?php echo base_url()?>index.php/Jobs/orders/candidatePage/<?php echo $candidate['CandidateID'];?>" style="position:fixed;right: 20px; bottom:20px;z-index:1"
         class=" btn-sm btn-dark border border-secondary">
-        <i style="font-size:30px;" class="icon ion-md-contacts m-1"></i>
+        <div class="textInfoPosLeft" ><span class="textInfoLeft text-center bg-dark text-light font-weight-bold border border-white">Assign a job</span> <i style="font-size:30px;" class="icon ion-md-contacts m-1"></i></div>
+       
     </a>
+    </div>
     <?php endif;?>
 
     <div id="savedMessage" hidden class="btn-sm btn-dark disabled">
@@ -55,8 +62,8 @@
             <div class="tab-pane fade  show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <div onchange="trackChanges()"> <!--applicantPageStart-->
                 <div class="d-flex">
-                <h3 class="text-warning mt-3"> Profession </h3>
-                <small class="ml-auto text-muted pt-1">Last Updated: <span v-text="updatedTime"></span></small>
+                <h3 class="text-warning mt-4"> Profession </h3>
+                <small class="ml-auto text-muted pt-2">Last Updated: <span v-text="updatedTime"></span></small>
                 </div>
                 <hr>
                 <div class="row">
@@ -396,8 +403,8 @@
                
                 
                 <div class="container jumbotron mt-5 bg-light">
-                <div class="row justify-content-center">
-                <img src="<?php echo base_url()?>lib/images/youtube.png" class="align-self-center mt-2" style="width:48px;height:48px; ">
+                <div class="row justify-content-center p-0">
+                <img src="<?php echo base_url()?>lib/images/youtube.png" class="align-self-center mt-2" style="width:40px;height:40px;object-fit:contain">
                
                 <span class="font-weight-bold align-self-center" style="font-size:48px;">YouTube URL</span>
                  </div>

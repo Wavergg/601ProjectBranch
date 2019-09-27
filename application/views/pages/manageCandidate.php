@@ -15,11 +15,12 @@
     <div class="container">
         <a href="<?php echo base_url()?>index.php/CandidateMission/addingNewCandidateStaffOnly">
             <button type="button" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-dark btn-lg border-white">
-            <i style="font-size:30px;" class="icon ion-md-add m-1 text-white"></i>
+            <div class="textInfoPosLeft" ><span class="textInfoLeft text-center bg-dark text-light font-weight-bold border border-white" style="font-size:16px;width:140px;">Add Candidate</span> <i style="font-size:30px;" class="icon ion-md-add m-1 text-white"></i></div>
             </button>
         </a>
         <button type="button" @click="showRemoveTab" style="position:fixed;right: 20px; bottom:95px;z-index:1" class="btn btn-outline-danger bg-danger">
-            <img style="height:39px; width:35px;" src="<?php echo base_url()?>lib/images/papershreeder.png">
+        <div class="textInfoPosLeft" ><span style="font-size:16px;width:180px;" class="textInfoLeft text-center bg-danger text-light font-weight-bold border border-white" >Toggle Remove Tab</span> <img style="height:39px; width:35px;" src="<?php echo base_url()?>lib/images/papershreeder.png"></div>
+
         </button>
         <!-- Collapse -->
         <a class="btn btn-outline-dark border border-dark form-control" style="border-radius: 15px 15px 0px 0px;" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -63,18 +64,17 @@
            
                 <thead>
                     <tr>
-                        <th scope="col" v-bind:class="{ 'd-none': ! showAssignCandidate }"><a href="#" class="text-dark">Assign_Applicant</a></th>
+                        <th scope="col" v-bind:class="{ 'd-none': ! showAssignCandidate }"><a href="#" class="text-dark">Assign&nbsp;Applicant</a></th>
                         <th scope="col" v-bind:class="{ 'd-none': ! showRemoveStatus }"><a href="#" class="text-dark">Remove</a></th>
                         <th scope="col"><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
                         <th scope="col" >CV</th>
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('ApplyDate')">Last Updated<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('FirstName')">First_name<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('LastName')">Last_name<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('JobInterest')">Profession_1<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('JobInterest2')">Profession_2<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
-
-                        <th scope="col" >Phone_Number</th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('ApplyDate')">Last&nbsp;Updated<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('FirstName')">First&nbsp;name<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('LastName')">Last&nbsp;name<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('JobInterest')">Profession&nbsp;1<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="sortBy('JobInterest2')">Profession&nbsp;2<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
                         <th scope="col"><a href="#" class="text-dark" @click.stop.prevent="sortBy('City')">City<div class="d-md-inline d-none"><i class="ml-1 icon ion-md-arrow-dropdown"></i><i class="icon ion-md-arrow-dropup"></i></div></a></th>
+                        <th scope="col" >Phone&nbsp;Number</th>
                         
                         <th scope="col" >Email</th>
                        <!-- <th scope="col" v-bind:class="{ 'd-none': ! showDOB }"><a href="#" class="text-dark pr-5" @click.stop.prevent="sortBy('DOB')">Date Of Birth</a></th>
@@ -109,8 +109,9 @@
                         <th class="font-weight-normal" v-text="candidate.LastName" ></th>
                         <th class="font-weight-normal" v-text="candidate.JobInterest" ></th>
                         <th class="font-weight-normal" v-text="candidate.JobInterest2" ></th>
-                        <th class="font-weight-normal" v-text="candidate.PhoneNumber" ></th>
                         <th class="font-weight-normal" v-text="candidate.City" ></th>
+                        <th class="font-weight-normal" v-text="candidate.PhoneNumber" ></th>
+                        
                         <th class="font-weight-normal" v-text="candidate.Email" ></th>
                         <!-- <th v-text="candidate.DOB" v-bind:class="{ 'd-none': ! showDOB }"></th>
                         

@@ -35,7 +35,7 @@
                     <p class="text-danger" v-text="emailError"></p>
                 </div>
             </div>
-            <div class="col-md-4 pr-md-0 p-0 mt-2 mt-md-0">
+            <div class="col-md-4 pr-md-0 p-0 mt-3 mt-md-0">
                 <label for="PhoneNumberID" class="font-weight-bold">Phone Number:</label>
                 <input type="text" placeholder="Enter PhoneNumber" @change="checkPhoneNumber" class="form-control" name="PhoneNumber"
                     id="PhoneNumberID" v-model="phoneNumber"/>
@@ -49,7 +49,7 @@
         </div>
        
         <div class="row mt-md-3">
-            <div class="col-lg-4 col-md-11 pr-md-3 p-0 mt-2 mt-md-0">
+            <div class="col-lg-4 col-md-11 pr-md-3 p-0 mt-3 mt-md-0">
                 <label for="AddressID" class="font-weight-bold"><span class="text-danger">* </span>Address and street number:</label>
                 <input type="text" placeholder="Enter Address" @change="checkAddress" class="form-control" name="Address" id="AddressID"
                  v-model="userAddress" />
@@ -57,7 +57,7 @@
                     <p class="text-danger" v-text="addressError"></p>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-4 col-9 p-0 mt-2 mt-lg-0 mt-md-2 pr-2">
+            <div class="col-lg-3 col-md-4 col-9 p-0 mt-3 mt-lg-0 mt-md-2 pr-2">
                 <label for="CityID" class="font-weight-bold"><span class="text-danger">* </span>City:</label>
                 <select class="form-control" type="text" @change="checkCity" name="City" id="CityID" v-model="city" >
                     <option selected></option>
@@ -69,14 +69,14 @@
                     <p class="text-danger" v-text="cityError"></p>
                 </div>
             </div>
-            <div class="col-lg-1 col-md-3 pr-md-0 p-0 mt-2 mt-lg-0 mt-md-2 col-3">
+            <div class="col-lg-1 col-md-3 pr-md-0 p-0 mt-3 mt-lg-0 mt-md-2 col-3">
                 <label for="ZipCodeID" class="font-weight-bold">ZipCode</label>
                 <input type="text" placeholder="ZIP" class="form-control" @change="checkZip" name="ZipCode" id="ZipCodeID" v-model="zipCode"/>
                 <div class="row mt-3 mx-3" v-if="zipCodeError.length">
                     <p class="text-danger" v-text="zipCodeError"></p>
                 </div>
             </div>
-            <div class="col-md-4 px-md-3 p-0 mt-2 mt-lg-0 mt-md-2">
+            <div class="col-md-4 px-md-3 p-0 mt-3 mt-lg-0 mt-md-2">
                 <label for="SuburbID" class="font-weight-bold">Suburb:</label>
                 <input type="text" placeholder="Enter Suburb" class="form-control" @change="checkSuburb" name="Suburb" id="SuburbID" v-model="suburb" />
                 <div class="row mt-3 mx-3" v-if="suburbError.length">
@@ -86,7 +86,7 @@
         </div>
         
         <div class="row mt-md-3">
-            <div class="col-md-4 pr-md-3 p-0">
+            <div class="col-md-4 pr-md-3 p-0 mt-3 mt-md-0">
                     <label for="DOBID" class="font-weight-bold"><span class="text-danger"></span>Date of Birth:</label>
                     <input type="date" placeholder="YYYY-MM-DD" class="form-control" v-model="DOB" name="DOB" id="DOBID">
             </div>
@@ -114,14 +114,14 @@
         
         <div class="row">
             
-            <div class="col-md-4">
+            <div class="col-md-4 mt-2 mt-md-0">
                 <label for="jobInterestID" class="font-weight-bold">Job interested in:</label>
                 <input type="text" class="form-control" v-model="jobInterest" @change="checkGeneral('jobInterest')" name="jobInterest" placeholder="Job Title" id="jobInterestID" />
                 <div class="row mt-3 mx-3">
                     <p id="jobInterestIDError" class="text-danger"></p>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 mt-2 mt-md-0">
                 <label for="jobInterest2ID" class="font-weight-bold">Other job interest:</label>
                 <input type="text" class="form-control" v-model="jobInterest2" @change="checkGeneral('jobInterest2')" name="jobInterest2" placeholder="Job Title" id="jobInterest2ID" />
                 <div class="row mt-3 mx-3">
@@ -136,7 +136,7 @@
                     <option value="PartTime">Part Time</option>
                 </select>
             </div>
-            <div class="col-md-5 mt-2 mt-md-0">
+            <div class="col-md-5 mt-3 mt-md-0">
                 <div class="row">
                 <label for="JobCVID" class="font-weight-bold mx-3">Drop your CV here:</label>
                 </div>
@@ -185,7 +185,7 @@
                     <option value="Class6 Motorcycle">Class 6 - Motorcycle license </option>
                 </select>
             </div>
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-4 mt-3 mt-md-0">
                 <label for="endorsementID" class="font-weight-bold mt-2">Endorsements:</label>
                 <input type="text" class="form-control" @change="checkGeneral('endorsement')" v-model="endorsement" placeholder="Endorsement" name="endorsement" id="endorsementID">
                 <div class="row mt-3 mx-3">
@@ -207,11 +207,11 @@
                 </select>
             </div>
 
-            <div class="col-lg-3 col-md-5 pr-md-0 mt-3">
+            <div class="col-lg-3 col-md-5 pr-md-0 mt-md-0 mt-3">
                 <label for="nationalityID" class="font-weight-bold"> Nationality:</label>
                 <input type="text" class="form-control" @change="checkGeneral('nationality')" v-model="nationality" placeholder="Enter Nationality" name="nationality"
                     id="nationalityID" />
-                <div class="row mt-3 mx-3">
+                <div class="row mt-3 ml-md-1 ml-3">
                     <p id="nationalityIDError" class="text-danger"></p>
                 </div>
             </div>
@@ -219,7 +219,7 @@
                 <label for="passportCountryID" class="font-weight-bold">Passport issuing country:</label>
                 <input type="text" class="form-control" v-model="passportCountry" @change="checkGeneral('passportCountry')" placeholder="Passport Issuing Country" name="passportCountry"
                     id="passportCountryID" />
-                <div class="row mt-3 mx-3">
+                <div class="row mt-3 ml-md-1 ml-3">
                     <p id="passportCountryIDError" class="text-danger"></p>
                 </div>
             </div>
@@ -227,7 +227,7 @@
                 <label for="passportNumberID" class="font-weight-bold">Passport Number:</label>
                 <input type="text" class="form-control" v-model="passportNumber" @change="checkGeneral('passportNumber')" placeholder="Passport Number" name="passportNumber"
                     id="passportNumberID" />
-                <div class="row mt-3 mx-3">
+                <div class="row mt-3 ml-md-1 ml-3">
                     <p id="passportNumberIDError" class="text-danger"></p>
                 </div>
             </div>
@@ -237,15 +237,15 @@
                 <label for="workPermitNumberID" class="font-weight-bold">Work permit number:</label>
                 <input type="text" class="form-control" v-model="workPermitNumber" @change="checkGeneral('workPermitNumber')" placeholder="Work Permit Number" name="workPermitNumber"
                     id="workPermitNumberID" />
-                <div class="row mt-3 mx-3">
+                <div class="row mt-3 ml-md-1 ml-3">
                     <p id="workPermitNumberIDError" class="text-danger"></p>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-5 pr-md-0">
+            <div class="col-lg-4 col-md-5 pr-md-0 mt-2 mt-md-0">
                 <label for="workPermitExpiryID" class="font-weight-bold">Work permit expiry date:</label>
                 <input type="date" class="form-control" @change="checkDate('workPermitExpiry')" v-model="workPermitExpiry" placeholder="Work Permit Expiry Date" name="workPermitExpiry"
                     id="workPermitExpiryID" />
-                <div class="row mt-3 mx-3">
+                <div class="row mt-3 ml-md-1 ml-3">
                     <p id="workPermitExpiryIDError" class="text-danger"></p>
                 </div>
             </div>

@@ -14,6 +14,7 @@ class EmployerMission extends CI_Controller{
         // Load Models
         $this->load->model('city_model');
         $this->load->model('job_model');
+        $this->load->model('client_model');
     }
     //loading the page of employerMission
     public function index($param=''){
@@ -142,7 +143,16 @@ class EmployerMission extends CI_Controller{
         //if the error is not detected adding the information to database else return a warning message
         if(!$errorIsTrue){
             $currentDate = date('Y-m-d');
-            $this->job_model->addJob($clientTitle,$clientName,$clientCompany,$clientEmail,$clientContact,$clientCity,$clientAddress,$clientJobTitle,$clientJobType,$description,$clientSuburb,$currentDate);
+
+            $data['client'] = $this->client_model->getClientByData($clientName,$clientCompany);
+
+            if(sizeof($data['client'])==0){
+                $this->client_model->addClient($clientTitle,$clientName,$clientCompany,$clientEmail,$clientContact,$clientCity,$clientAddress,$clientSuburb);
+                
+                $data['client'] = $this->client_model->getClientByData($clientName,$clientCompany);
+            } 
+            $this->job_model->addJob($data['client']['ClientID'],$clientTitle,$clientName,$clientCompany,$clientEmail,$clientContact,$clientCity,$clientAddress,$clientJobTitle,$clientJobType,$description,$clientSuburb,$currentDate);
+            
             $data['title'] = 'Job was added successfully.';
 
             // create a folder for the job, named as JobID
@@ -158,5 +168,79 @@ class EmployerMission extends CI_Controller{
         $this->load->view('templates/header', $userdata);
         $this->load->view('pages/employerMission', $data);
         $this->load->view('templates/footer');
+    }
+
+
+    //called from: view->pages->addClientStaffOnly
+    //adding a client into database
+    public function addClient(){
+        if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+            $userdata['userType'] = $_SESSION['userType'];
+
+            $isError = false;
+
+            if(isset($_POST['clientTitle'])){
+                $clientTitle = $_POST['clientTitle'];
+            } else {
+                $clientTitle = "";
+            }
+
+            if(isset($_POST['clientName'])){
+                $clientName = $_POST['clientName'];
+            } else {
+                $isError = true;
+            }
+            
+            if(isset($_POST['clientCompany'])){
+                $company = $_POST['clientCompany'];
+            } else {
+                $isError = true;
+            }
+
+            if(isset($_POST['clientEmail'])){
+                $email = $_POST['clientEmail'];
+            } else {
+                $email = "";
+            }
+
+            if(isset($_POST['clientContact'])){
+                $contactNumber = $_POST['clientContact'];
+            } else {
+                $isError = true;
+            }
+
+            if(isset($_POST['clientAddress'])){
+                $address = $_POST['clientAddress'];
+            } else {
+                $isError = true; 
+            }
+
+            if(!empty($_POST['clientCity'])){
+                $city = $_POST['clientCity'];
+            } else {
+                $isError = true;
+            }
+
+            if(isset($_POST['clientSuburb'])){
+                $suburb = $_POST['clientSuburb'];
+            } else {
+                $suburb = "";
+            }
+        	
+            $data['cities'] = $this->city_model->get_cities();
+            
+            if($this->client_model->countClientByData($clientName,$company)>0){
+                echo 'The client already exists';
+            } else {
+                if(!$isError){
+                $this->client_model->addClient($clientTitle,$clientName,$company,$email,$contactNumber,$city,$address,$suburb);
+                echo 'Successful in inserting data';
+                } else {
+                    echo 'Error in inserting data';
+                }
+            }
+		} else {
+			redirect('/');
+		}
     }
 }

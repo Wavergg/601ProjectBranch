@@ -211,7 +211,7 @@
   <div class="card text-center" >
     <a href="<?php echo base_url()?>index.php/Personcenter/personalInfo" style="text-decoration:none;">
     <div class="row justify-content-center mt-3 ">
-    <img src="<?php echo base_url()?>lib/images/settings.png" :style="'width:'+(paneWidth-10)+'px;height:'+(paneHeight-10)+'px;'" class="card-img-top" alt="">
+    <img src="<?php echo base_url()?>lib/images/settings.png" :style="'width:'+(paneWidth)+'px;height:'+(paneHeight)+'px;'" class="card-img-top" alt="">
     </div>
     <div class="card-body">
       <h5 class="card-title text-dark" style="font-size:16px;">Settings</h5>

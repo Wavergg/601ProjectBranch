@@ -27,7 +27,7 @@
                 </a>
             </div>
             <!-- space -->
-            <div class="col-md-5 text-left text-md-right">
+            <div class="col-md-5 text-left pl-5 mt-4 mt-md-0 text-md-right">
             <?php if(isset($_SESSION['userType'])):?>
                 <?php if($_SESSION['userType']=="admin" || $_SESSION['userType']=="staff"):?>
                 <!-- load the database and use function to count how many unchecked job and candidate -->
@@ -56,7 +56,7 @@
                 <!-- <a class="nav-link text-dark mx-4" href="<?php echo base_url() ?>index.php/Register">Register</a> -->
                 </div>
                 <?php else: ?>
-                <a class="nav-link text-dark mx-4" href="<?php echo base_url() ?>index.php/personcenter">Dashboard</a>
+                <a class="nav-link text-dark mx-4" href="<?php echo base_url() ?>index.php/personcenter">Recruitment Tools</a>
                 <a class="nav-link text-dark mx-4" href="<?php echo base_url() ?>index.php/login/logout">Logout</a>
                 <?php endif; ?>
             </nav>
@@ -64,6 +64,8 @@
     </nav>
 
     <!--BottomHeaderNav-->
+    <?php if(!isset($_SESSION['userID'])):?>
+    <!-- if the user is not logged in -->
     <nav class="navbar navbar-expand-sm py-3 justify-content-around border-bottom shadow-sm"
         style="background-color:#ff9900;">
         <a class="nav-link text-dark" href="<?php echo base_url() ?>">Home</a>
@@ -86,3 +88,28 @@
         <a class="nav-link text-dark" href="<?php echo base_url()?>index.php/AboutUS">About Us</a>
         <a class="nav-link text-dark" href="<?php echo base_url()?>index.php/ContactUs">Contact Us</a>
     </nav>
+    <?php else :?>
+
+    <!-- if the user is logged in -->
+    <nav class="navbar navbar-expand-sm py-3 justify-content-around border-bottom shadow-sm"
+        style="background-color:#ff9900;">
+        <a class="nav-link text-dark" href="<?php echo base_url() ?>index.php/Jobs/orders">Orders</a>
+        <a class="nav-link text-dark" href="<?php echo base_url() ?>index.php/Jobs">Jobs</a>
+        <div class="dropdown">
+            <button class="dropbtn text-dark dropdown-toggle"><a class="text-dark" style="text-decoration:none" href="<?php echo base_url() ?>index.php/CandidateMission/manageCandidate/">Applicants</a></button>
+            <div class="dropdown-content">
+                <a href="<?php echo base_url() ?>index.php/CandidateMission/addingNewCandidateStaffOnly">New Applicants</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn text-dark dropdown-toggle"><a class="text-dark" style="text-decoration:none" href="<?php echo base_url() ?>index.php/Jobs/manageClient">Clients</a></button>
+            <div class="dropdown-content">
+                <a href="<?php echo base_url() ?>index.php/Jobs/addClientStaffOnly">New Client</a>
+                <a href="<?php echo base_url() ?>index.php/Jobs/submitVacancy">Submit Vacancy</a>
+            </div>
+        </div>
+        <a class="nav-link text-dark" href="<?php echo base_url() ?>index.php/Archive">Archive</a>
+        <a class="nav-link text-dark" href="<?php echo base_url()?>index.php/Personcenter/personalInfo">Settings</a>
+    </nav>
+
+    <?php endif;?>

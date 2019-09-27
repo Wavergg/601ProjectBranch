@@ -60,7 +60,7 @@ class Login extends CI_Controller {
                 //set the session from array
                 $this->session->set_userdata($newdata);
 
-                redirect('/personcenter/index');
+                redirect('/CandidateMission/manageCandidate');
             } else {
               
                 $userdata['userType'] = 'anyone';

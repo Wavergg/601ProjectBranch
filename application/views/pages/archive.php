@@ -4,7 +4,10 @@
 
     <h2 class="text-center"><?php echo $title; ?></h2>
     <hr />
-    
+    <button type="button" @click="showRemoveTab" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-outline-danger bg-danger">
+        <div class="textInfoPosLeft" ><span style="font-size:16px;width:200px;" class="textInfoLeft text-center bg-danger text-light font-weight-bold border border-white" >Toggle Remove Column</span><img style="height:39px; width:35px;" src="<?php echo base_url()?>lib/images/papershreeder.png"></div>
+        
+    </button>
     <ul class="nav nav-tabs flex-sm-row" id="myTab" role="tablist">
         <li class="nav-item ml-auto text-sm-center">
             <a class="nav-link active" id="OrdersArchives-tab" data-toggle="tab" href="#OrdersArchives" role="tab" aria-controls="OrdersArchives" aria-selected="true">Orders Archives</a>
@@ -16,9 +19,7 @@
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="OrdersArchives" role="tabpanel" aria-labelledby="OrdersArchives-tab">
         <div class="container mt-5">
-        <button type="button" @click="showRemoveTab" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-outline-danger bg-danger">
-            <img style="height:39px; width:35px;" src="<?php echo base_url()?>lib/images/papershreeder.png">
-        </button>
+        
         <!-- Collapse -->
         <a class="btn btn-outline-dark border border-dark form-control" style="border-radius: 15px 15px 0px 0px;" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
         <span class="font-weight-bold">Order Filters</span><i class="ml-1 icon ion-md-barcode mx-3"></i></a>
@@ -122,9 +123,7 @@
   <!-- start applicant Tab -->
   <div class="tab-pane fade" id="applicantsArchives" role="tabpanel" aria-labelledby="applicantsArchives-tab">
   <div class="container mt-5">
-        <button type="button" @click="showRemoveTab" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-outline-danger bg-danger">
-            <img style="height:39px; width:35px;" src="<?php echo base_url()?>lib/images/papershreeder.png">
-        </button>
+       
         <!-- <a href="<?php echo base_url()?>index.php/CandidateMission/addingNewCandidateStaffOnly">
             <button type="button" style="position:fixed;right: 20px; bottom:20px;z-index:1" class="btn btn-dark btn-lg border-white">
             <i style="font-size:30px;" class="icon ion-md-add m-1 text-white"></i>

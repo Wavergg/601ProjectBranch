@@ -16,6 +16,8 @@ class Jobs extends CI_Controller {
 		$this->load->model('job_model');
 		$this->load->model('city_model');
 		$this->load->model('candidate_model');
+		$this->load->model('client_model');
+		
 	}
 	//loads the jobs page
 	public function index()
@@ -50,9 +52,25 @@ class Jobs extends CI_Controller {
         $this->load->view('templates/footer');
 	}
 
+	// load the adding client 
+	public function addClientStaffOnly(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			$userdata['userType'] = $_SESSION['userType'];
+			
+			$data['message'] = array();
+        	$data['cities'] = $this->city_model->get_cities();
+			
+			$this->load->view('templates/header',$userdata);
+			$this->load->view('pages/clientApplicationForm',$data);
+			$this->load->view('templates/footer');
+		} else {
+			redirect('/');
+		}
+	}
+
 	// called from view->personcenter->adminPanel , view->personcenter->staffPanel
 	// show client tables
-	public function manageClient($page="",$candidateID=""){
+	public function orders($page="",$candidateID=""){
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
 			$userdata['userType'] = $_SESSION['userType'];
 			$userID = $_SESSION['userID'];
@@ -88,6 +106,44 @@ class Jobs extends CI_Controller {
                 if(empty($data['jobs'][$i]['JobStatus'])){ $data['jobs'][$i]['JobStatus']="NoAction"; }
                 $data['jobs'][$i]['ref'] = $ref;
          
+			}
+			
+			$data['fromPage'] = $page; 
+			$this->load->view('templates/header',$userdata);
+			$this->load->view('pages/orders',$data);
+			$this->load->view('templates/footer');
+		} else {
+			redirect('/');
+		}
+	}
+
+	// called from view->personcenter->adminPanel , view->personcenter->staffPanel
+	// show client tables
+	public function manageClient($page="",$candidateID=""){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			$userdata['userType'] = $_SESSION['userType'];
+			$userID = $_SESSION['userID'];
+			//update visited time
+			$data['lastVisitClient'] = $_SESSION['visitedClient'];
+
+			$this->job_model->updateVisitedManageClient($userID);
+            date_default_timezone_set('NZ');
+			$_SESSION['visitedClient'] = date('Y-m-d H:i:s');
+			//end visit time
+			
+			
+			$data['jobs'] = $this->client_model->get_clients();
+			$data['candidateData'] = array();
+			$data['activeJobNum'] = $this->job_model->countAllClient();
+
+			$data['title'] = "Manage Client";
+			$data['message'] ="";
+	
+			//adding 1 more field into jobs ref
+            for($i=0;$i<sizeof($data['jobs']);$i++){
+                $ref = base_url() . 'index.php/Jobs/clientDetails/' . $data['jobs'][$i]['ClientID'] ;
+
+                $data['jobs'][$i]['ref'] = $ref;
 			}
 			
 			$data['fromPage'] = $page; 
@@ -130,6 +186,157 @@ class Jobs extends CI_Controller {
         } else {
             redirect('/');
         }
+	}
+
+	//called from view->pages->manageClient
+	//AJAX method
+	//get the next 10 records for next page for manageClient page
+	public function getActiveClient(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+
+			$offset=$_POST['offset'];
+
+		
+				$clientsResult = $this->client_model->get_clients($offset);
+
+			//adding 1 more extra field ref
+            for($i=0;$i<sizeof($clientsResult);$i++){
+				$ref = base_url() . 'index.php/Jobs/clientDetails/' . $clientsResult[$i]['ClientID'];
+				
+				//if jobStatus is null, "" or 0 , return the string of NoAction as the value in jobstatus for specific job
+                if(empty($clientsResult[$i]['ClientStatus'])){ $clientsResult[$i]['ClientStatus']="NoAction"; }
+                $clientsResult[$i]['ref'] = $ref;
+              
+            }
+
+            echo json_encode($clientsResult);
+        } else {
+            redirect('/');
+        }
+	}
+
+	public function submitVacancy(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			$userdata['userType'] = $_SESSION['userType'];
+			$userID = $_SESSION['userID'];
+			//update visited time
+			$data['lastVisitClient'] = $_SESSION['visitedClient'];
+
+			$this->job_model->updateVisitedManageClient($userID);
+            date_default_timezone_set('NZ');
+			$_SESSION['visitedClient'] = date('Y-m-d H:i:s');
+			//end visit time
+			
+			
+			$data['jobs'] = $this->client_model->get_clients();
+			$data['candidateData'] = array();
+			$data['activeJobNum'] = $this->job_model->countAllClient();
+			
+
+			$data['title'] = "Manage Client";
+			$data['message'] ="";
+	
+			//adding 1 more field into jobs ref
+            for($i=0;$i<sizeof($data['jobs']);$i++){
+                $ref = base_url() . 'index.php/Jobs/addVacancy/' . $data['jobs'][$i]['ClientID'] ;
+
+                $data['jobs'][$i]['ref'] = $ref;
+			}
+			
+			$data['fromPage'] = "submitVacancy"; 
+			$this->load->view('templates/header',$userdata);
+			$this->load->view('pages/manageClient',$data);
+			$this->load->view('templates/footer');
+		} else {
+			redirect('/');
+		}
+	}
+
+	//called from: Controller->CandidateMission->manageClients
+	public function clientDetails($clientID){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			$userdata['userType'] = $_SESSION['userType'];
+			
+        	$data['client'] = $this->client_model->getClientById($clientID);
+			$data['cities'] = $this->city_model->get_cities();
+			$this->load->view('templates/header',$userdata);
+			$this->load->view('pages/clientDetails',$data);
+			$this->load->view('templates/footer');
+		} else {
+			redirect('/');
+		}
+	}
+
+	public function updateClientData(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+			
+
+			$isError = false;
+			
+			if(isset($_POST['clientID'])){
+                $clientID = $_POST['clientID'];
+            } else {
+                $isError = true;
+            }
+
+            if(isset($_POST['clientTitle'])){
+                $clientTitle = $_POST['clientTitle'];
+            } else {
+                $clientTitle = "";
+            }
+
+            if(isset($_POST['clientName'])){
+                $clientName = $_POST['clientName'];
+            } else {
+                $isError = true;
+            }
+            
+            if(isset($_POST['clientCompany'])){
+                $company = $_POST['clientCompany'];
+            } else {
+                $isError = true;
+            }
+
+            if(isset($_POST['clientEmail'])){
+                $email = $_POST['clientEmail'];
+            } else {
+                $email = "";
+            }
+
+            if(isset($_POST['clientContact'])){
+                $contactNumber = $_POST['clientContact'];
+            } else {
+                $isError = true;
+            }
+
+            if(isset($_POST['clientAddress'])){
+                $address = $_POST['clientAddress'];
+            } else {
+                $isError = true; 
+            }
+
+            if(!empty($_POST['clientCity'])){
+                $city = $_POST['clientCity'];
+            } else {
+                $isError = true;
+            }
+
+            if(isset($_POST['clientSuburb'])){
+                $suburb = $_POST['clientSuburb'];
+            } else {
+                $suburb = "";
+            }
+         
+            if(!$isError){
+            $this->client_model->updateClientData($clientID,$clientTitle,$clientName,$company,$email,$contactNumber,$city,$address,$suburb);
+            echo 'Successful in updating data';
+            } else {
+                echo 'Failure in updating data';
+			}
+				
+		} else {
+			redirect('/');
+		}
 	}
 
 	//called from: View->page->manageClient
@@ -280,7 +487,9 @@ class Jobs extends CI_Controller {
 			$this->job_model->updateJobData($jobID,$data);
 			//update time
 			$this->job_model->updateTimeChanged($jobID);
+			$data['ClientID'] = $_POST['clientID'];
 			
+			$this->client_model->updateClientData($data['ClientID'],$data['ClientTitle'],$data['ClientName'],$data['Company'],$data['Email'],$data['ContactNumber'],$data['City'],$data['Address'],$data['Suburb']);
 		} else {
 			redirect('/');
 		}
@@ -315,6 +524,19 @@ class Jobs extends CI_Controller {
 		}
 
 	}
+
+	public function updateCheckedStatus(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+
+			$data['JobID'] = $_POST['jobID'];
+			$data['Checked'] = $_POST['checked'];
+			$this->job_model->checkJob($data['JobID'],$data);
+		} else {
+			redirect('/');
+		}
+
+	}
+
 	/**
 	 * AJAX Methods for staff and Admin
 	 */
@@ -350,6 +572,7 @@ class Jobs extends CI_Controller {
 		}
 	}
 
+
 	//called from view->pages->manageCandidate, view->pages->candidateDetails
 	//assign the candidate to this job
 	public function assignCandidate($candidateID,$jobID){
@@ -368,6 +591,21 @@ class Jobs extends CI_Controller {
 
 			$this->load->view('templates/header',$userdata);
 			$this->load->view('pages/jobDetails',$data);
+			$this->load->view('templates/footer');
+			
+		} else {
+			redirect('/');
+		}
+	}
+
+	public function addVacancy($clientID=0){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+
+			$data['client'] = $this->client_model->getClientById($clientID);
+			$userdata['userType'] = $_SESSION['userType'];
+			$data['cities'] = $this->city_model->get_cities();
+			$this->load->view('templates/header',$userdata);
+			$this->load->view('pages/vacancyFormStaffOnly',$data);
 			$this->load->view('templates/footer');
 			
 		} else {
@@ -545,7 +783,8 @@ class Jobs extends CI_Controller {
 	
 			//add 1 more field ref
             for($i=0;$i<sizeof($data['jobs']);$i++){
-                $ref = base_url() . 'index.php/Jobs/jobDetails/' . $data['jobs'][$i]['JobID'] . '/' . $candidateID;
+				$ref = base_url() . 'index.php/Jobs/jobDetails/' . $data['jobs'][$i]['JobID'] . '/' . $candidateID;
+				if(empty($data['jobs'][$i]['JobStatus'])){ $data['jobs'][$i]['JobStatus']="NoAction"; }
                 $data['jobs'][$i]['ref'] = $ref;
             }
 
@@ -564,6 +803,18 @@ class Jobs extends CI_Controller {
 		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
         $jobID = $_POST['jobID'];
 		$this->job_model->updateJobStatusToComplete($jobID);
+		
+		} else {
+			redirect('/');
+		}
+	}
+
+	//called from: view->pages->manageClient
+	//move it into archive
+	public function removeClientApplication(){
+		if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+        $clientID = $_POST['clientID'];
+		$this->job_model->updateClientStatusToDeleted($clientID);
 		
 		} else {
 			redirect('/');

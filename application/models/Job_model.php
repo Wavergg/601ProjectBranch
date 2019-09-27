@@ -26,14 +26,7 @@ class Job_model extends CI_Model {
         return $query->result_array();
     }
 
-    // get all unchecked jobs
-    // called from : Controller->Applicant->index
-    public function getUnchecked(){
-        $this->db->where('Checked', NULL);
-        $this->db->order_by('JobSubmittedDate', 'DESC');
-        $query = $this->db->get('Job');
-        return $query->result_array();
-    }
+    
 
     //called from: Controller->Home->index(), Controller->Jobs->index()
     //get job with status of published
@@ -43,8 +36,10 @@ class Job_model extends CI_Model {
         $this->db->where('JobStatus', 'published');
         if($page=="home"){
             //if it's called byhomepage sort it by newest to oldest grab 9 records
+            $this->db->where('Checked','true');
             $this->db->order_by('PublishDate', 'DESC');
             $this->db->limit(9);
+            
         }
         //filter functions
         if($jobTitle != ""){
@@ -95,21 +90,23 @@ class Job_model extends CI_Model {
     /**
      * Update functions
      */
-    //called from Controller: Applicant->checkClient
+   
     //update the check status to be true
-    public function checkJob($jobID){
-        $this->db->set('Checked', 'true');
+    public function checkJob($jobID,$data){
+        
         $this->db->where('JobID', $jobID);
-        $this->db->update('Job');
+        $this->db->update('Job',$data);
     }
+
 
     /**
      * Insert functions
      */
     // Called from: Controller->EmployerMission->addJob()
     // Insert a new Job into database
-    public function addJob($clientTitle,$clientName,$clientCompany,$clientEmail,$clientContact,$clientCity,$clientAddress,$clientJobTitle,$clientJobType,$description,$suburb,$dateJobSubmitted) {
+    public function addJob($clientID,$clientTitle,$clientName,$clientCompany,$clientEmail,$clientContact,$clientCity,$clientAddress,$clientJobTitle,$clientJobType,$description,$suburb,$dateJobSubmitted) {
         $data = array(
+            'ClientID' => $clientID,
             'ClientTitle' => $clientTitle,
             'ClientName' => $clientName,
             'Company' => $clientCompany,
@@ -146,6 +143,7 @@ class Job_model extends CI_Model {
         $this->db->where('JobID',$jobID);
         $this->db->update('Job',$data);
     }
+
     
     public function updateVisitedManageClient($userID){
         $this->db->where('UserID',$userID);
@@ -173,7 +171,7 @@ class Job_model extends CI_Model {
         $this->db->where('JobID',$jobID);
         $data = array(
             'JobStatus' => 'completed',
-            'Checked' => 'true',
+            
         );
         $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->update('Job',$data);
@@ -185,7 +183,7 @@ class Job_model extends CI_Model {
         $this->db->where('JobID',$jobID);
         $data = array(
             'JobStatus' => 'deleted',
-            'Checked' => 'true',
+            
         );
         $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->update('Job',$data);
@@ -428,6 +426,14 @@ class Job_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function countAllClient(){
+        $data = array(
+            'completed','deleted'
+        );
+        $this->db->where_not_in('ClientStatus',$data);
+        return $this->db->count_all_results('Client');
+    }
+
     //called from: view->templates->header
     //return the number of unchecked job as notification
     public function countNumberUncheckedJob($visitedTimeJob){
@@ -443,6 +449,14 @@ class Job_model extends CI_Model {
         $data['TOB'] = $TOBfile;
         $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->update('Job',$data);
+    }
+
+    //called from: Controller->Jobs->removeClientApplication()
+    public function updateClientStatusToDeleted($clientID){
+        $this->db->where('ClientID',$clientID);
+        $data = array('ClientStatus' => 'deleted');
+        $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
+        $this->db->update('Client',$data);
     }
 
     //update the time everytime there is an update
