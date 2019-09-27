@@ -164,7 +164,6 @@ CREATE TABLE `client` (
 
 LOCK TABLES `client` WRITE;
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
-INSERT INTO `client` VALUES (6,'Mr.','Henrik','Ahnberg','bulldog@gmail.com','0129391','012931 orlean st','Napier','Nate','','2019-09-27 16:06:42'),(7,'Mr.','Henrik','Ahnberg','bulldog@gmail.com','0129391','012931 orlean st','Napier','Nate','','2019-09-27 16:06:41'),(8,'undefine','undefined','undefined','undefined','undefined','undefined','undefined','undefined','','2019-09-27 16:06:42'),(9,'','Henrik','Ahnberg','anyTeam@gmail.com','+13012011','5 Dee St','Gisborne','Invercargill','','2019-09-27 16:06:42'),(10,'','Henrik','Ahnberg','klhjdljigcdbscjkdk@gts.com','','123 sadf sd','Levin','Napier','','2019-09-27 16:06:43'),(11,'','Henrik','Ahnberg','klhjdljigcdbscjkdk@gts.com','029322','123 sadf sd','Levin','Napier','','2019-09-27 16:06:43'),(12,'','bob','ross','anyTeam@gmail.com','+13012011','5 Dee St','Christchurch','Invercargill','','2019-09-27 10:42:15'),(13,'','bobs','ross','anyTeam@gmail.com','+13012011','5 Dee St','Christchurch','Invercargill','','2019-09-27 16:06:32'),(14,'','bobsr','ross','anyTeam@gmail.com','+13012011','5 Dee St','Greymouth','Invercargill','','2019-09-27 16:06:31'),(15,'','bobsr','ross','anyTeam@gmail.com','+13012011','5 Dee St','Dunedin','Invercargill','','2019-09-27 16:06:31'),(16,'','bobsr','ross','anyTeam@gmail.com','+13012011','5 Dee St','Greymouth','Invercargill','','2019-09-27 16:06:20'),(17,'-','HENRIK','AHNBERGO','greg@2gmail.com','+13012011','KJDGFHUFSUWAGF 22323','Napier','Napier','','2019-09-27 16:41:41');
 /*!40000 ALTER TABLE `client` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -210,7 +209,6 @@ CREATE TABLE `job` (
 
 LOCK TABLES `job` WRITE;
 /*!40000 ALTER TABLE `job` DISABLE KEYS */;
-INSERT INTO `job` VALUES (14,'Mr.','Henrik','Ahnberg','bulldog@gmail.com','0129391','Driver','PartTime','012931 orlean st','Napier','','Nate',NULL,NULL,'',NULL,NULL,'2019-09-27 09:49:16','false',NULL,NULL,'2019-09-27',NULL,7),(15,'Mr.','henrik','ahnberg','ultimateformj@gmail.com','0276245998','Hitman','PartTime','Dee st 3','Invercargill','','Totoroa',NULL,NULL,'completed',NULL,NULL,'2019-09-27 16:02:06','false',NULL,'true','2019-09-27',NULL,17),(16,'Mr.','henrik','ahnberg','ultimateformj@gmail.com','0276245998','Hitman','PartTime','Dee st 3','Invercargill','','Totoroa',NULL,NULL,'completed',NULL,NULL,'2019-09-27 16:02:08','false',NULL,'true','2019-09-27',NULL,17),(17,'Mr.','henrik','ahnberg','ultimateformj@gmail.com','0276245998','Truck Driver','PartTime','Dee st 3','Invercargill','','Invercargill',NULL,NULL,'',NULL,NULL,'2019-09-27 14:14:52','false',NULL,NULL,'2019-09-27',NULL,17),(18,'-','HENRIK','AHNBERGO','greg@2gmail.com','+13012011','asdf','PartTime','KJDGFHUFSUWAGF 22323','Napier','','Napier',NULL,NULL,'',NULL,NULL,'2019-09-27 16:41:41','false',NULL,'false','2019-09-27',NULL,17);
 /*!40000 ALTER TABLE `job` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -261,4 +259,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-27 18:55:12
+-- Dump completed on 2019-09-27 18:56:42
