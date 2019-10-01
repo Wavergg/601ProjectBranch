@@ -35,6 +35,45 @@ a .card:hover{
     opacity: 1;
 }
 
+.textInfoPosLeft{
+  position:relative;
+  
+}
+
+.textInfoLeft{
+  visibility: hidden;
+  width: 105px;
+  background-color: #FFF;
+  text-align: center;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 5px;
+  position: absolute;
+  white-space: nowrap;
+  z-index: 3;
+  opacity:0;
+  bottom: 25%;
+  right: 50px;
+  overflow: visible;
+  transition: opacity 0.3s;
+}
+
+.textInfoPosLeft:hover .textInfoLeft{
+  visibility: visible;
+  opacity: 1;
+}
+
+.btnNoGlow .btn-info:focus,
+.btnNoGlow .btn-info:active,
+.btnNoGlow .btn-dark:focus,
+.btnNoGlow .btn-dark:active,
+.btnNoGlow .btn-success:focus,
+.btnNoGlow .btn-success:active{
+    box-shadow:none ;
+    outline:0px ;
+}
+
+
 .wrapper {
     position: relative;
     padding-bottom: 56.25%; /* 16:9 */
@@ -124,6 +163,8 @@ a .card:hover{
     color: black;
     font-family: 'Helvetica', 'Arial', sans-serif;
   }
+
+  
 
  
   
