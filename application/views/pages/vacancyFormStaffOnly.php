@@ -10,7 +10,7 @@
             <hr>
            
             
-            <div class="">
+            <div class="pb-5">
             
             <form action="<?php echo base_url()?>index.php/EmployerMission/addJob/" class="m-md-5" method="POST" @submit="checkForm">
             <div class="row">
