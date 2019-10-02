@@ -16,13 +16,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `candidate`
+-- Table structure for table `Candidate`
 --
 
-DROP TABLE IF EXISTS `candidate`;
+DROP TABLE IF EXISTS `Candidate`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `candidate` (
+CREATE TABLE `Candidate` (
   `CandidateID` int(11) NOT NULL AUTO_INCREMENT,
   `JobInterest` varchar(64) DEFAULT NULL,
   `JobType` varchar(64) DEFAULT NULL,

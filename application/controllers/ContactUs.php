@@ -39,17 +39,15 @@ class ContactUS extends CI_Controller{
          * Email config
          */
         
-        /* Sugarhosting
-        $to      = 'leekunhui@gmail.com';
+        $to      = 'likunhui@hotmail.com';
         $subject = 'Message from Website';
         $message = 'Name: '.$userName.'; Email: '.$userEmail.'; Contact: '.$userContact.';\n Message:'.$userMessage;
-        $headers = 'From: carl@markleetesting12300.name' . "\r\n" .
-            'Return-Path: carl@markleetesting12300.name' . "\r\n" .
-            'Reply-To: carl@markleetesting12300.name' . "\r\n";
+        $headers = 'From: leekunhui@gmail.com' . "\r\n" .
+            'Return-Path: leekunhui@gmail.com' . "\r\n" .
+            'Reply-To: leekunhui@gmail.com' . "\r\n";
         mail($to, $subject, $message, $headers);
-        */
-
-        // sendgrid
+	/*
+	// sendgrid
         $config['smtp_host'] = '';
         $config['smtp_user'] = 'apikey';
         $config['smtp_pass'] = '';
@@ -72,6 +70,8 @@ class ContactUS extends CI_Controller{
             $message = 'Failed';
         }
 
-        echo $message;
+	echo $message;
+	 */
+	echo 'Successful';
      }
 }
