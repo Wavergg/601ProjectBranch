@@ -121,8 +121,9 @@
                         <td class="font-weight-normal" v-text="client.UpdateDate"></td>
                         <!-- <td class="font-weight-normal" v-text="client.clientStatus" ></td> -->
                         <!-- <td class="font-weight-normal" v-text="client.ClientTitle" ></td> -->
-                        <td class="font-weight-normal" v-text="client.ClientName" ></td>
                         <td class="font-weight-normal" v-text="client.Company" ></td>
+                        <td class="font-weight-normal" v-text="client.ClientName" ></td>
+                        
                        
                        
                         <!-- <td class="font-weight-normal" v-text="client.clientTitle" ></td> -->
