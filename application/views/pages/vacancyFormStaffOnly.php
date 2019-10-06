@@ -109,6 +109,7 @@
                 </div>
              </div>
              <div class="row">
+            <input type="hidden" value="VacancyPage" name="fromPage">
             <input type="submit" value="Submit Vacancy" class="btn btn-primary m-0" :disabled="isButton">
             </div> 
             </form>
