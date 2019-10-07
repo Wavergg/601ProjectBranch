@@ -169,9 +169,9 @@ class EmployerMission extends CI_Controller{
 
         $this->load->view('templates/header', $userdata);
         if(isset($_POST['fromPage'])){
-            $this->load->view('pages/employerMission', $data);
-        } else {
             $this->load->view('pages/vacancyFormStaffOnly',$data);
+        } else {
+            $this->load->view('pages/employerMission', $data);
         }
         $this->load->view('templates/footer');
     }
