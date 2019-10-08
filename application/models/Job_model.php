@@ -454,7 +454,9 @@ class Job_model extends CI_Model {
     //called from: Controller->Jobs->removeClientApplication()
     public function updateClientStatusToDeleted($clientID){
         $this->db->where('ClientID',$clientID);
-        $data = array('ClientStatus' => 'deleted');
+        $data = array(
+            'ClientStatus' => 'deleted',
+        );
         $this->db->set('UpdateDate', $this->db->escape(date('Y-m-d H:i:s')), FALSE);
         $this->db->update('Client',$data);
     }

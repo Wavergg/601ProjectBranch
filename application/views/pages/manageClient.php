@@ -114,7 +114,7 @@
                         
                         <!-- <td > <input type="checkbox" :id="client.bookmarkUrl" v-on:click="updateBookmark(client.ClientID)" :checked="client.bookmarkStat"></td> -->
                         <!-- <th class="textInfoPos text-center" v-bind:class="{ 'd-none': !showAssignCandidate }"><span class="textInfo text-center" style="left: 0px;overflow:initial;">Assign client <br>to this Applicant</span><a v-on:click="AssignIDURL(client.ClientID)" role="button" class="text-info"><i style="font-size:30px;" class="ml-1 icon ion-md-contacts mx-3"></i></a></th> -->
-                        <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeclientApp(client.ClientID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
+                        <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeClientApp(client.ClientID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
                         <td v-if="fromPage =='submitVacancy'" class="textInfoPos pl-4" ><span class="textInfo text-center" style="left: 10px;width:100px;">Add Vacancy</span><a :href="client.ref" role="button"><i style="font-size:30px;" class="ml-1 icon ion-md-add-circle mx-3"></i></a></td>
                         <td v-if="fromPage !='submitVacancy'" class="textInfoPos" ><span class="textInfo text-center" style="left: 0px;width:100px;">See Client's<br/> Details</span><a :href="client.ref" role="button"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></td>
                         <!-- <th class="textInfoPos" ><span class="textInfo text-center" style="left: -45px;width:160px;">Download TOB</span><a class="btn btn-outline-dark px-2" :href="'<?php echo base_Url(); ?>index.php/clients/downloadTOB/'+ client.ClientID +'/'+client.TOB">TOB</a></th> -->
@@ -243,7 +243,7 @@ var app = new Vue({
         showRemoveTab: function(){
             this.showRemoveStatus = !this.showRemoveStatus
         },
-        removeJobApp: function(elementID){
+        removeClientApp: function(elementID){
             var formData = new FormData()
             formData.append('clientID',elementID)
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/jobs/removeClientApplication/'
