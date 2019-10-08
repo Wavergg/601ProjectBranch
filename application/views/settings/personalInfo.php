@@ -8,7 +8,7 @@
         }
         echo '</ul>';
     };?>
-    <div class="container justify-content-center rounded mb-5">
+    <div class="container justify-content-center rounded my-5">
         <form action="<?php echo base_url()?>index.php/Personcenter/updatePassword" class="m-md-5" method="POST" @submit="checkForm">
            <h3 style="color: darkslategray">Change My Password</h3>
            <div class="row justify-content-center mt-5">
