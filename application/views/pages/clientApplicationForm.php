@@ -4,7 +4,7 @@
     <h2 class="text-warning ml-0 my-3 mt-5">Add Client</h2>
     <hr />
 
-    <div class="col-12">
+    <div class="col-12 pb-5 pb-md-0">
             
             <form class="mx-md-5 mb-md-5">
             <div class="row">

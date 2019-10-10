@@ -1,5 +1,5 @@
 <div class="tab-pane fade <?php if($title=="Manage Staff"){ echo "show active";}?>" id="staffSettings" role="tabpanel" aria-labelledby="staffSettings-tab">
-<div class="container mb-5 p-md-5">
+<div class="container my-5 px-md-5">
 <?php if($userType == 'admin'):?>
     <div class="container">
     <h3 style="color: darkslategray">Manage My Staffs</h3>

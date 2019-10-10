@@ -146,7 +146,7 @@ class EmployerMission extends CI_Controller{
 
             $data['client'] = $this->client_model->getClientByData($clientName,$clientCompany);
 
-            if(sizeof($data['client'])==0){
+            if($data['client']['ClientID']==NULL){
                 $this->client_model->addClient($clientTitle,$clientName,$clientCompany,$clientEmail,$clientContact,$clientCity,$clientAddress,$clientSuburb);
                 
                 $data['client'] = $this->client_model->getClientByData($clientName,$clientCompany);
@@ -165,8 +165,14 @@ class EmployerMission extends CI_Controller{
             $data['message'] = $errMessage;
         }
         
+        
+
         $this->load->view('templates/header', $userdata);
-        $this->load->view('pages/employerMission', $data);
+        if(isset($_POST['fromPage'])){
+            $this->load->view('pages/vacancyFormStaffOnly',$data);
+        } else {
+            $this->load->view('pages/employerMission', $data);
+        }
         $this->load->view('templates/footer');
     }
 

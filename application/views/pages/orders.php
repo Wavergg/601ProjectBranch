@@ -120,8 +120,9 @@
                         <td class="font-weight-normal" v-text="job.UpdateDate"></td>
                         <td class="font-weight-normal" v-text="job.JobStatus" ></td>
                         <!-- <td class="font-weight-normal" v-text="job.ClientTitle" ></td> -->
-                        <td class="font-weight-normal" v-text="job.ClientName" ></td>
                         <td class="font-weight-normal" v-text="job.Company" ></td>
+                        <td class="font-weight-normal" v-text="job.ClientName" ></td>
+                        
                         <td class="font-weight-normal" v-text="job.Email" ></td>
                         <td class="font-weight-normal" v-text="job.ContactNumber" ></td>
                         <td class="font-weight-normal" v-text="job.JobTitle" ></td>

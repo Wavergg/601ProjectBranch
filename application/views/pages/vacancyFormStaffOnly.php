@@ -10,7 +10,7 @@
             <hr>
            
             
-            <div class="">
+            <div class="pb-5">
             
             <form action="<?php echo base_url()?>index.php/EmployerMission/addJob/" class="m-md-5" method="POST" @submit="checkForm">
             <div class="row">
@@ -27,15 +27,15 @@
                 </select>
                 </div>
                 <div class="col-5 px-1 px-md-4">
-                <label for="clientNameID" class="font-weight-bold"><small class="text-danger mr-1">*</small>Contact Person:</label>
-                <input type="text" placeholder="Enter Name" v-model="clientName" @change="checkName" class="form-control" name="clientName" id="clientNameID" required>
+                <label for="clientNameID" class="font-weight-bold">Contact Person:</label>
+                <input type="text" placeholder="Enter Name" v-model="clientName" @change="checkName" class="form-control" name="clientName" id="clientNameID" >
                 <div class="mt-3" v-if="clientNameError.length">
                         <p class="text-danger" v-text="clientNameError"></p>
                     </div>
                 </div>
                 <div class="col-5 p-0">
-                <label for="clientCompanyID" class="font-weight-bold"><small class="text-danger mr-1">*</small>Company Name:</label>
-                <input type="text" placeholder="Company Name" v-model="company" class="form-control" name="clientCompany" id="clientCompanyID" required/>
+                <label for="clientCompanyID" class="font-weight-bold">Company Name:</label>
+                <input type="text" placeholder="Company Name" v-model="company" class="form-control" name="clientCompany" id="clientCompanyID" />
                 </div>
                 
             </div>
@@ -50,8 +50,8 @@
             </div>
             <div class="row mt-3">
              <div class="col-12 p-0">
-                 <label for="clientContactID" class="font-weight-bold"><small class="text-danger mr-1">*</small>Contact Number:</label>
-                 <input type="text" v-model="contact" @change="checkContact" placeholder="Enter Contact Number" class="form-control" name="clientContact" id="clientContact" required/>
+                 <label for="clientContactID" class="font-weight-bold">Contact Number:</label>
+                 <input type="text" v-model="contact" @change="checkContact" placeholder="Enter Contact Number" class="form-control" name="clientContact" id="clientContact" />
             </div>
             <div class="container mt-3" v-if="contactError.length">
                 <span class="text-danger" v-text="contactError"></span>
@@ -59,8 +59,8 @@
             </div>
             <div class="row mt-3">
              <div class="col-6 col-md-3 pl-0">
-                 <label for="clientCityID" class="font-weight-bold"><small class="text-danger mr-1">*</small>City:</label>
-                 <select class="form-control" type="text" @change="checkCity" v-model="city" name="clientCity" id="clientCityID" required>
+                 <label for="clientCityID" class="font-weight-bold">City:</label>
+                 <select class="form-control" type="text" @change="checkCity" v-model="city" name="clientCity" id="clientCityID" >
                     <option>Enter City</option>
                     <?php foreach($cities as $city): ?>
                     <option value="<?php echo $city['CityName'];?>"><?php echo $city['CityName']; ?></option>
@@ -71,12 +71,12 @@
                 </div>
             </div>
                 <div class="col-md-3 col-6 pr-md-3 pr-0 pl-0">
-                 <label for="SuburbID" class="font-weight-bold"><small class="text-danger mr-1">*</small>Suburb:</label>
-                 <input type="text" placeholder="Enter Suburb Name" v-model="suburb" class="form-control" name="clientSuburb" id="Suburb" required/>
+                 <label for="SuburbID" class="font-weight-bold">Suburb:</label>
+                 <input type="text" placeholder="Enter Suburb Name" v-model="suburb" class="form-control" name="clientSuburb" id="Suburb" />
                 </div>
                 <div class="col-md-6 col-12 pr-0 pl-md-3 pl-0 mt-md-0 mt-3">
-                 <label for="clientAddressID" class="font-weight-bold"><small class="text-danger mr-1">*</small>Address Number:</label>
-                 <input type="text" placeholder="Enter Address Number"  @change="checkAddress" v-model="address" class="form-control" name="clientAddress" id="clientAddress" required/>
+                 <label for="clientAddressID" class="font-weight-bold">Address Number:</label>
+                 <input type="text" placeholder="Enter Address Number"  @change="checkAddress" v-model="address" class="form-control" name="clientAddress" id="clientAddress" />
                  <div class="mt-3" v-if="addressError.length">
                         <p class="text-danger" v-text="addressError"></p>
                     </div>
@@ -84,12 +84,12 @@
             </div>
             <div class="row mt-3">
              <div class="col-6 pl-0">
-                 <label for="clientJobTitleID" class="font-weight-bold"><small class="text-danger mr-1">*</small>Job Title:</label>
-                 <input type="text" placeholder="Enter Job Title" class="form-control" name="clientJobTitle" id="clientJobTitleID" required/>
+                 <label for="clientJobTitleID" class="font-weight-bold">Job Title:</label>
+                 <input type="text" placeholder="Enter Job Title" class="form-control" name="clientJobTitle" id="clientJobTitleID" />
                 </div>
                 <div class="col-6 pr-0">
-                <label for="clientJobTypeID" class="font-weight-bold"><small class="text-danger mr-1">*</small>Job Type:</label>
-                 <select class="form-control" v-model="jobType" type="text" name="clientJobType" id="clientJobTypeID" required>
+                <label for="clientJobTypeID" class="font-weight-bold">Job Type:</label>
+                 <select class="form-control" v-model="jobType" type="text" name="clientJobType" id="clientJobTypeID" >
                     <option selected>Enter Job Type</option>
                     <option value="PartTime">Part Time</option>
                     <option value="FullTime">Full Time</option>
@@ -109,6 +109,7 @@
                 </div>
              </div>
              <div class="row">
+            <input type="hidden" value="VacancyPage" name="fromPage">
             <input type="submit" value="Submit Vacancy" class="btn btn-primary m-0" :disabled="isButton">
             </div> 
             </form>
@@ -145,20 +146,10 @@
         },
         methods: {
             checkForm: function(e){
-                if(this.city=="Enter City" || this.city.length<1){
-                    this.cityError="Please enter the city",
-                    e.preventDefault()
-                } else {
-                    if(this.jobType!="FullTime" && this.jobType!="PartTime"){
-                        this.jobTypeError="Please enter the job Type"
-                        e.preventDefault()
-                    } else {
-                        return true
-                    }
-                }
+                return true
             },
             checkEmail: function(){
-                    if(!this.validEmail(this.email)){
+                    if(this.email.length>0 && !this.validEmail(this.email)){
                         this.emailError = "Invalid Email Address"
                         this.isButton = true
                     } else {
@@ -172,7 +163,7 @@
                 return re.test(email)
             },
             checkContact: function(){
-                if(!this.validContact(this.contact)){
+                if(this.contact.length>0 && !this.validContact(this.contact)){
                     this.contactError = "Invalid Contact"
                     this.isButton = true
                 } else {
@@ -194,9 +185,6 @@
                         this.addressError = "Incorrect address number"
                         this.isButton = true
                     }
-                } else { 
-                    this.addressError = "Please fill the Last address input box"
-                    this.isButton = true
                 }
             },
             checkCity: function(){

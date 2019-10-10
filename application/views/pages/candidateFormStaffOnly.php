@@ -427,7 +427,7 @@ var app = new Vue ({
         smoke : false,
         conviction : false,
         convictionDetails : "",
-        
+        applicantPageUrl: "<?php echo base_url()?>index.php/CandidateMission/manageCandidate/"
     },
     methods: {
         newCandidate: async function(){
@@ -533,39 +533,14 @@ var app = new Vue ({
                 await this.$http.post(urllink, formData).then(function(res) {
                     var result = res.body
                     this.message = res.body
-                    $('#myModal').modal('show');
+                    window.location.replace(this.applicantPageUrl)
                 }, function(res) {
                     // error callback
                     this.message = 'Failure in submitting your application'
                     $('#myModal').modal('show');
                 }
                 );
-            
-                // // upload CV
-                // var candidateCV = document.getElementById("JobCVID");
-                // if(candidateCV.files.length > 0){
-                //     var candidateCV = document.getElementById("JobCVID");
-                    
-                //     var formData = new FormData()
-                //     // firstName and lastName for getting the user ID
-                //     formData.append('firstName', this.firstName);
-                //     formData.append('lastName', this.lastName);
-                //     formData.append('JobCV', candidateCV.files[0]);
-                //     var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/uploadCV/'
-                //     this.$http.post(urllink, formData).then(function(res) {
-                //         var result = res.body
-                //         this.message=result;
-                //         $('#myModal').modal('show');
-                        
-                //     }, function(res) {
-                //         // error callback
-                //         this.message="CV upload was failed, please try again.";
-                //         $('#myModal').modal('show');
-                //     })
-                // } else {
-                //     this.message="Success, no job CV attached";
-                //     $('#myModal').modal('show');
-                // }
+                
             }
             
         } 

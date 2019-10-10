@@ -56,7 +56,7 @@
                 <!-- <a class="nav-link text-dark mx-4" href="<?php echo base_url() ?>index.php/Register">Register</a> -->
                 </div>
                 <?php else: ?>
-                <a class="nav-link text-dark mx-4" href="<?php echo base_url() ?>index.php/personcenter">Recruitment Tools</a>
+                <span class="nav-link text-dark mx-4">Recruitment Tools</span>
                 <a class="nav-link text-dark mx-4" href="<?php echo base_url() ?>index.php/login/logout">Logout</a>
                 <?php endif; ?>
             </nav>

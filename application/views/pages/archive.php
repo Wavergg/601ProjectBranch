@@ -68,7 +68,7 @@
                         <th scope="col" v-bind:class="{ 'd-none': ! showRemoveStatus }"><a href="#" class="text-dark">Remove</a></th>
                         <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
                         <th scope="col" >TOB</th>
-                        <th scope="col" ><a href="#" class="text-dark py-2" @click.stop.prevent="sortBy('UpdateDate')">Update_Date</a></th>
+                        <th scope="col" ><a href="#" class="text-dark py-2" @click.stop.prevent="sortBy('UpdateDate')">Update&nbsp;Date</a></th>
                         <th scope="col" ><a href="#" class="text-dark p-2 pr-3" @click.stop.prevent="jobSortBy('ClientTitle')">Title</a></th>
                         <th scope="col" ><a href="#" class="text-dark p-2 pr-3" @click.stop.prevent="jobSortBy('ClientName')">Name</a></th>
                         <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="jobSortBy('Company')">Company</a></th>
@@ -174,12 +174,12 @@
                         <th scope="col" v-bind:class="{ 'd-none': ! showRemoveStatus }"><a href="#" class="text-dark">Remove</a></th>
                         <th scope="col"><a href="#" class="text-dark" @click.stop.prevent="">Details</a></th>
                         <th scope="col" >CV</th>
-                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="candidateSortBy('ApplyDate')">Updated Date</a></th>
-                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="candidateSortBy('FirstName')">First_Name</a></th>
-                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="candidateSortBy('LastName')">Last_Name</a></th>
-                        <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="candidateSortBy('JobInterest')">Profession_1</a></th>
-                        <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="candidateSortBy('JobInterest2')">Profession_2</a></th>
-                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Phone_Number</a></th>
+                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="candidateSortBy('ApplyDate')">Updated&nbsp;Date</a></th>
+                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="candidateSortBy('FirstName')">First&nbsp;Name</a></th>
+                        <th scope="col" ><a href="#" class="text-dark pr-5" @click.stop.prevent="candidateSortBy('LastName')">Last&nbsp;Name</a></th>
+                        <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="candidateSortBy('JobInterest')">Profession&nbsp;1</a></th>
+                        <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="candidateSortBy('JobInterest2')">Profession&nbsp;2</a></th>
+                        <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Phone&nbsp;Number</a></th>
                         <th scope="col" ><a href="#" class="text-dark pt-5 pr-5 pb-3 pl-0" @click.stop.prevent="candidateSortBy('City')">City</a></th>
                         
                         <th scope="col" ><a href="#" class="text-dark" @click.stop.prevent="">Email</a></th>
