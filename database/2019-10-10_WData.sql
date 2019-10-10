@@ -1,0 +1,264 @@
+-- MySQL dump 10.16  Distrib 10.1.38-MariaDB, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: marklee
+-- ------------------------------------------------------
+-- Server version	10.1.38-MariaDB-0+deb9u1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `Candidate`
+--
+
+DROP TABLE IF EXISTS `Candidate`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Candidate` (
+  `CandidateID` int(11) NOT NULL AUTO_INCREMENT,
+  `JobInterest` varchar(64) DEFAULT NULL,
+  `JobType` varchar(64) DEFAULT NULL,
+  `JobCV` varchar(64) DEFAULT NULL,
+  `Transportation` varchar(64) DEFAULT NULL,
+  `LicenseNumber` varchar(64) DEFAULT NULL,
+  `ClassLicense` varchar(64) DEFAULT NULL,
+  `Endorsement` varchar(64) DEFAULT NULL,
+  `Citizenship` varchar(64) DEFAULT NULL,
+  `Nationality` varchar(64) DEFAULT NULL,
+  `PassportCountry` varchar(64) DEFAULT NULL,
+  `PassportNumber` varchar(64) DEFAULT NULL,
+  `CompensationInjury` varchar(64) DEFAULT NULL,
+  `CompensationDateFrom` varchar(64) DEFAULT NULL,
+  `CompensationDateTo` varchar(64) DEFAULT NULL,
+  `Asthma` varchar(8) DEFAULT NULL,
+  `BlackOut` varchar(8) DEFAULT NULL,
+  `Diabetes` varchar(8) DEFAULT NULL,
+  `Bronchitis` varchar(8) DEFAULT NULL,
+  `BackInjury` varchar(8) DEFAULT NULL,
+  `Deafness` varchar(8) DEFAULT NULL,
+  `Dermatitis` varchar(8) DEFAULT NULL,
+  `SkinInfection` varchar(8) DEFAULT NULL,
+  `Allergies` varchar(8) DEFAULT NULL,
+  `Hernia` varchar(8) DEFAULT NULL,
+  `HighBloodPressure` varchar(8) DEFAULT NULL,
+  `HeartProblems` varchar(8) DEFAULT NULL,
+  `UsingDrugs` varchar(8) DEFAULT NULL,
+  `UsingContactLenses` varchar(8) DEFAULT NULL,
+  `RSI` varchar(8) DEFAULT NULL,
+  `Dependants` varchar(8) DEFAULT NULL,
+  `Smoke` varchar(8) DEFAULT NULL,
+  `Conviction` varchar(8) DEFAULT NULL,
+  `ConvictionDetails` varchar(64) DEFAULT NULL,
+  `UserID` int(11) DEFAULT NULL,
+  `JobID` int(11) DEFAULT NULL,
+  `CandidateHoursWorked` int(11) DEFAULT '0',
+  `CandidateNotes` varchar(64) DEFAULT NULL,
+  `CandidateEarnings` decimal(13,2) DEFAULT '0.00',
+  `JobRate` decimal(13,2) DEFAULT '0.00',
+  `WorkPermitNumber` varchar(45) DEFAULT NULL,
+  `WorkPermitExpiry` date DEFAULT NULL,
+  `Checked` varchar(8) DEFAULT NULL,
+  `CandidateStatus` varchar(16) DEFAULT '',
+  `UserPicture` varchar(64) DEFAULT NULL,
+  `YoutubeURL` varchar(96) DEFAULT '',
+  `ApplyDate` datetime DEFAULT NULL,
+  `JobInterest2` varchar(64) NOT NULL DEFAULT '',
+  `PictureHeight` int(11) DEFAULT '150',
+  `PictureWidth` int(11) DEFAULT '150',
+  PRIMARY KEY (`CandidateID`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Candidate`
+--
+
+LOCK TABLES `Candidate` WRITE;
+/*!40000 ALTER TABLE `Candidate` DISABLE KEYS */;
+INSERT INTO `Candidate` VALUES (1,'Driver','FullTime','Test_CV_in_PDF.pdf','car','','','','New Zealand','','','','','','','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','true','false','false','',2,5,0,'test edit',0.00,0.00,'','0000-00-00','true','removed','1Safety-850x476.jpg','','2019-10-10 15:47:32','Labourer',150,250),(2,'Administrator','FullTime',NULL,'','','','','','','','','','0000-00-00','0000-00-00','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','',3,NULL,0,'',0.00,0.00,'','0000-00-00','true','removed',NULL,'','2019-10-10 15:47:32','Administrator',150,150),(3,'','',NULL,'','','','','','','','','','0000-00-00','0000-00-00','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','',4,NULL,0,'',0.00,0.00,'','0000-00-00','true','removed',NULL,'','2019-10-10 15:47:16','',150,150),(4,'Tester','FullTime',NULL,'','','','','Australia','','','','','0000-00-00','0000-00-00','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','',5,NULL,0,'',0.00,0.00,'','0000-00-00','true','removed',NULL,'','2019-10-10 15:47:17','Designer',150,150),(5,'Tester','FullTime',NULL,'','','','','','','','','','0000-00-00','0000-00-00','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','',6,NULL,0,'',0.00,0.00,'','0000-00-00','true','removed',NULL,'','2019-10-10 15:47:17','Designer',150,150),(6,'Tester','FullTime',NULL,'','','','','','','','','','0000-00-00','0000-00-00','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','',7,NULL,0,'',0.00,0.00,'','0000-00-00','true','removed',NULL,'','2019-10-10 15:47:17','Designer',150,150),(7,'Designer','FullTime',NULL,'','','','','','','','','','0000-00-00','0000-00-00','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','',8,NULL,0,'',0.00,0.00,'','0000-00-00','true','removed',NULL,'','2019-10-10 15:47:18','Tester',150,150),(8,'Drafter','PartTime',NULL,'','','','','','','','','','0000-00-00','0000-00-00','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','',9,NULL,0,'',0.00,0.00,'','0000-00-00','true','removed',NULL,'','2019-10-10 15:47:19','Designer',150,150),(9,'Bob','',NULL,'','','','','','','','','','0000-00-00','0000-00-00','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','',10,NULL,0,'',0.00,0.00,'','0000-00-00','true','removed',NULL,'','2019-10-10 15:47:21','',150,150),(10,'','',NULL,'','','','','','','','','','0000-00-00','0000-00-00','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','',11,NULL,0,'',0.00,0.00,'','0000-00-00','true','removed',NULL,'','2019-10-10 15:47:19','',150,150),(11,'Worker','FullTime',NULL,'','','','','','','','','','0000-00-00','0000-00-00','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','',12,NULL,0,'',0.00,0.00,'','0000-00-00','true','removed',NULL,'','2019-10-10 15:47:22','Manager',150,150),(12,'','',NULL,'','','','','','','','','','0000-00-00','0000-00-00','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','false','',13,NULL,0,'',0.00,0.00,'','0000-00-00','true','removed',NULL,'','2019-10-10 15:47:23','',150,150);
+/*!40000 ALTER TABLE `Candidate` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Citizenship`
+--
+
+DROP TABLE IF EXISTS `Citizenship`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Citizenship` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Citizenship` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=245 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Citizenship`
+--
+
+LOCK TABLES `Citizenship` WRITE;
+/*!40000 ALTER TABLE `Citizenship` DISABLE KEYS */;
+INSERT INTO `Citizenship` VALUES (1,'Afghanistan'),(2,'Åland Islands'),(3,'Albania'),(4,'Algeria'),(5,'American Samoa'),(6,'Andorra'),(7,'Angola'),(8,'Anguilla'),(9,'Antarctica'),(10,'Antigua and Barbuda'),(11,'Argentina'),(12,'Armenia'),(13,'Aruba'),(14,'Australia'),(15,'Austria'),(16,'Azerbaijan'),(17,'Bahamas'),(18,'Bahrain'),(19,'Bangladesh'),(20,'Barbados'),(21,'Belarus'),(22,'Belgium'),(23,'Belize'),(24,'Benin'),(25,'Bermuda'),(26,'Bhutan'),(27,'Bolivia'),(28,'Bosnia and Herzegovina'),(29,'Botswana'),(30,'Bouvet Island'),(31,'Brazil'),(32,'British Indian Ocean Territory'),(33,'Brunei Darussalam'),(34,'Bulgaria'),(35,'Burkina Faso'),(36,'Burundi'),(37,'Cambodia'),(38,'Cameroon'),(39,'Canada'),(40,'Cape Verde'),(41,'Cayman Islands'),(42,'Central African Republic'),(43,'Chad'),(44,'Chile'),(45,'China'),(46,'Christmas Island'),(47,'Cocos (Keeling) Islands'),(48,'Colombia'),(49,'Comoros'),(50,'Congo'),(51,'Congo, The Democratic Republic of The'),(52,'Cook Islands'),(53,'Costa Rica'),(54,'Cote D\'ivoire'),(55,'Croatia'),(56,'Cuba'),(57,'Cyprus'),(58,'Czech Republic'),(59,'Denmark'),(60,'Djibouti'),(61,'Dominica'),(62,'Dominican Republic'),(63,'Ecuador'),(64,'Egypt'),(65,'El Salvador'),(66,'Equatorial Guinea'),(67,'Eritrea'),(68,'Estonia'),(69,'Ethiopia'),(70,'Falkland Islands (Malvinas)'),(71,'Faroe Islands'),(72,'Fiji'),(73,'Finland'),(74,'France'),(75,'French Guiana'),(76,'French Polynesia'),(77,'French Southern Territories'),(78,'Gabon'),(79,'Gambia'),(80,'Georgia'),(81,'Germany'),(82,'Ghana'),(83,'Gibraltar'),(84,'Greece'),(85,'Greenland'),(86,'Grenada'),(87,'Guadeloupe'),(88,'Guam'),(89,'Guatemala'),(90,'Guernsey'),(91,'Guinea'),(92,'Guinea-bissau'),(93,'Guyana'),(94,'Haiti'),(95,'Heard Island and Mcdonald Islands'),(96,'Holy See (Vatican City State)'),(97,'Honduras'),(98,'Hong Kong'),(99,'Hungary'),(100,'Iceland'),(101,'India'),(102,'Indonesia'),(103,'Iran, Islamic Republic of'),(104,'Iraq'),(105,'Ireland'),(106,'Isle of Man'),(107,'Israel'),(108,'Italy'),(109,'Jamaica'),(110,'Japan'),(111,'Jersey'),(112,'Jordan'),(113,'Kazakhstan'),(114,'Kenya'),(115,'Kiribati'),(116,'Korea, Democratic People\'s Republic of'),(117,'Korea, Republic of'),(118,'Kuwait'),(119,'Kyrgyzstan'),(120,'Lao People\'s Democratic Republic'),(121,'Latvia'),(122,'Lebanon'),(123,'Lesotho'),(124,'Liberia'),(125,'Libyan Arab Jamahiriya'),(126,'Liechtenstein'),(127,'Lithuania'),(128,'Luxembourg'),(129,'Macao'),(130,'Macedonia, The Former Yugoslav Republic of'),(131,'Madagascar'),(132,'Malawi'),(133,'Malaysia'),(134,'Maldives'),(135,'Mali'),(136,'Malta'),(137,'Marshall Islands'),(138,'Martinique'),(139,'Mauritania'),(140,'Mauritius'),(141,'Mayotte'),(142,'Mexico'),(143,'Micronesia, Federated States of'),(144,'Moldova, Republic of'),(145,'Monaco'),(146,'Mongolia'),(147,'Montenegro'),(148,'Montserrat'),(149,'Morocco'),(150,'Mozambique'),(151,'Myanmar'),(152,'Namibia'),(153,'Nauru'),(154,'Nepal'),(155,'Netherlands'),(156,'Netherlands Antilles'),(157,'New Caledonia'),(158,'New Zealand'),(159,'Nicaragua'),(160,'Niger'),(161,'Nigeria'),(162,'Niue'),(163,'Norfolk Island'),(164,'Northern Mariana Islands'),(165,'Norway'),(166,'Oman'),(167,'Pakistan'),(168,'Palau'),(169,'Palestinian Territory, Occupied'),(170,'Panama'),(171,'Papua New Guinea'),(172,'Paraguay'),(173,'Peru'),(174,'Philippines'),(175,'Pitcairn'),(176,'Poland'),(177,'Portugal'),(178,'Puerto Rico'),(179,'Qatar'),(180,'Reunion'),(181,'Romania'),(182,'Russian Federation'),(183,'Rwanda'),(184,'Saint Helena'),(185,'Saint Kitts and Nevis'),(186,'Saint Lucia'),(187,'Saint Pierre and Miquelon'),(188,'Saint Vincent and The Grenadines'),(189,'Samoa'),(190,'San Marino'),(191,'Sao Tome and Principe'),(192,'Saudi Arabia'),(193,'Senegal'),(194,'Serbia'),(195,'Seychelles'),(196,'Sierra Leone'),(197,'Singapore'),(198,'Slovakia'),(199,'Slovenia'),(200,'Solomon Islands'),(201,'Somalia'),(202,'South Africa'),(203,'South Georgia and The South Sandwich Islands'),(204,'Spain'),(205,'Sri Lanka'),(206,'Sudan'),(207,'Suriname'),(208,'Svalbard and Jan Mayen'),(209,'Swaziland'),(210,'Sweden'),(211,'Switzerland'),(212,'Syrian Arab Republic'),(213,'Taiwan, Province of China'),(214,'Tajikistan'),(215,'Tanzania, United Republic of'),(216,'Thailand'),(217,'Timor-leste'),(218,'Togo'),(219,'Tokelau'),(220,'Tonga'),(221,'Trinidad and Tobago'),(222,'Tunisia'),(223,'Turkey'),(224,'Turkmenistan'),(225,'Turks and Caicos Islands'),(226,'Tuvalu'),(227,'Uganda'),(228,'Ukraine'),(229,'United Arab Emirates'),(230,'United Kingdom'),(231,'United States'),(232,'United States Minor Outlying Islands'),(233,'Uruguay'),(234,'Uzbekistan'),(235,'Vanuatu'),(236,'Venezuela'),(237,'Viet Nam'),(238,'Virgin Islands, British'),(239,'Virgin Islands, U.S.'),(240,'Wallis and Futuna'),(241,'Western Sahara'),(242,'Yemen'),(243,'Zambia'),(244,'Zimbabwe');
+/*!40000 ALTER TABLE `Citizenship` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `City`
+--
+
+DROP TABLE IF EXISTS `City`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `City` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `CityName` varchar(24) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `City`
+--
+
+LOCK TABLES `City` WRITE;
+/*!40000 ALTER TABLE `City` DISABLE KEYS */;
+INSERT INTO `City` VALUES (1,'Auckland'),(2,'Christchurch'),(3,'Dunedin'),(4,'Gisborne'),(5,'Greymouth'),(6,'Hamilton'),(7,'Hawera'),(8,'Hokitika'),(9,'Invercargill'),(10,'Kerikeri'),(11,'Levin'),(12,'Lower Hutt'),(13,'Masterton'),(14,'Napier'),(15,'Nelson'),(16,'New Plymouth'),(17,'Northcote'),(18,'Palmerston North'),(19,'Paraparaumu beach'),(20,'Porirua Pa'),(21,'Pukekohe East'),(22,'Taupo'),(23,'Tauranga'),(24,'Te Anau'),(25,'Thames'),(26,'Timaru'),(27,'Tokoroa'),(28,'Turangi'),(29,'Waioruarangi'),(30,'Waitakere'),(31,'Waitangi'),(32,'Wanaka'),(33,'Wanganui'),(34,'Wellington'),(35,'Westport'),(36,'Whakatane'),(37,'Otago');
+/*!40000 ALTER TABLE `City` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Client`
+--
+
+DROP TABLE IF EXISTS `Client`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Client` (
+  `ClientID` int(11) NOT NULL AUTO_INCREMENT,
+  `ClientTitle` varchar(8) DEFAULT NULL,
+  `ClientName` varchar(32) DEFAULT NULL,
+  `Company` varchar(32) DEFAULT NULL,
+  `Email` varchar(64) DEFAULT NULL,
+  `ContactNumber` varchar(16) DEFAULT NULL,
+  `Address` varchar(32) DEFAULT NULL,
+  `City` varchar(32) DEFAULT NULL,
+  `Suburb` varchar(32) DEFAULT NULL,
+  `ClientStatus` varchar(16) DEFAULT '',
+  `UpdateDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`ClientID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Client`
+--
+
+LOCK TABLES `Client` WRITE;
+/*!40000 ALTER TABLE `Client` DISABLE KEYS */;
+INSERT INTO `Client` VALUES (1,'Mr.','Bob','Any Web','bob@gmail.com','021-3456789','123 Eye Street','Nelson','Big Stone','','2019-09-27 22:18:06'),(2,'Mrs.','Bob','Trap','trapa@gmail.com','012391921','3 russel street, gladstone','Invercargill','invercargill','','2019-10-10 15:07:45'),(3,'Mr.','Kappa','RR','inclusion@gmail.com','0129391','3 russel street, gladstone','Nelson','invercargill','','2019-10-10 15:17:46'),(4,'Dr.','Lee','SIT','lee@gmail.com','12012345','4 spay street','Levin','new','','2019-10-10 15:47:29');
+/*!40000 ALTER TABLE `Client` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Job`
+--
+
+DROP TABLE IF EXISTS `Job`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Job` (
+  `JobID` int(11) NOT NULL AUTO_INCREMENT,
+  `ClientTitle` varchar(8) DEFAULT NULL,
+  `ClientName` varchar(32) DEFAULT NULL,
+  `Company` varchar(32) DEFAULT NULL,
+  `Email` varchar(64) DEFAULT NULL,
+  `ContactNumber` varchar(16) DEFAULT NULL,
+  `JobTitle` varchar(32) DEFAULT NULL,
+  `JobType` varchar(16) DEFAULT NULL,
+  `Address` varchar(32) DEFAULT NULL,
+  `City` varchar(32) DEFAULT NULL,
+  `Description` text,
+  `Suburb` varchar(32) DEFAULT NULL,
+  `Editor1` varchar(2048) DEFAULT NULL,
+  `ThumbnailText` varchar(255) DEFAULT NULL,
+  `JobStatus` varchar(15) DEFAULT '',
+  `PublishTitle` varchar(64) DEFAULT NULL,
+  `PublishDate` date DEFAULT NULL,
+  `UpdateDate` datetime DEFAULT NULL,
+  `Bookmark` varchar(5) DEFAULT 'false',
+  `JobImage` blob,
+  `Checked` varchar(8) DEFAULT 'true',
+  `JobSubmittedDate` date DEFAULT NULL,
+  `TOB` varchar(64) DEFAULT NULL,
+  `ClientID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`JobID`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Job`
+--
+
+LOCK TABLES `Job` WRITE;
+/*!40000 ALTER TABLE `Job` DISABLE KEYS */;
+INSERT INTO `Job` VALUES (1,'Mr.','Bob','Any Web','bob@gmail.com','021-3456789','Web Designer','PartTime','123 Eye Street','Nelson','3 years experiences','Big Stone',NULL,NULL,'completed',NULL,NULL,'2019-10-10 15:48:36','false',NULL,NULL,'2019-09-27',NULL,1),(2,'Mr.','Jack','Any Tech','jack@gmail.com','021-3456789','Web Developer','PartTime','123 Eye Street','Nelson','Basic','Big Stone',NULL,NULL,'completed',NULL,NULL,'2019-10-10 15:48:31','false',NULL,NULL,'2019-09-27',NULL,NULL),(3,'Mr.','Bob','Any Web','bob@gmail.com','021-3456789','Developer','PartTime','123 Eye Street','Nelson','Nothing','Big Stone',NULL,NULL,'completed',NULL,NULL,'2019-10-10 15:48:31','false',NULL,NULL,'2019-10-07',NULL,1),(4,'Mr.','Jack','Every Tech','jack@gmail.com','021-34567','Tester','FullTime','123 Ear Street','Nelson','Tester','Big Stone',NULL,NULL,'completed',NULL,NULL,'2019-10-10 15:48:30','false',NULL,NULL,'2019-10-07',NULL,NULL),(5,'Mr.','Bob','Any Web','bob@gmail.com','021-3456789','Tester','FullTime','123 Eye Street','Nelson','Full time Job','Big Stone','<p>test</p>\r\n\r\n<p>test</p>\r\n\r\n<p>test</p>','Administrator test','completed','FullTime Tester worker needed in Nelson','2019-10-08','2019-10-10 15:48:30','false','5Administrator.jpg','false','2019-10-07',NULL,1),(6,'Mrs.','Bob','Trap','trapa@gmail.com','012391921','Tester','PartTime','3 russel street, gladstone','Invercargill','','invercargill',NULL,NULL,'completed',NULL,NULL,'2019-10-10 15:48:29','false',NULL,NULL,'2019-10-10',NULL,2),(7,'Mr.','Kappa','RR','inclusion@gmail.com','0129391','lolalsd','PartTime','3 russel street, gladstone','Nelson','','invercargill',NULL,NULL,'completed',NULL,NULL,'2019-10-10 15:48:28','false',NULL,'true','2019-10-10',NULL,3),(8,'Mrs.','Bob','Trap','trapa@gmail.com','012391921','teacher','PartTime','3 russel street, gladstone','Invercargill','','invercargill',NULL,NULL,'completed',NULL,NULL,'2019-10-10 15:48:28','false',NULL,'true','2019-10-10',NULL,2),(9,'Mr.','Bob','Any Web','bob@gmail.com','021-3456789','Designer','FullTime','123 Eye Street','Nelson','','Big Stone',NULL,NULL,'completed',NULL,NULL,'2019-10-10 15:48:27','false',NULL,'true','2019-10-10',NULL,1),(10,'Dr.','Lee','SIT','lee@gmail.com','12012345','teacher','PartTime','4 spay street','Levin','11','new',NULL,NULL,'completed',NULL,NULL,'2019-10-10 15:48:27','false',NULL,'true','2019-10-10',NULL,4),(11,'Mrs.','Lee','SIT','lee@gmail.com','12012345','teacher','FullTime','4 spay street','Invercargill','','new',NULL,NULL,'completed',NULL,NULL,'2019-10-10 15:48:27','false',NULL,'true','2019-10-10',NULL,4);
+/*!40000 ALTER TABLE `Job` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `User`
+--
+
+DROP TABLE IF EXISTS `User`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `User` (
+  `UserID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Email` varchar(64) NOT NULL,
+  `FirstName` varchar(64) NOT NULL,
+  `LastName` varchar(64) NOT NULL,
+  `DOB` date NOT NULL,
+  `Address` varchar(64) NOT NULL,
+  `City` varchar(64) NOT NULL,
+  `ZipCode` varchar(16) NOT NULL,
+  `Suburb` varchar(32) NOT NULL,
+  `PhoneNumber` varchar(32) NOT NULL,
+  `Gender` varchar(8) NOT NULL,
+  `UserPasswd` varchar(64) NOT NULL,
+  `UserType` varchar(16) NOT NULL,
+  `VisitedCandidate` datetime DEFAULT NULL,
+  `VisitedClient` datetime DEFAULT NULL,
+  `PreferencePanel` varchar(16) DEFAULT 'default',
+  PRIMARY KEY (`UserID`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `User`
+--
+
+LOCK TABLES `User` WRITE;
+/*!40000 ALTER TABLE `User` DISABLE KEYS */;
+INSERT INTO `User` VALUES (1,'william@gmail.com','waver','edwin','1995-04-08','LithSt','Invercargill','9810','Gleggary','272727','male','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92','admin','2019-10-10 15:50:36','2019-10-10 15:50:42','default'),(2,'oxana@leerecruitment.co.nz','test','test','0000-00-00','20 North St','Invercargill','0000','','','female','8cc9663b03b983941238c8f38c8c4c6c6751ed81e0fa01a27afc3f1283b3d9fc','candidate',NULL,NULL,'default'),(3,'test@test.co.nz','Admin test','Admin test','0000-00-00','20 Tay St','Invercargill','0000','','','female','d2983e63b7018e919099d44f9ecd79b1b2b86a059e5ab6a6f02d1039e37fb210','candidate',NULL,NULL,'default'),(4,'ultimateformj@gmail.com','William','Edwin','0000-00-00','Dee st 3','Invercargill','9810','Invercargill','0276245998','','0d19355628296338e807c31af55e97d895510222d6197f30bdef2124d5c7a239','candidate',NULL,NULL,'default'),(5,'leekunhui@gmail.com','kunhui','li','0000-00-00','3 russel street, gladstone','Invercargill','9810','invercargill','0284146257','male','ec9c739f44eae8875d660b632df4042af3cb81ac395c6e40c836da5e59f9cf30','candidate',NULL,NULL,'default'),(6,'leekunhui@gmail.com','kunhui','li','0000-00-00','3 russel street, gladstone','Invercargill','9810','invercargill','0284146257','male','bc5e7b422fbd1bebaa6c8e3271c81a0f1050836cddbf543342ecd8fe223144ea','candidate',NULL,NULL,'default'),(7,'leekunhui@gmail.com','kunhui','li','0000-00-00','3 russel street, gladstone','Invercargill','9810','invercargill','0284146257','male','de5ec31b0bf76cdbd39abb6ba1ec246ec355b6ef7190411f44b02e28feaa3dd3','candidate',NULL,NULL,'default'),(8,'leekunhui@gmail.com','kunhui','li','0000-00-00','3 russel street, gladstone','Invercargill','9810','invercargill','0284146257','','7f9ba70631d324e6d261193943bbca61c732138f77daa8832a43e3331c8c5a67','candidate',NULL,NULL,'default'),(9,'leekunhui@gmail.com','kunhui','li','0000-00-00','3 russel street, gladstone','Invercargill','9810','invercargill','0284146257','male','e1f7c5e3719997085da79793a9779873fc58f62640bb5b3f4e42088f8823500a','candidate',NULL,NULL,'default'),(10,'anyTeam@gmail.com','SIT','TEAM','0000-00-00','5 Dee St','Invercargill','9810','Invercargill','+13012011','','897dae20810d23e447ce78cde2384fef1e27d627b9e0d23ce626c9754456eeb2','candidate',NULL,NULL,'default'),(11,'ivy@gmail.com','ivy','li','0000-00-00','5 Dee St','Invercargill','9810','Invercargill','','','822ed4481ba95204c76edf7fcf3e0f8d613696a975770ab5eb6fe06b095157e0','candidate',NULL,NULL,'default'),(12,'john@gmail.com','John','Smith','0000-00-00','123 Eye Street','Nelson','0000','','023-3456788','male','e5ec7dc43398d878359c5ce1b9196ce0320291241714161ec5f538feaa9168b2','candidate',NULL,NULL,'default'),(13,'ultimateformj@gmail.com','William','Edwin','0000-00-00','Dee st 3','Invercargill','9810','Invercargill','0276245998','','70809fa30750a6c189253adc248f77b1f3baf64f80804907df255d69f5a36a9f','candidate',NULL,NULL,'default');
+/*!40000 ALTER TABLE `User` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2019-10-10  2:55:04
