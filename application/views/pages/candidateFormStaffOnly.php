@@ -427,7 +427,7 @@ var app = new Vue ({
         smoke : false,
         conviction : false,
         convictionDetails : "",
-        applicantPageUrl: "<?php echo base_url()?>CandidateMission/manageCandidate/"
+        applicantPageUrl: "<?php echo base_url()?>index.php/CandidateMission/manageCandidate/"
     },
     methods: {
         newCandidate: async function(){
