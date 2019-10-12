@@ -292,9 +292,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 
 <!-- Vue -->
-<!-- development version, includes helpful console warnings -->
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+<script src="<?php echo base_Url(); ?>lib/vue/vue-2.4.0.js"></script>
+<script src="<?php echo base_Url(); ?>lib/vue-resource/vue-resource-1.5.1.min.js"></script>
+
 <!-- check if the user did save the page or not after doing changes -->
 <script>
     var unsaved = false;
