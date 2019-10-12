@@ -1,6 +1,6 @@
 <div class="container mt-5 " id="app">
 
-    <a href="<?php echo base_url()?>index.php/Jobs/manageClient/submitVacancy" style="position:fixed;right: 15px; bottom:20px;z-index:1"
+    <a href="<?php echo base_url()?>index.php/Jobs/submitVacancy" style="position:fixed;right: 15px; bottom:20px;z-index:1"
         class=" btn-sm btn-dark border border-secondary">
         <div class="textInfoPosLeft" ><span class="textInfoLeft text-center bg-dark text-light font-weight-bold border border-white" style="width:230px;">Go back to Submit Vacancy page</span><i style="font-size:30px;" class="icon ion-md-redo m-1"></i></div>
         

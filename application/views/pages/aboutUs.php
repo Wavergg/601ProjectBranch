@@ -67,7 +67,7 @@
         </div>
         <div class="card-body">
         <p class="card-text">Have any inquiries or assistance regarding our services? feel free to contact us.</p>
-        <div class="text-center" ><a href="<?php echo base_url()?>index.php/ContactUS" class="btn btn-dark border border-dark">Contact Us</a></div>
+        <div class="text-center" ><a href="<?php echo base_url()?>index.php/ContactUs" class="btn btn-dark border border-dark">Contact Us</a></div>
         </div>
     </div>
     </div>
