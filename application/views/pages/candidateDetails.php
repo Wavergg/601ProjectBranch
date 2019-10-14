@@ -9,9 +9,9 @@
     <a href="<?php echo base_url();?>index.php/Jobs/assignCandidate/<?php echo $candidate['CandidateID'];?>/<?php echo $job['JobID'];?>">
         <button type="button" style="position:fixed;right: 20px; bottom:20px;z-index:1" class=" btn-lg border-white">
             <span>Assign this candidate</span>
-                            <div class="textInfoPosLeft" ><span style="font-size:16px;width:150px;" class="textInfoLeft text-center bg-dark text-light font-weight-bold border border-white" >Add New Client</span> <i style="font-size:30px;" class="icon ion-md-add m-1"></i></div>
-
+                        
             <i style="font-size:30px;" class="icon ion-md-contacts m-1 text-dark"></i>
+        
         </button>
     </a>
     <?php endif;?>
@@ -29,11 +29,19 @@
         <div class="textInfoPosLeft" ><span class="textInfoLeft text-center bg-success text-light font-weight-bold border border-white">Save Data</span><i style="font-size:30px;" class="icon ion-md-save m-1"></i></div>
         
     </button>
-    <a href="<?php echo base_url()?>index.php/Jobs/orders/candidatePage/<?php echo $candidate['CandidateID'];?>" style="position:fixed;right: 20px; bottom:20px;z-index:1"
-        class=" btn-sm btn-dark border border-secondary">
-        <div class="textInfoPosLeft" ><span class="textInfoLeft text-center bg-dark text-light font-weight-bold border border-white">Assign a job</span> <i style="font-size:30px;" class="icon ion-md-contacts m-1"></i></div>
-       
-    </a>
+        <?php if(empty($candidate['CandidateStatus'])):?>
+        <a href="<?php echo base_url()?>index.php/Jobs/orders/candidatePage/<?php echo $candidate['CandidateID'];?>" style="position:fixed;right: 20px; bottom:20px;z-index:1"
+            class=" btn-sm btn-dark border border-secondary">
+            <div class="textInfoPosLeft" ><span class="textInfoLeft text-center bg-dark text-light font-weight-bold border border-white">Assign a job</span> <i style="font-size:30px;" class="icon ion-md-contacts m-1"></i></div>
+        
+        </a>
+        <?php else:?>
+        <button type="button" id="retrieveCandidate" @click="retrieveCandidate()" style="position:fixed;right: 20px; bottom:20px;z-index:1"
+            class=" btn-sm btn-outline-light text-dark border border-dark">
+            <div class="textInfoPosLeft" ><span class="textInfoLeft text-center bg-light text-dark font-weight-bold border border-dark" style="width:160px;">Retrieve Applicant</span> <i style="font-size:30px;" class="icon ion-md-sunny m-1"></i></div>
+        
+        </button>
+        <?php endif;?>
     </div>
     <?php endif;?>
 
@@ -858,6 +866,16 @@ var app = new Vue({
         var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
          return dateTime;
         },
+        retrieveCandidate: function(){
+                var formData = new FormData();
+                formData.append('candidateID', this.candidateID);
+                var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/retrieveCandidate/'
+                this.$http.post(urllink, formData).then(function(res) {
+                
+                }, function(res) {
+                })
+        }
+        ,
         updateCV: function(){
             this.message = "";
 

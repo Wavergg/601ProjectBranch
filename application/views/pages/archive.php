@@ -87,7 +87,7 @@
                     <tr v-for="job in jobs" :key="job.JobID" :id="'rowJob'+job.JobID">
                         
                         <!-- <td ><input type="checkbox" :id="job.bookmarkUrl" v-on:click="updateBookmark(job.JobID)" :checked="job.bookmarkStat"></td> -->
-                        <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeJob(job.JobID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
+                        <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="deleteConfirmationJob(job.JobID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
                         <td class="textInfoPos"><span class="textInfo text-center" style="left: -35px;width:190px;">See Job's Details</span><a :href="job.ref" role="button"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></td>
                         <th class="textInfoPos" ><span class="textInfo text-center" style="left: -45px;width:160px;">Download TOB</span><a class="btn btn-outline-dark px-2" :href="'<?php echo base_Url(); ?>index.php/Jobs/downloadTOB/'+ job.JobID +'/'+job.TOB">TOB</a></th>
                         <td v-text="job.UpdateDate"></td>
@@ -188,7 +188,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="candidate in candidatesCopy" :key="candidate.CandidateID" :id="'rowCandidate'+candidate.CandidateID">
-                        <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="removeCandidate(candidate.CandidateID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
+                        <th class="textInfoPos" v-bind:class="{ 'd-none': ! showRemoveStatus }"><button type="button" v-on:click="deleteConfirmationCandidate(candidate.CandidateID)" class="btn btn-danger"><img src="<?php echo base_url()?>lib/images/papershreeder.png" style="height:35px;width:35px;"></button></th>
                         <th class="textInfoPos"><span class="textInfo text-center" style="left: -35px;width:190px;">See Candidate's Details</span><a v-on:click="getUrl(candidate.CandidateID)" role="button" class="text-primary"><i style="font-size:30px;" class="ml-1 icon ion-md-document mx-3"></i></a></th>
                         <th class="textInfoPos" ><span class="textInfo text-center" style="left: -45px;width:160px;">Download <br>Candidate's CV</span><a class="btn btn-outline-dark px-2" :href="'<?php echo base_Url(); ?>index.php/candidateMission/downloadCV/' + candidate.JobCV">CV</a></th>
                         <th class="font-weight-normal" v-text="candidate.ApplyDate"></th>
@@ -234,16 +234,42 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Action {{ errMessage }}</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Confirmation</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>{{ errors }}</p>
+                    <span>You are about to delete the applicant's data from this table, Please confirm this action</span>
+
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <div class="modal-footer justify-content-end">
+                    <button type="button" class="btn btn-danger mx-1" @click="removeCandidate(storeIDCandidate)" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-secondary mx-1" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal END -->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalJob" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" >Delete Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span>You are about to delete the order data from this table, Please confirm this action</span>
+
+                </div>
+                <div class="modal-footer justify-content-end">
+                    <button type="button" class="btn btn-danger mx-1" @click="removeJob(storeIDJob)" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-secondary mx-1" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
@@ -289,6 +315,8 @@ var app = new Vue({
         candidatePageNums:[
             {id: 1, isActive: true}
         ],
+        storeIDCandidate: "",
+        storeIDJob: "",
     },
     methods: {
         //sort function by clicking on table header
@@ -467,25 +495,33 @@ var app = new Vue({
         showRemoveTab: function(){
             this.showRemoveStatus = !this.showRemoveStatus;
         },
+        deleteConfirmationCandidate: function(candidateID){
+            $('#exampleModal').modal('show');
+            this.storeIDCandidate = candidateID;
+        },
         removeCandidate: function(candidateID){
             var formData = new FormData()
+         
             formData.append('candidateID',candidateID)
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/CandidateMission/deleteCandidateApplication/'
-            this.$http.post(urllink, formData).then(res => {
-                
-            }, res => {
-                
-            });
+            this.$http.post(urllink, formData).then(function(res) {
+            }, function(res) {
+            })
             $('#rowCandidate'+candidateID).addClass('text-muted');
             $('#rowCandidate'+candidateID).css('background-color',"#F0F0F0");
+           
+        },
+        deleteConfirmationJob: function(jobID){
+            $('#exampleModalJob').modal('show');
+            this.storeIDJob = jobID;
         },
         removeJob: function(jobID){
             var formData = new FormData()
             formData.append('jobID',jobID)
             var urllink = "<?php echo base_Url(); ?>" + 'index.php/Jobs/deleteJobApplication/'
-            this.$http.post(urllink, formData).then(res => {
+            this.$http.post(urllink, formData).then(function(res) {
                 
-            }, res => {
+            }, function(res) {
                 
             });
             $('#rowJob'+jobID).addClass('text-muted');

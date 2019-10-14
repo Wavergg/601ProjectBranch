@@ -559,6 +559,20 @@ class CandidateMission extends CI_Controller{
             }
     }
 
+    //called from: view->pages->candidateDetails
+    //retrieve the candidate from archive
+    public function retrieveCandidate(){
+        if($_SESSION['userType']=='admin' || $_SESSION['userType'] =='staff'){
+            $candidateID = $_POST['candidateID'];
+            
+            $this->candidate_model->retrieveCandidate($candidateID);
+            $this->candidate_model->updateTimeChanged($candidateID);
+            }
+            else {
+                redirect('/');
+            }
+    }
+
     //function that are called from CandidateMission->applyJob
     //only called when staff or admin is adding the staff themself in the view->pages/candidateFormStaffOnly
     //generate a random 4 digits 1 character password for the user that is added in by this way

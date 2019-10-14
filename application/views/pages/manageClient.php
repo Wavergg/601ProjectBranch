@@ -14,11 +14,7 @@
             </button>
             
         </a>
-        <button v-if="fromPage != 'submitVacancy'" type="button" @click="showRemoveTab" style="position:fixed;right: 20px; bottom:95px;z-index:1" class="btn btn-outline-danger bg-danger">
-        <div class="textInfoPosLeft" ><span style="font-size:16px;width:200px;" class="textInfoLeft text-center bg-danger text-light font-weight-bold border border-white" >Toggle Remove Client</span>  <img style="height:39px; width:35px;" src="<?php echo base_url()?>lib/images/papershreeder.png"></div>
-    
        
-        </button>
         <!-- Collapse -->
         <a class="btn btn-outline-dark border border-dark form-control" style="border-radius: 15px 15px 0px 0px;" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
         <span class="font-weight-bold">Filters</span><i class="ml-1 icon ion-md-barcode mx-3"></i></a>

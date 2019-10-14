@@ -273,6 +273,7 @@ class Job_model extends CI_Model {
             $this->db->like('City',$city);
         }
         
+        if(!empty($jobTitle) || !empty($jobTitle2)){
         $this->db->group_start();
         if(!empty($jobTitle)){
             //get the closest match by jobInterest
@@ -346,6 +347,7 @@ class Job_model extends CI_Model {
         }
 
         $this->db->group_end();
+        }
 
         $this->db->order_by('UpdateDate', 'DESC');
         $query = $this->db->get('Job');

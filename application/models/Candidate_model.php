@@ -505,6 +505,13 @@ class Candidate_model extends CI_Model {
         $this->db->update('Candidate',$data);
     }
 
+    //called from: Controller->CandidateMission->retrieveCandidate
+    //update the candidateStatus to null
+    public function retrieveCandidate($candidateID){
+        $this->db->where('CandidateID',$candidateID);
+        $this->db->update('CandidateStatus','');
+    }
+
     //called from: Controller->CandidateMission->updateCVfile()
     //updating CV file for specific candidate
     public function updateCVLink($candidateID,$CVfile){
