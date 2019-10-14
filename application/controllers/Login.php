@@ -19,9 +19,9 @@ class Login extends CI_Controller {
     function index(){
         $userdata['userType'] = 'anyone';
         $message['wrongInfo'] = 'undefined';
-        $this->load->view('templates/header', $userdata);
+        $this->load->view('templates/navtop', $userdata);
         $this->load->view('login/main',$message);
-        $this->load->view('templates/footer');
+        $this->load->view('templates/footerLogin');
     }
 
     //called from: view->login->main
@@ -66,9 +66,9 @@ class Login extends CI_Controller {
                 $userdata['userType'] = 'anyone';
                 
                 $message['wrongInfo'] = "invalidInfo";
-                $this->load->view('templates/header', $userdata);
+                $this->load->view('templates/navtop', $userdata);
                 $this->load->view('login/main',$message);
-                $this->load->view('templates/footer');
+                $this->load->view('templates/footerLogin');
             }
         
         } else {
@@ -80,7 +80,7 @@ class Login extends CI_Controller {
     //when logout button is pressed remove the session entirely
     public function logout(){
         $this->session->sess_destroy();
-        redirect('home/index/');
+        redirect('http://markleetesting12300.name/');
     }
 
 
